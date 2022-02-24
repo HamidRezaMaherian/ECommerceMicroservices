@@ -1,18 +1,14 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using Product.Domain.Common;
+using Product.Domain.Enums;
+using System.ComponentModel.DataAnnotations;
 
-namespace SampleEcommerce.Domain.Models
+namespace Product.Domain.Entities
 {
-    public class Property : EntityBase<string>
-    {
-        [MaxLength(300)]
-        [Required]
-        public string Name { get; set; }
-        public PropertyType Type { get; set; }
-    }
-    public enum PropertyType
-    {
-        Number,
-        String
-    }
+	public class Property : EntityBase<string>
+	{
+		//[MaxLength(300)]
+		//[Required]
+		public string Name { get; set; }
+		public PropertyType Type { get; set; }
+	}
 }

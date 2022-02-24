@@ -1,16 +1,17 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Product.Domain.Common;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace SampleEcommerce.Domain.Models
+namespace Product.Domain.Entities
 {
     public class ProductImage : EntityBase<string>
     {
-        [Required]
+        //[Required]
         public string ImagePath { get; set; }
         #region Relations
-        [Required]
+        //[Required]
         public string ProductId { get; set; }
-        [ForeignKey(nameof(ProductId))]
+        //[ForeignKey(nameof(ProductId))]
         public virtual Product Product { get; set; }
         #endregion
     }

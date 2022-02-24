@@ -1,17 +1,16 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using Product.Domain.Common;
 
-namespace SampleEcommerce.Domain.Models
+namespace Product.Domain.Entities
 {
-    public class CategoryProperty: EntityFlagBase
-    {
-        [Required]
-        public string PropertyId { get; set; }
-        [Required]
-        public string CategoryId { get; set; }
-        #region NavigationProps
-        public virtual ProductCategory Category { get; set; }
-        public virtual Property Property { get; set; }
-        #endregion
-    }
+	public class CategoryProperty : EntityFlagBase
+	{
+		//[Required]
+		public string PropertyId { get; set; }
+		//[Required]
+		public string CategoryId { get; set; }
+		#region NavigationProps
+		public virtual ProductCategory Category { get; set; }
+		public virtual Property Property { get; set; }
+		#endregion
+	}
 }

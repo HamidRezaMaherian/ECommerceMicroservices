@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Product.Domain.Common;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -6,12 +7,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SampleEcommerce.Domain.Models
+namespace Product.Domain.Entities
 {
     public class ProductCategory : EntityBase<string>
     {
-        [MaxLength(150)]
-        [Required]
+        //[MaxLength(150)]
+        //[Required]
         public string Name { get; set; }
         //[Required]
         //public string ImagePath { get; set; }
@@ -19,7 +20,7 @@ namespace SampleEcommerce.Domain.Models
 
         public string? ParentId { get; set; }
 
-        [ForeignKey(nameof(ParentId))]
+        //[ForeignKey(nameof(ParentId))]
         public virtual ProductCategory Parent { get; set; }
         #endregion
     }
