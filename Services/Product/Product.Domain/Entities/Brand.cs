@@ -4,12 +4,10 @@ namespace Product.Domain.Entities;
 
 public class Brand : EntityBase<string>
 {
-	//[MaxLength(150)]
-	//[Required]
-	public string Name { get; set; }
-	public string ImagePath { get; set; }
+	public virtual string Name { get; set; }
+	public virtual string ImagePath { get; set; }
 
 	#region NavigationProps
-	public virtual Product Products { get; set; }
+	public virtual IReadOnlyCollection<Product> Products { get; set; }
 	#endregion
 }

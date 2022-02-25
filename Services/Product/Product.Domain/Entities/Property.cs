@@ -6,9 +6,7 @@ namespace Product.Domain.Entities
 {
 	public class Property : EntityBase<string>
 	{
-		//[MaxLength(300)]
-		//[Required]
-		public string Name { get; set; }
+		public virtual string Name { get; set; }
 		public PropertyType Type { get; set; }
 	}
 }

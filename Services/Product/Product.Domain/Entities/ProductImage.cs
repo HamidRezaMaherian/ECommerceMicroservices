@@ -4,15 +4,12 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Product.Domain.Entities
 {
-    public class ProductImage : EntityBase<string>
-    {
-        //[Required]
-        public string ImagePath { get; set; }
-        #region Relations
-        //[Required]
-        public string ProductId { get; set; }
-        //[ForeignKey(nameof(ProductId))]
-        public virtual Product Product { get; set; }
-        #endregion
-    }
+	public class ProductImage : EntityBase<string>
+	{
+		public virtual string ImagePath { get; set; }
+		#region Relations
+		public virtual string ProductId { get; set; }
+		public Product Product { get; set; }
+		#endregion
+	}
 }

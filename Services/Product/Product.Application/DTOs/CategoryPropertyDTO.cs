@@ -2,13 +2,14 @@
 
 namespace Product.Domain.Entities
 {
-	public class CategoryProperty : EntityFlagBase
+	public class CategoryPropertyDTO
 	{
+		public string Id { get; set; }
 		public virtual string PropertyId { get; set; }
 		public virtual string CategoryId { get; set; }
 		#region NavigationProps
-		public virtual ProductCategory Category { get; set; }
-		public virtual Property Property { get; set; }
+		public virtual ProductCategoryDTO Category { get; set; }
+		public virtual PropertyDTO Property { get; set; }
 		#endregion
 	}
 }

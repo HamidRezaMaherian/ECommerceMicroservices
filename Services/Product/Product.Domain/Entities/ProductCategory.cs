@@ -11,17 +11,11 @@ namespace Product.Domain.Entities
 {
     public class ProductCategory : EntityBase<string>
     {
-        //[MaxLength(150)]
-        //[Required]
-        public string Name { get; set; }
-        //[Required]
-        //public string ImagePath { get; set; }
+        public virtual string Name { get; set; }
+
         #region Relations
-
         public string? ParentId { get; set; }
-
-        //[ForeignKey(nameof(ParentId))]
-        public virtual ProductCategory Parent { get; set; }
+        public ProductCategory Parent { get; set; }
         #endregion
     }
 }
