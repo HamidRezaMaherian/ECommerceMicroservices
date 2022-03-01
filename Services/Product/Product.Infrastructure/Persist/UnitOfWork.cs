@@ -1,4 +1,5 @@
-﻿using Product.Application.Repositories;
+﻿using AutoMapper;
+using Product.Application.Repositories;
 using Product.Application.UnitOfWork;
 using Product.Infrastructure.Repositories;
 
@@ -7,9 +8,12 @@ namespace Product.Infrastructure.Persist
 	public class UnitOfWork : IUnitOfWork
 	{
 		private readonly ApplicationDbContext _db;
-		public UnitOfWork(ApplicationDbContext db)
+		private readonly IMapper _mapper;
+
+		public UnitOfWork(ApplicationDbContext db, IMapper mapper)
 		{
 			_db = db;
+			_mapper = mapper;
 		}
 		#region Product
 		private IProductRepo _productRepo;
@@ -17,7 +21,7 @@ namespace Product.Infrastructure.Persist
 		{
 			get
 			{
-				_productRepo ??= new ProductRepo(_db);
+				_productRepo ??= new ProductRepo(_db,_mapper);
 				return _productRepo;
 			}
 		}
@@ -26,7 +30,7 @@ namespace Product.Infrastructure.Persist
 		{
 			get
 			{
-				_brandRepo ??= new BrandRepo(_db);
+				_brandRepo ??= new BrandRepo(_db,_mapper);
 				return _brandRepo;
 			}
 		}
@@ -35,7 +39,7 @@ namespace Product.Infrastructure.Persist
 		{
 			get
 			{
-				_productCategoryRepo ??= new ProductCategoryRepo(_db);
+				_productCategoryRepo ??= new ProductCategoryRepo(_db,_mapper);
 				return _productCategoryRepo;
 			}
 		}
@@ -44,7 +48,7 @@ namespace Product.Infrastructure.Persist
 		{
 			get
 			{
-				_productImageRepo ??= new ProductImageRepo(_db);
+				_productImageRepo ??= new ProductImageRepo(_db,_mapper);
 				return _productImageRepo;
 			}
 		}
@@ -53,7 +57,7 @@ namespace Product.Infrastructure.Persist
 		{
 			get
 			{
-				_propertyRepo ??= new PropertyRepo(_db);
+				_propertyRepo ??= new PropertyRepo(_db,_mapper);
 				return _propertyRepo;
 			}
 		}
@@ -62,7 +66,7 @@ namespace Product.Infrastructure.Persist
 		{
 			get
 			{
-				_categoryPropertyRepo ??= new CategoryPropertyRepo(_db);
+				_categoryPropertyRepo ??= new CategoryPropertyRepo(_db,_mapper);
 				return _categoryPropertyRepo;
 			}
 		}

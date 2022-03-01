@@ -4,19 +4,15 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Product.Infrastructure.Persist.DAOs
 {
-	public class ProductImageDAO : ProductImage
+	public class ProductImageDAO : EntityBase<string>
 	{
-		[Key]
-		[DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-		public override string Id { get; set; }
-
 		[Required]
-		public override string ImagePath { get; set; }
+		public string ImagePath { get; set; }
 		#region Relations
 		[Required]
-		public override string ProductId { get; set; }
+		public string ProductId { get; set; }
 		[ForeignKey(nameof(ProductId))]
-		public new virtual ProductDAO Product { get; set; }
+		public virtual ProductDAO Product { get; set; }
 		#endregion
 	}
 }

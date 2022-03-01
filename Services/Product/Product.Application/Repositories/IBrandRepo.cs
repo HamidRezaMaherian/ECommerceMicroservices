@@ -2,8 +2,7 @@
 
 namespace Product.Application.Repositories
 {
-	public interface IBrandRepo : IRepository<BrandDTO>
+	public interface IBrandRepo : IRepository<Brand>
 	{
-
 	}
 }

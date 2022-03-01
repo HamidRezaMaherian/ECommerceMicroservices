@@ -1,38 +1,15 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-
-namespace Product.Domain.Common
+﻿namespace Product.Domain.Common
 {
 	public interface IBaseActive
 	{
 		public bool IsActive { get; set; }
 	}
-	public interface IBaseDelete
-	{
-		public bool IsDelete { get; set; }
-	}
-
-	public abstract class EntityFlagBase : IBaseActive, IBaseDelete
-	{
-		public bool IsActive { get; set; }
-		public bool IsDelete { get; set; }
-	}
 	public abstract class EntityPrimaryBase<T>
 	{
 		public virtual T Id { get; set; }
 	}
-	public abstract class EntityBase<T> : EntityPrimaryBase<T>, IBaseActive, IBaseDelete
+	public abstract class EntityBase<T> : EntityPrimaryBase<T>, IBaseActive
 	{
 		public bool IsActive { get; set; }
-		public bool IsDelete { get; set; }
-
-	}
-	public abstract class EntityActiveBase<T> : EntityPrimaryBase<T>, IBaseActive
-	{
-		public bool IsActive { get; set; }
-	}
-	public abstract class EntityDeleteBase<T> : EntityPrimaryBase<T>, IBaseDelete
-	{
-		public bool IsDelete { get; set; }
 	}
 }

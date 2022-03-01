@@ -4,17 +4,16 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Product.Infrastructure.Persist.DAOs
 {
-	public class ProductCategoryDAO : ProductCategory
+	public class ProductCategoryDAO : EntityBase<string>
 	{
-		[Key]
-		[DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-		public override string Id { get; set; }
 		[MaxLength(150)]
 		[Required]
-		public override string Name { get; set; }
+		public string Name { get; set; }
+		public string? ParentId { get; set; }
+
 		#region Relations
 		[ForeignKey(nameof(ParentId))]
-		public new ProductCategoryDAO Parent { get; set; }
+		public ProductCategoryDAO Parent { get; set; }
 		#endregion
 	}
 }

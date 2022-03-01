@@ -7,6 +7,6 @@ public class ProductImageDTO : EntityBase<string>
 	public virtual string ImagePath { get; set; }
 	#region Relations
 	public virtual string ProductId { get; set; }
-	public Product Product { get; set; }
+	public ProductDTO Product { get; set; }
 	#endregion
 }

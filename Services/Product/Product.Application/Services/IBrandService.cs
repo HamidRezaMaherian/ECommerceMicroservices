@@ -1,11 +1,9 @@
-﻿using Product.Domain.Entities;
+﻿using Product.Application.DTOs;
+using Product.Domain.Entities;
 
 namespace Product.Application.Services
 {
-	public interface IBrandService : IEntityBaseService<BrandDTO>
+	public interface IBrandService : IEntityBaseService<Brand, BrandDTO>
 	{
-		new IEnumerable<BrandDTO> GetAll();
-		new BrandDTO GetById(object id);
-		new IEnumerable<BrandDTO> GetAllActive();
 	}
 }

@@ -1,17 +1,8 @@
-﻿using SampleEcommerce.Application.DTOs;
-using SampleEcommerce.Domain.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Product.Application.DTOs;
 
 namespace Product.Application.Services
 {
-    public interface IProductService : IEntityBaseService<Product>
-    {
-        new IEnumerable<ProductDTO> GetAll();
-        new ProductDTO GetById(object id);
-        new IEnumerable<ProductDTO> GetAllActive();
-    }
+	public interface IProductService : IEntityBaseService<Domain.Entities.Product,ProductDTO>
+	{
+	}
 }

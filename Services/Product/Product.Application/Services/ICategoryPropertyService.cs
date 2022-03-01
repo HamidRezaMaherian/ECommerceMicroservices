@@ -1,6 +1,9 @@
-﻿namespace Product.Application.Services
+﻿using Product.Application.DTOs;
+using Product.Domain.Entities;
+
+namespace Product.Application.Services
 {
-	public interface ICategoryPropertyService : IEntityBaseService<CategoryProperty>
+	public interface ICategoryPropertyService : IBaseService<CategoryProperty, CategoryPropertyDTO>
 	{
 	}
 }

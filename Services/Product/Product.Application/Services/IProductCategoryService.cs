@@ -1,13 +1,8 @@
-﻿using SampleEcommerce.Domain.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Product.Application.DTOs;
+using Product.Domain.Entities;
 
-namespace Product.Application.Services
+namespace Product.Application.Services;
+
+public interface IProductCategoryService : IEntityBaseService<ProductCategory,ProductCategoryDTO>
 {
-    public interface IProductCategoryService : IEntityBaseService<ProductCategory>
-    {
-    }
 }

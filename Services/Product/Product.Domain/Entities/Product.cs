@@ -4,20 +4,20 @@ namespace Product.Domain.Entities
 {
 	public class Product : EntityBase<string>
 	{
-		public virtual string Name { get; set; }
-		public virtual string ShortDesc { get; set; }
-		public virtual string Description { get; set; }
+		public string Name { get; set; }
+		public string ShortDesc { get; set; }
+		public string Description { get; set; }
 
-		public virtual decimal UnitPrice { get; set; }
+		public decimal UnitPrice { get; set; }
 
-		public virtual string MainImagePath { get; set; }
+		public string MainImagePath { get; set; }
 
-		public virtual DateTime CreatedDateTime { get; set; }
+		public DateTime CreatedDateTime { get; set; }
 
 		public string CategoryId { get; set; }
 		#region Relations
-		public virtual ProductCategory Category { get; set; }
-		public virtual ICollection<ProductImage> Images { get; set; }
+		public ProductCategory Category { get; set; }
+		public ICollection<ProductImage> Images { get; set; }
 		#endregion
 	}
 }

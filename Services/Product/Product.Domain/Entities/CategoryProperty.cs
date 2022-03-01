@@ -2,7 +2,7 @@
 
 namespace Product.Domain.Entities
 {
-	public class CategoryProperty : EntityFlagBase
+	public class CategoryProperty : EntityPrimaryBase<string>
 	{
 		public virtual string PropertyId { get; set; }
 		public virtual string CategoryId { get; set; }

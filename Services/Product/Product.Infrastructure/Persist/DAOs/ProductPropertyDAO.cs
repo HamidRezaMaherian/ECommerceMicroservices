@@ -7,23 +7,20 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Product.Infrastructure.Persist.DAOs
 {
-	public class ProductPropertyDAO : ProductProperty, IEntityTypeConfiguration<ProductPropertyDAO>
+	public class ProductPropertyDAO : EntityBase<string>,
+		IEntityTypeConfiguration<ProductPropertyDAO>
 	{
-		[Key]
-		[DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-		public override string Id { get; set; }
-
 		[Required]
 		[MaxLength(500)]
-		public override string Value { get; set; }
+		public string Value { get; set; }
 		[Required]
-		public override string PropertyId { get; set; }
+		public string PropertyId { get; set; }
 		[Required]
-		public override string ProductId { get; set; }
+		public string ProductId { get; set; }
 
 		#region NavigationProps
-		public new ProductDAO Product { get; set; }
-		public new PropertyDAO Property { get; set; }
+		public virtual ProductDAO Product { get; set; }
+		public virtual PropertyDAO Property { get; set; }
 
 		public void Configure(EntityTypeBuilder<ProductPropertyDAO> builder)
 		{

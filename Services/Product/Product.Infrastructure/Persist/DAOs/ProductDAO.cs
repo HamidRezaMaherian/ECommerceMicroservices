@@ -4,30 +4,30 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Product.Infrastructure.Persist.DAOs
 {
-	public class ProductDAO : Domain.Entities.Product
+	public class ProductDAO : EntityBase<string>
 	{
-		[Key]
-		[DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-		public override string Id { get; set; }
-
 		[MaxLength(300)]
 		[Required]
-		public override string Name { get; set; }
+		public string Name { get; set; }
 		[Required]
 		[MaxLength(500)]
-		public override string ShortDesc { get; set; }
+		public string ShortDesc { get; set; }
 		[Required]
-		public override string Description { get; set; }
+		public string Description { get; set; }
 
 		[Required]
-		public override decimal UnitPrice { get; set; }
+		public decimal UnitPrice { get; set; }
 
 		[Required]
-		public override string MainImagePath { get; set; }
+		public string MainImagePath { get; set; }
+
+		public DateTime CreatedDateTime { get; set; }
+
+		public string CategoryId { get; set; }
 		#region Relations
 		[ForeignKey(nameof(CategoryId))]
-		public new ProductCategoryDAO Category { get; set; }
-		public new ICollection<ProductImageDAO> Images { get; set; }
+		public ProductCategoryDAO Category { get; set; }
+		public ICollection<ProductImageDAO> Images { get; set; }
 		#endregion
 	}
 }

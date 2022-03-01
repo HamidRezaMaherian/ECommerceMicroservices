@@ -5,12 +5,12 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Product.Infrastructure.Persist.DAOs;
 
-public class BrandDAO : Brand
+public class BrandDAO : EntityBase<string>
 {
-	[Key]
-	[DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-	public override string Id { get; set; }
 	[Required]
 	[MaxLength(150)]
-	public override string Name { get; set; }
+	public string Name { get; set; }
+	#region NavigationProps
+	public IReadOnlyCollection<ProductDAO> Products { get; set; }
+	#endregion
 }

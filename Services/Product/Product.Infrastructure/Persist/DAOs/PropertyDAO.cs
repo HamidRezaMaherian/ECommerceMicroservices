@@ -5,14 +5,11 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Product.Infrastructure.Persist.DAOs
 {
-	public class PropertyDAO : Property
+	public class PropertyDAO : EntityBase<string>
 	{
-		[Key]
-		[DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-		public override string Id { get; set; }
 		[MaxLength(300)]
 		[Required]
-		public override string Name { get; set; }
-		public new PropertyType Type { get; set; }
+		public string Name { get; set; }
+		public PropertyType Type { get; set; }
 	}
 }
