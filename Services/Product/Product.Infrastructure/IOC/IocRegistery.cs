@@ -1,10 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using Product.Application.Repositories;
-using Product.Application.Services;
 using Product.Application.UnitOfWork;
 using Product.Infrastructure.Persist;
 using Product.Infrastructure.Persist.Mappings;
-using Product.Infrastructure.Repositories;
 
 namespace Product.Infrastructure.IOC
 {

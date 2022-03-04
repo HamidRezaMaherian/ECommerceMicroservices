@@ -2,7 +2,7 @@
 
 namespace Product.Application.Repositories
 {
-	public interface IProductImageRepo : IRepository<ProductImage>
+	public interface IProductImageRepo : IRepository<ProductImage> 
 	{
 
 	}

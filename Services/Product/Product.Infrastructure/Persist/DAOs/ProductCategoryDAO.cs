@@ -1,5 +1,4 @@
-﻿using Product.Domain.Entities;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Product.Infrastructure.Persist.DAOs

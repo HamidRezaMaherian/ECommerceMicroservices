@@ -1,5 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Query;
 using Product.Infrastructure.Persist.DAOs;
+using System.Linq.Expressions;
 using System.Reflection;
 
 namespace Product.Infrastructure.Persist
@@ -11,7 +13,13 @@ namespace Product.Infrastructure.Persist
 		protected override void OnModelCreating(ModelBuilder builder)
 		{
 			SeedData(builder);
-			builder.ApplyConfigurationsFromAssembly(Assembly.GetAssembly(typeof(ApplicationDbContext)));
+			builder.ApplyGlobalFilters<IBaseDelete>(i=>!i.IsDelete);
+
+			builder.ApplyConfigurationsFromAssembly(
+				Assembly.GetAssembly(typeof(ApplicationDbContext)) ??
+				Assembly.GetExecutingAssembly()
+				);
+
 			base.OnModelCreating(builder);
 		}
 
@@ -31,5 +39,21 @@ namespace Product.Infrastructure.Persist
 		{
 		}
 		#endregion
+	}
+	public static class DbOptionsExtensions
+	{
+		public static void ApplyGlobalFilters<TInterface>(this ModelBuilder modelBuilder, Expression<Func<TInterface, bool>> expression)
+		{
+			var entities = modelBuilder.Model
+				 .GetEntityTypes()
+				 .Where(e => e.ClrType.GetInterface(typeof(TInterface).Name) != null)
+				 .Select(e => e.ClrType);
+			foreach (var entity in entities)
+			{
+				var newParam = Expression.Parameter(entity);
+				var newbody = ReplacingExpressionVisitor.Replace(expression.Parameters.Single(), newParam, expression.Body);
+				modelBuilder.Entity(entity).HasQueryFilter(Expression.Lambda(newbody, newParam));
+			}
+		}
 	}
 }

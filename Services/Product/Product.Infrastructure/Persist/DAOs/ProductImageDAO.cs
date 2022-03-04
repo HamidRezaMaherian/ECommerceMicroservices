@@ -1,5 +1,4 @@
-﻿using Product.Domain.Entities;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Product.Infrastructure.Persist.DAOs
@@ -13,6 +12,7 @@ namespace Product.Infrastructure.Persist.DAOs
 		public string ProductId { get; set; }
 		[ForeignKey(nameof(ProductId))]
 		public virtual ProductDAO Product { get; set; }
+
 		#endregion
 	}
 }

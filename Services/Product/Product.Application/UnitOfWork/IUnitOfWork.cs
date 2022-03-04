@@ -4,7 +4,6 @@ namespace Product.Application.UnitOfWork
 {
 	public interface IUnitOfWork : IDisposable, IAsyncDisposable
 	{
-
 		#region Product
 		public IProductRepo ProductRepo { get; }
 		public IProductCategoryRepo ProductCategoryRepo { get; }

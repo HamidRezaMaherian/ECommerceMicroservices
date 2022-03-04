@@ -7,7 +7,6 @@ namespace Product.Domain.Entities
 		public string Name { get; set; }
 		public string ShortDesc { get; set; }
 		public string Description { get; set; }
-
 		public decimal UnitPrice { get; set; }
 
 		public string MainImagePath { get; set; }
@@ -17,7 +16,7 @@ namespace Product.Domain.Entities
 		public string CategoryId { get; set; }
 		#region Relations
 		public ProductCategory Category { get; set; }
-		public ICollection<ProductImage> Images { get; set; }
+		public IReadOnlyCollection<ProductImage> Images { get; set; }
 		#endregion
 	}
 }

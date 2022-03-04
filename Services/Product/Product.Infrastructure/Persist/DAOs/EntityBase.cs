@@ -1,5 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Builders;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Product.Infrastructure.Persist.DAOs
 {
@@ -7,7 +7,7 @@ namespace Product.Infrastructure.Persist.DAOs
 	{
 		public bool IsActive { get; set; }
 	}
-	public interface IBaseDelete : IEntityTypeConfiguration<IBaseDelete>
+	public interface IBaseDelete
 	{
 		public bool IsDelete { get; set; }
 	}
@@ -16,24 +16,17 @@ namespace Product.Infrastructure.Persist.DAOs
 	{
 		public bool IsActive { get; set; }
 		public bool IsDelete { get; set; }
-		public void Configure(EntityTypeBuilder<IBaseDelete> builder)
-		{
-			builder.HasQueryFilter(i => !i.IsDelete);
-		}
 	}
 	public abstract class EntityPrimaryBase<T>
 	{
+		[Key]
+		[DatabaseGenerated(DatabaseGeneratedOption.Identity)]
 		public virtual T Id { get; set; }
 	}
 	public abstract class EntityBase<T> : EntityPrimaryBase<T>, IBaseActive, IBaseDelete
 	{
 		public bool IsActive { get; set; }
 		public bool IsDelete { get; set; }
-		public void Configure(EntityTypeBuilder<IBaseDelete> builder)
-		{
-			builder.HasQueryFilter(i => !i.IsDelete);
-		}
-
 	}
 	public abstract class EntityActiveBase<T> : EntityPrimaryBase<T>, IBaseActive
 	{
@@ -42,9 +35,5 @@ namespace Product.Infrastructure.Persist.DAOs
 	public abstract class EntityDeleteBase<T> : EntityPrimaryBase<T>, IBaseDelete
 	{
 		public bool IsDelete { get; set; }
-		public void Configure(EntityTypeBuilder<IBaseDelete> builder)
-		{
-			builder.HasQueryFilter(i => !i.IsDelete);
-		}
 	}
 }

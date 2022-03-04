@@ -1,7 +1,6 @@
-﻿using Product.Domain.Common;
-using Product.Domain.Entities;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Product.Infrastructure.Persist.DAOs;
 

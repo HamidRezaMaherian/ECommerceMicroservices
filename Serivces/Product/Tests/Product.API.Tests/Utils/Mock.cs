@@ -15,7 +15,7 @@ namespace Product.API.Tests.Utils
 		{
 			var store = new Mock<IRepository<T>>();
 			store.Setup(i => i.Get()).Returns(list.AsQueryable());
-			store.Setup(i => i.Add(It.IsAny<T>())).Callback<T>(c => list.Add(c));
+			store.Setup(i => i.Add(ref It.Ref<T>.IsAny)).Callback((ref T c) => list.Add(c));
 			store.Setup(i => i.Update(It.IsAny<T>())).Callback<T>(c =>
 			{
 				var res = list.FirstOrDefault(i => i.Id.Equals(c.Id));

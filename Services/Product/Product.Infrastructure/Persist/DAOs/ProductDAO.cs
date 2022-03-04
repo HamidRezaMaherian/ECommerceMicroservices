@@ -1,4 +1,5 @@
-﻿using Product.Infrastructure.Persist.DAOs;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -28,6 +29,7 @@ namespace Product.Infrastructure.Persist.DAOs
 		[ForeignKey(nameof(CategoryId))]
 		public ProductCategoryDAO Category { get; set; }
 		public ICollection<ProductImageDAO> Images { get; set; }
+
 		#endregion
 	}
 }

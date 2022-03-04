@@ -22,11 +22,10 @@ namespace Product.API.Tests.Unit
 				.MockServie<IProductService>(_products).Object;
 			_productController = new ProductController(_productService);
 		}
-		[SetUp]
-		public void SetUp()
+		[TearDown]
+		public void TearDown()
 		{
-			_productService = MockAction<Domain.Entities.Product, ProductDTO>
-				.MockServie<IProductService>(_products).Object;
+			_products.Clear();
 		}
 		[Test]
 		public void GetAll_ReturnAllProducts()
@@ -38,6 +37,17 @@ namespace Product.API.Tests.Unit
 			});
 			var res = _productController.GetAll();
 			Assert.AreEqual(res.Value.Count(), 1);
+		}
+		[Test]
+		public void Create_AddProduct()
+		{
+			var product=new ProductDTO()
+			{
+				Id = "1",
+				Name = "Name",
+			};
+			_productController.Create(product);
+			Assert.AreEqual(_products.Count, 1);
 		}
 	}
 }

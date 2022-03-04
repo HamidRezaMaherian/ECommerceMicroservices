@@ -1,11 +1,12 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using Product.Application.Repositories;
+using Product.Application.Utils;
 using Product.Infrastructure.Persist;
 
 namespace Product.Infrastructure.Repositories
 {
-	public abstract class Repository<T,TDAO> : IRepository<T>
+	public abstract class Repository<T, TDAO> : IRepository<T>
 		where T : class
 		where TDAO : class
 	{
@@ -18,9 +19,11 @@ namespace Product.Infrastructure.Repositories
 			_dbSet = _db.Set<TDAO>();
 			_mapper = mapper;
 		}
-		public virtual void Add(T entity)
+		public virtual void Add(ref T entity)
 		{
-			_dbSet.Add(_mapper.Map<TDAO>(entity));
+			var result=_dbSet.Add(_mapper.Map<TDAO>(entity));
+			_db.SaveChanges();
+			entity= _mapper.Map<T>(result.Entity);
 		}
 		public virtual void Delete(object id)
 		{
@@ -35,19 +38,39 @@ namespace Product.Infrastructure.Repositories
 			_dbSet.Remove(_mapper.Map<TDAO>(entity));
 		}
 
-		public virtual IQueryable<T> Get()
+		public virtual IEnumerable<T> Get(QueryParams<T> queryParams)
 		{
-			return _dbSet.Cast<T>();
+			IQueryable<TDAO> query = _dbSet;
+			query = query.Where(
+				ExpressionHelper.Convert<T,TDAO>(queryParams.Expression)
+				);
+
+			//foreach (var includeProperty in queryParams.IncludeProperties.Split
+			//			(',', StringSplitOptions.RemoveEmptyEntries))
+			//	query = query.Include(includeProperty);
+
+			//if (queryParams.OrderBy != null)
+			//	queryParams.OrderBy(query);
+
+			query = queryParams.Skip != 0 ? query.Skip(queryParams.Skip) : query;
+			query = queryParams.Take != 0 ? query.Take(queryParams.Take) : query;
+			return _mapper.Map<IEnumerable<T>>(query.ToList());
+		}
+		public virtual IEnumerable<T> Get()
+		{
+			return _mapper.Map<IEnumerable<T>>(_dbSet.ToList());
 		}
 
 		public virtual T Get(object id)
 		{
+			ArgumentNullException.ThrowIfNull(id);
 			return _mapper.Map<T>(_dbSet.Find(id));
 		}
 
 		public virtual void Update(T entity)
 		{
-			_dbSet.Update(entity as TDAO);
+			ArgumentNullException.ThrowIfNull(entity);
+			_dbSet.Update(_mapper.Map<TDAO>(entity));
 		}
 	}
 }

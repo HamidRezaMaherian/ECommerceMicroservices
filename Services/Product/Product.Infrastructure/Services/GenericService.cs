@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Product.Application.Repositories;
 using Product.Application.UnitOfWork;
+using Product.Application.Utils;
 using Product.Domain.Common;
 using System.Linq.Expressions;
 
@@ -11,7 +12,6 @@ namespace Product.Application.Services
 		protected readonly IRepository<T> _repo;
 		protected readonly IMapper _mapper;
 		protected readonly IUnitOfWork _unitOfWork;
-
 		public GenericBaseService(IUnitOfWork unitOfWork, IMapper mapper)
 		{
 			_unitOfWork = unitOfWork;
@@ -48,7 +48,10 @@ namespace Product.Application.Services
 		}
 		public virtual IEnumerable<T> GetAll(Expression<Func<T, bool>> condition)
 		{
-			return _repo.Get().Where(condition).ToList();
+			return _repo.Get(new QueryParams<T>()
+			{
+				Expression = condition
+			}).ToList();
 		}
 		public virtual IEnumerable<TypeDTO> GetAll<TypeDTO>(Expression<Func<T, bool>> condition) where TypeDTO : class
 		{
@@ -59,7 +62,7 @@ namespace Product.Application.Services
 		public virtual void Add(Tdto entityDTO)
 		{
 			var entity = _mapper.Map<T>(entityDTO);
-			_repo.Add(entity);
+			_repo.Add(ref entity);
 		}
 		public virtual void Update(Tdto entityDTO)
 		{
@@ -81,7 +84,7 @@ namespace Product.Application.Services
 
 		public virtual IEnumerable<T> GetAllActive()
 		{
-			return 
+			return
 				_repo.Get().Where(i => i.IsActive).ToList()
 				;
 		}
@@ -91,9 +94,10 @@ namespace Product.Application.Services
 		}
 		public virtual IEnumerable<T> GetAllActive(Expression<Func<T, bool>> condition)
 		{
-			return 
-				_repo.Get().Where(i => i.IsActive).Where(condition).ToList()
-				;
+			return _repo.Get(new QueryParams<T>()
+			{
+				Expression = ExpressionHelper.And(i => i.IsActive, condition)
+			});
 		}
 		public virtual IEnumerable<TypeDTO> GetAllActive<TypeDTO>(Expression<Func<T, bool>> condition) where TypeDTO : class
 		{

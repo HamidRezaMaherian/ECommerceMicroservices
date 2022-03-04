@@ -8,7 +8,6 @@ namespace Product.API.Configurations.Validations
 		public ProductValidator()
 		{
 			RuleFor(i => i.Name).NotEmpty().NotNull();
-			RuleFor(i => i.Name).NotEmpty().NotNull();
 		}
 	}
 }

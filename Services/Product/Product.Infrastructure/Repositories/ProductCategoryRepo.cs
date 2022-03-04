@@ -5,7 +5,8 @@ using Product.Infrastructure.Persist;
 using Product.Infrastructure.Persist.DAOs;
 namespace Product.Infrastructure.Repositories
 {
-	public class ProductCategoryRepo : Repository<ProductCategory, ProductCategoryDAO>, IProductCategoryRepo
+	public class ProductCategoryRepo : Repository<ProductCategory, ProductCategoryDAO>
+		, IProductCategoryRepo
 	{
 		public ProductCategoryRepo(ApplicationDbContext db, IMapper mapper) : base(db, mapper) { }
 	}

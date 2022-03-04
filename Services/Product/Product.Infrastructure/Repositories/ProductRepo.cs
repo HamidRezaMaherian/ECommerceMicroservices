@@ -5,7 +5,8 @@ using Product.Infrastructure.Persist.DAOs;
 
 namespace Product.Infrastructure.Repositories
 {
-	public class ProductRepo : Repository<Domain.Entities.Product, ProductDAO>, IProductRepo
+	public class ProductRepo : Repository<Domain.Entities.Product, ProductDAO>
+		, IProductRepo
 	{
 		public ProductRepo(ApplicationDbContext db, IMapper mapper) : base(db, mapper) { }
 	}

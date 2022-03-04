@@ -21,7 +21,7 @@ namespace Product.Infrastructure.Persist
 		{
 			get
 			{
-				_productRepo ??= new ProductRepo(_db,_mapper);
+				_productRepo ??= new ProductRepo(_db, _mapper);
 				return _productRepo;
 			}
 		}
@@ -30,7 +30,7 @@ namespace Product.Infrastructure.Persist
 		{
 			get
 			{
-				_brandRepo ??= new BrandRepo(_db,_mapper);
+				_brandRepo ??= new BrandRepo(_db, _mapper);
 				return _brandRepo;
 			}
 		}
@@ -39,7 +39,7 @@ namespace Product.Infrastructure.Persist
 		{
 			get
 			{
-				_productCategoryRepo ??= new ProductCategoryRepo(_db,_mapper);
+				_productCategoryRepo ??= new ProductCategoryRepo(_db, _mapper);
 				return _productCategoryRepo;
 			}
 		}
@@ -48,7 +48,7 @@ namespace Product.Infrastructure.Persist
 		{
 			get
 			{
-				_productImageRepo ??= new ProductImageRepo(_db,_mapper);
+				_productImageRepo ??= new ProductImageRepo(_db, _mapper);
 				return _productImageRepo;
 			}
 		}
@@ -57,7 +57,7 @@ namespace Product.Infrastructure.Persist
 		{
 			get
 			{
-				_propertyRepo ??= new PropertyRepo(_db,_mapper);
+				_propertyRepo ??= new PropertyRepo(_db, _mapper);
 				return _propertyRepo;
 			}
 		}
@@ -66,14 +66,15 @@ namespace Product.Infrastructure.Persist
 		{
 			get
 			{
-				_categoryPropertyRepo ??= new CategoryPropertyRepo(_db,_mapper);
+				_categoryPropertyRepo ??= new CategoryPropertyRepo(_db, _mapper);
 				return _categoryPropertyRepo;
 			}
 		}
 		#endregion
 
 		#region Methods
-		public IRepository<T> GetRepo<T>() where T : class
+		public IRepository<T> GetRepo<T>()
+			where T : class
 		{
 			var props = GetType().GetProperties();
 			var res = props.FirstOrDefault(i => i.PropertyType.GetInterfaces().Contains(typeof(IRepository<T>)))?.GetValue(this, null);

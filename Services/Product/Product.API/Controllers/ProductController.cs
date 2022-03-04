@@ -21,16 +21,24 @@ namespace Product.API.Controllers
 			return _productService.GetAll().ToList();
 		}
 		[HttpPost]
-		public IActionResult Create(ProductDTO productDTO)
+		[ProducesResponseType(StatusCodes.Status200OK)]
+		public IActionResult Create([FromBody] ProductDTO productDTO)
 		{
-			try
-			{
-				_productService.Add(productDTO);
-			}
-			catch (Exception e)
-			{
-				return BadRequest(e);
-			}
+			_productService.Add(productDTO);
+			return Ok();
+		}
+		[HttpPut]
+		[ProducesResponseType(StatusCodes.Status200OK)]
+		public IActionResult Update([FromBody] ProductDTO productDTO)
+		{
+			_productService.Update(productDTO);
+			return Ok();
+		}
+		[HttpDelete]
+		[ProducesResponseType(StatusCodes.Status200OK)]
+		public IActionResult Delete(object id)
+		{
+			_productService.Delete(id);
 			return Ok();
 		}
 	}
