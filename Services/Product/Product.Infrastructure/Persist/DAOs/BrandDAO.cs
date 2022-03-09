@@ -1,10 +1,8 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace Product.Infrastructure.Persist.DAOs;
 
-public class BrandDAO : EntityBase<string>
+public class BrandDAO : EntityBaseDAO<string>
 {
 	[Required]
 	[MaxLength(150)]

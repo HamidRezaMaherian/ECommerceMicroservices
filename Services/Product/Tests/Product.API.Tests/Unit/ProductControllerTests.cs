@@ -1,8 +1,9 @@
-﻿using NUnit.Framework;
+﻿using Microsoft.AspNetCore.Mvc;
+using NUnit.Framework;
 using Product.API.Controllers;
-using Product.API.Tests.Utils;
 using Product.Application.DTOs;
 using Product.Application.Services;
+using Services.Shared.Tests;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -41,13 +42,14 @@ namespace Product.API.Tests.Unit
 		[Test]
 		public void Create_AddProduct()
 		{
-			var product=new ProductDTO()
+			var product = new ProductDTO()
 			{
 				Id = "1",
 				Name = "Name",
 			};
-			_productController.Create(product);
+			var result = _productController.Create(product);
 			Assert.AreEqual(_products.Count, 1);
+			Assert.AreEqual(typeof(OkResult), result.GetType());
 		}
 	}
 }

@@ -1,9 +1,9 @@
 ﻿using NUnit.Framework;
-using Product.Application.Utils;
 using Product.Infrastructure.Persist;
 using Product.Infrastructure.Persist.DAOs;
 using Product.Infrastructure.Repositories;
 using Product.Infrastructure.Tests.Utils;
+using Services.Shared.AppUtils;
 using System;
 using System.Linq;
 
@@ -40,7 +40,7 @@ namespace Product.Infrastructure.Tests.Unit.Repositories
 				MainImagePath = "no image"
 			};
 			_productRepo.Add(ref product);
-			Assert.AreEqual(_db.Products.Count(i=>i.Id==product.Id), 1);
+			Assert.AreEqual(_db.Products.Count(i => i.Id == product.Id), 1);
 		}
 		[Test]
 		public void GetAll_WithValidCondition_ReturnEntities()
@@ -61,7 +61,7 @@ namespace Product.Infrastructure.Tests.Unit.Repositories
 			{
 				Expression = i => i.Name == "Test"
 			}).ToList();
-			Assert.That(res.Count>=1);
+			Assert.That(res.Count >= 1);
 		}
 	}
 }

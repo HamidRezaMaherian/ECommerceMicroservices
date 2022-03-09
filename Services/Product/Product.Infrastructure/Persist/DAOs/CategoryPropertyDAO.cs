@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Product.Infrastructure.Persist.DAOs;
 
-public class CategoryPropertyDAO : EntityFlagBase,
+public class CategoryPropertyDAO : EntityFlagBaseDAO,
 	IEntityTypeConfiguration<CategoryPropertyDAO>
 {
 	[Required]

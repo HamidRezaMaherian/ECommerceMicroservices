@@ -1,5 +1,5 @@
-﻿using Discount.Application.Utils;
-using Discount.Domain.Entities;
+﻿using Discount.Domain.Entities;
+using Services.Shared.Contracts;
 
 namespace Discount.Application.Repositories
 {

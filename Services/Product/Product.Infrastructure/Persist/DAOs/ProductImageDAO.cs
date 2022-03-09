@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Product.Infrastructure.Persist.DAOs
 {
-	public class ProductImageDAO : EntityBase<string>
+	public class ProductImageDAO : EntityBaseDAO<string>
 	{
 		[Required]
 		public string ImagePath { get; set; }

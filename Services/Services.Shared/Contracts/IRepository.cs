@@ -1,0 +1,20 @@
+﻿using Services.Shared.AppUtils;
+
+namespace Services.Shared.Contracts
+{
+	public interface IRepository<T>
+		where T : class
+	{
+		IEnumerable<T> Get();
+
+		T Get(object id);
+
+		void Delete(object id);
+		void Delete(T entity);
+
+		void Add(T entity);
+
+		void Update(T entity);
+		IEnumerable<T> Get(QueryParams<T> queryParams);
+	}
+}

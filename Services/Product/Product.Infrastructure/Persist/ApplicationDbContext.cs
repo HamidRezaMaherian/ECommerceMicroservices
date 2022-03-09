@@ -13,7 +13,7 @@ namespace Product.Infrastructure.Persist
 		protected override void OnModelCreating(ModelBuilder builder)
 		{
 			SeedData(builder);
-			builder.ApplyGlobalFilters<IBaseDelete>(i=>!i.IsDelete);
+			builder.ApplyGlobalFilters<IBaseDelete>(i => !i.IsDelete);
 
 			builder.ApplyConfigurationsFromAssembly(
 				Assembly.GetAssembly(typeof(ApplicationDbContext)) ??
@@ -24,13 +24,13 @@ namespace Product.Infrastructure.Persist
 		}
 
 		#region Product
-		public DbSet<BrandDAO> Brands { get; set; }
-		public DbSet<ProductDAO> Products { get; set; }
-		public DbSet<ProductCategoryDAO> ProductCategories { get; set; }
-		public DbSet<ProductImageDAO> ProductImages { get; set; }
-		public DbSet<PropertyDAO> Properties { get; set; }
-		public DbSet<CategoryPropertyDAO> CategoryProperties { get; set; }
-		public DbSet<ProductPropertyDAO> ProductProperties { get; set; }
+		public DbSet<BrandDAO> Brands { get; private set; }
+		public DbSet<ProductDAO> Products { get; private set; }
+		public DbSet<ProductCategoryDAO> ProductCategories { get; private set; }
+		public DbSet<ProductImageDAO> ProductImages { get; private set; }
+		public DbSet<PropertyDAO> Properties { get; private set; }
+		public DbSet<CategoryPropertyDAO> CategoryProperties { get; private set; }
+		public DbSet<ProductPropertyDAO> ProductProperties { get; private set; }
 		#endregion
 
 

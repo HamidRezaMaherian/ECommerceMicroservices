@@ -1,6 +1,8 @@
-﻿namespace Discount.Application.DTOs
+﻿using Services.Shared.Common;
+
+namespace Discount.Application.DTOs
 {
-	public class PercentDiscountDTO
+	public class PercentDiscountDTO:EntityBase<string>
 	{
 		public DateTime StartDateTime { get; set; }
 		public DateTime EndDateTime { get; set; }

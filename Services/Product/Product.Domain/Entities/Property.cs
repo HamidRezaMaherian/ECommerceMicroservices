@@ -1,5 +1,5 @@
-﻿using Product.Domain.Common;
-using Product.Domain.Enums;
+﻿using Product.Domain.Enums;
+using Services.Shared.Common;
 
 namespace Product.Domain.Entities
 {

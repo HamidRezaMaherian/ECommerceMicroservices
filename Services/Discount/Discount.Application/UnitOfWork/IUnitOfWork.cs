@@ -1,4 +1,5 @@
 ﻿using Discount.Application.Repositories;
+using Services.Shared.Contracts;
 
 namespace Discount.Application.UnitOfWork
 {

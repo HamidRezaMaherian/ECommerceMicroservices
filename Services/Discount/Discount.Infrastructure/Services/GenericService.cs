@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
-using Discount.Application.Repositories;
 using Discount.Application.UnitOfWork;
-using Discount.Application.Utils;
-using Discount.Domain.Common;
+using Services.Shared.AppUtils;
+using Services.Shared.Common;
+using Services.Shared.Contracts;
 using System.Linq.Expressions;
 
 namespace Discount.Application.Services

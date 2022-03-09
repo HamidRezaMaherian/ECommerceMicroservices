@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
-using Discount.Application.Repositories;
-using Discount.Application.Utils;
 using Discount.Infrastructure.Persist;
 using Microsoft.EntityFrameworkCore;
+using Services.Shared.AppUtils;
+using Services.Shared.Contracts;
 
 namespace Discount.Infrastructure.Repositories
 {
@@ -19,11 +19,11 @@ namespace Discount.Infrastructure.Repositories
 			_dbSet = _db.Set<TDAO>();
 			_mapper = mapper;
 		}
-		public virtual void Add(ref T entity)
+		public virtual void Add(T entity)
 		{
 			var result = _dbSet.Add(_mapper.Map<TDAO>(entity));
 			_db.SaveChanges();
-			entity = _mapper.Map<T>(result.Entity);
+			_mapper.Map(result.Entity, entity);
 		}
 		public virtual void Delete(object id)
 		{

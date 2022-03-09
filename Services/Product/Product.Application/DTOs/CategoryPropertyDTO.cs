@@ -1,6 +1,4 @@
-﻿using Product.Domain.Common;
-
-namespace Product.Application.DTOs;
+﻿namespace Product.Application.DTOs;
 public class CategoryPropertyDTO
 {
 	public string Id { get; set; }

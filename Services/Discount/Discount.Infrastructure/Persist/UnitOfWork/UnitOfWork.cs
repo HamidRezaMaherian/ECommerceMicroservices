@@ -2,6 +2,7 @@
 using Discount.Application.Repositories;
 using Discount.Application.UnitOfWork;
 using Discount.Infrastructure.Repositories;
+using Services.Shared.Contracts;
 
 namespace Discount.Infrastructure.Persist
 {

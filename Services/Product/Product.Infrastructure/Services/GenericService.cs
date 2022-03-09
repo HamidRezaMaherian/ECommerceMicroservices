@@ -1,11 +1,11 @@
 ﻿using AutoMapper;
-using Product.Application.Repositories;
 using Product.Application.UnitOfWork;
-using Product.Application.Utils;
-using Product.Domain.Common;
+using Services.Shared.AppUtils;
+using Services.Shared.Common;
+using Services.Shared.Contracts;
 using System.Linq.Expressions;
 
-namespace Product.Application.Services
+namespace Product.Infrastructure.Services
 {
 	public abstract class GenericBaseService<T, Tdto> : IBaseService<T, Tdto> where T : class
 	{
@@ -62,7 +62,8 @@ namespace Product.Application.Services
 		public virtual void Add(Tdto entityDTO)
 		{
 			var entity = _mapper.Map<T>(entityDTO);
-			_repo.Add(ref entity);
+			_repo.Add(entity);
+			_mapper.Map(entity,entityDTO);
 		}
 		public virtual void Update(Tdto entityDTO)
 		{

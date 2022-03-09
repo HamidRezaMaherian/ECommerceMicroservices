@@ -1,10 +1,8 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace Product.Infrastructure.Persist.DAOs
 {
-	public class ProductPropertyDAO : EntityBase<string>
+	public class ProductPropertyDAO : EntityBaseDAO<string>
 	{
 		[Required]
 		[MaxLength(500)]

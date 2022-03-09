@@ -1,0 +1,23 @@
+syntax = "proto3";
+import "google/protobuf/timestamp.proto";
+option csharp_namespace = "DiscountRPC";
+
+package DiscountRPC;
+
+// The greeting service definition.
+service DiscountRPCService {
+  // Sends a greeting
+  rpc GetDiscounts (ProductId) returns (stream DiscountBaseResult);
+}
+
+// The request message containing the user's name.
+message ProductId {
+string product_id=1;
+}
+
+// The response message containing the greetings.
+message DiscountBaseResult {
+  string ProductId=1;
+  google.protobuf.Timestamp StartDateTime=2;
+  google.protobuf.Timestamp EndDateTime=3;
+}

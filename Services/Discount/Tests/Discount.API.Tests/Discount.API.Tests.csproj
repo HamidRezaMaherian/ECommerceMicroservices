@@ -17,6 +17,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\..\Services.Shared\Services.Shared.csproj" />
     <ProjectReference Include="..\..\Discount.API\Discount.API.csproj" />
     <ProjectReference Include="..\..\Discount.Application\Discount.Application.csproj" />
   </ItemGroup>

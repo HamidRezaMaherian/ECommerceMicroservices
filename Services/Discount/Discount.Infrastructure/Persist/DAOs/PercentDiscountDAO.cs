@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Discount.Infrastructure.Persist.DAOs
 {
-	public class PercentDiscountDAO : EntityBase<string>
+	public class PercentDiscountDAO : EntityBaseDAO<string>
 	{
 		[Required]
 		public DateTime StartDateTime { get; set; }

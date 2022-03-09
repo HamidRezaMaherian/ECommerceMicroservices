@@ -1,6 +1,8 @@
-﻿namespace Discount.Domain.Entities
+﻿using Services.Shared.Common;
+
+namespace Discount.Domain.Entities
 {
-	public class PriceDiscountDTO
+	public class PriceDiscountDTO : EntityBase<string>
 	{
 		public DateTime StartDateTime { get; set; }
 		public DateTime EndDateTime { get; set; }

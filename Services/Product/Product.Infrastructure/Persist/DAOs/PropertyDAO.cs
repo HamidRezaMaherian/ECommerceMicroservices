@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Product.Infrastructure.Persist.DAOs
 {
-	public class PropertyDAO : EntityBase<string>
+	public class PropertyDAO : EntityBaseDAO<string>
 	{
 		[MaxLength(300)]
 		[Required]

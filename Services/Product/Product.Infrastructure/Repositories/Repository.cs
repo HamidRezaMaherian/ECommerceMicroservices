@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
-using Product.Application.Repositories;
-using Product.Application.Utils;
 using Product.Infrastructure.Persist;
+using Services.Shared.AppUtils;
+using Services.Shared.Contracts;
 
 namespace Product.Infrastructure.Repositories
 {
@@ -19,11 +19,11 @@ namespace Product.Infrastructure.Repositories
 			_dbSet = _db.Set<TDAO>();
 			_mapper = mapper;
 		}
-		public virtual void Add(ref T entity)
+		public virtual void Add(T entity)
 		{
-			var result=_dbSet.Add(_mapper.Map<TDAO>(entity));
+			var result = _dbSet.Add(_mapper.Map<TDAO>(entity));
 			_db.SaveChanges();
-			entity= _mapper.Map<T>(result.Entity);
+			_mapper.Map(result.Entity, entity);
 		}
 		public virtual void Delete(object id)
 		{
@@ -42,7 +42,7 @@ namespace Product.Infrastructure.Repositories
 		{
 			IQueryable<TDAO> query = _dbSet;
 			query = query.Where(
-				ExpressionHelper.Convert<T,TDAO>(queryParams.Expression)
+				ExpressionHelper.Convert<T, TDAO>(queryParams.Expression)
 				);
 
 			//foreach (var includeProperty in queryParams.IncludeProperties.Split

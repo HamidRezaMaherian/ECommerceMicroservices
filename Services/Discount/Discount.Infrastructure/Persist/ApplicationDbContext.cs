@@ -24,8 +24,8 @@ namespace Discount.Infrastructure.Persist
 		}
 
 		#region Discount
-		public DbSet<PercentDiscountDAO> PercentDiscounts { get; set; }
-		public DbSet<PriceDiscountDAO> Products { get; set; }
+		public DbSet<PercentDiscountDAO> PercentDiscounts { get; private set; }
+		public DbSet<PriceDiscountDAO> Products { get; private set; }
 		#endregion
 
 

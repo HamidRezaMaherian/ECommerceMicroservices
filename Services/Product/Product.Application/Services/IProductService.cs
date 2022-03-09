@@ -1,4 +1,5 @@
 ﻿using Product.Application.DTOs;
+using Services.Shared.Contracts;
 
 namespace Product.Application.Services
 {

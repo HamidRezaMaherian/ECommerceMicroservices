@@ -2,6 +2,7 @@
 using Product.Application.Repositories;
 using Product.Application.UnitOfWork;
 using Product.Infrastructure.Repositories;
+using Services.Shared.Contracts;
 
 namespace Product.Infrastructure.Persist
 {

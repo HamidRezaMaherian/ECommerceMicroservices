@@ -1,5 +1,4 @@
-﻿using Product.Domain.Common;
-using System.ComponentModel.DataAnnotations;
+﻿using Services.Shared.Common;
 
 namespace Product.Application.DTOs;
 public class ProductPropertyDTO : EntityBase<string>
