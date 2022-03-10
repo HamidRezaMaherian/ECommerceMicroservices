@@ -29,5 +29,6 @@ public interface IBaseService<T, Tdto>
 	void Add(Tdto entityDTO);
 	void Update(Tdto entityDTO);
 	void Delete(object id);
+	bool Exists(Expression<Func<T, bool>> condition);
 }
 

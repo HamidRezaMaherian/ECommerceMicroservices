@@ -12,6 +12,8 @@ namespace Discount.Infrastructure.Persist.DAOs
 
 		[Required]
 		public string ProductId { get; set; }
+		[Required]
+		public string StoreId { get; set; }
 
 		[Range(1, 100)]
 		[Required]

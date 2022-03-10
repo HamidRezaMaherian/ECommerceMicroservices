@@ -68,13 +68,16 @@ namespace Inventory.Infrastructure.Services
 		{
 			var entity = _mapper.Map<T>(entityDTO);
 			_repo.Update(entity);
-			_unitOfWork.Save();
 		}
 
 		public virtual void Delete(object id)
 		{
 			_repo.Delete(id);
-			_unitOfWork.Save();
+		}
+
+		public bool Exists(Expression<Func<T, bool>> condition)
+		{
+			return _repo.Get().Any(condition.Compile());
 		}
 
 	}

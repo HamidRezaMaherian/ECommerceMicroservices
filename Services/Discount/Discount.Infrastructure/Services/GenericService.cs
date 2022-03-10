@@ -62,7 +62,7 @@ namespace Discount.Application.Services
 		public virtual void Add(Tdto entityDTO)
 		{
 			var entity = _mapper.Map<T>(entityDTO);
-			_repo.Add(ref entity);
+			_repo.Add(entity);
 		}
 		public virtual void Update(Tdto entityDTO)
 		{
@@ -75,6 +75,11 @@ namespace Discount.Application.Services
 		{
 			_repo.Delete(id);
 			_unitOfWork.Save();
+		}
+
+		public bool Exists(Expression<Func<T, bool>> condition)
+		{
+			return _repo.Get().Any(condition.Compile());
 		}
 
 	}

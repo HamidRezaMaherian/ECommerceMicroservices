@@ -37,7 +37,7 @@ namespace Product.Infrastructure.Tests.Unit.Repositories
 				UnitPrice = 45000,
 				MainImagePath = "no image"
 			};
-			_productRepo.Add(ref product);
+			_productRepo.Add(product);
 			_db.SaveChanges();
 			Assert.AreEqual(_db.Products.Count(i=>i.Id==product.Id), 1);
 		}

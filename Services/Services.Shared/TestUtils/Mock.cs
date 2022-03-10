@@ -20,7 +20,8 @@ namespace Services.Shared.Tests
 			store.Setup(i => i.Update(It.IsAny<T>())).Callback<T>(c =>
 			{
 				var res = list.FirstOrDefault(i => i.Id.Equals(c.Id));
-				res = c;
+				list.Remove(res);
+				list.Add(c);
 			});
 			store.Setup(i => i.Delete(It.IsAny<object>())).Callback<object>(c =>
 			{
@@ -52,7 +53,7 @@ namespace Services.Shared.Tests
 				{
 					var entity = mapper.Map<T>(c);
 					repository.Add(entity);
-					mapper.Map(entity,c);
+					mapper.Map(entity, c);
 				});
 
 			store.Setup(i => i.GetById(It.IsAny<object>()))

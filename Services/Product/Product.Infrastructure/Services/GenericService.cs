@@ -78,6 +78,10 @@ namespace Product.Infrastructure.Services
 			_unitOfWork.Save();
 		}
 
+		public bool Exists(Expression<Func<T, bool>> condition)
+		{
+			return _repo.Get().Any(condition.Compile());
+		}
 	}
 	public abstract class GenericActiveService<T, Tdto> : GenericBaseService<T, Tdto>, IBaseActiveService<T, Tdto> where T : class, IBaseActive
 	{

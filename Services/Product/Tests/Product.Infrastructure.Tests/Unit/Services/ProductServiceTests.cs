@@ -39,7 +39,7 @@ namespace Product.Infrastructure.Tests.Unit.Repositories
 				UnitPrice = 45000,
 				MainImagePath = "no image"
 			};
-			_productRepo.Add(ref product);
+			_productRepo.Add(product);
 			Assert.AreEqual(_db.Products.Count(i => i.Id == product.Id), 1);
 		}
 		[Test]
@@ -55,7 +55,7 @@ namespace Product.Infrastructure.Tests.Unit.Repositories
 				UnitPrice = 45000,
 				MainImagePath = "no image"
 			};
-			_productRepo.Add(ref product);
+			_productRepo.Add(product);
 
 			var res = _productRepo.Get(new QueryParams<Domain.Entities.Product>()
 			{
