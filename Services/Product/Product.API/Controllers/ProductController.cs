@@ -6,7 +6,7 @@ using Product.Application.Services;
 namespace Product.API.Controllers
 {
 	[ApiController]
-	[Route("[controller]")]
+	[Route("[controller]/[action]")]
 	public class ProductController : ControllerBase
 	{
 		private readonly IProductService _productService;

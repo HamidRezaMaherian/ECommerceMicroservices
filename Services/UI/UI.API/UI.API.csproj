@@ -18,4 +18,8 @@
     <Folder Include="Controllers\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\UI.Infrastructure\UI.Infrastructure.csproj" />
+  </ItemGroup>
+
 </Project>
