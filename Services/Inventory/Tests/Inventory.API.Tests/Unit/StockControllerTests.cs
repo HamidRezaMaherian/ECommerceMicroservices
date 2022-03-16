@@ -39,7 +39,7 @@ namespace Product.API.Tests.Unit
 
 			var res = _stockController.GetAllForProduct(productId);
 
-			CollectionAssert.AreEquivalent(res.Value?.Select(i => i.Id), _stockService.GetAll(i=>i.ProductId==productId).Select(i => i.Id));
+			CollectionAssert.AreEquivalent(res.Value?.Select(i => i.Id), _stockService.GetAll(i => i.ProductId == productId).Select(i => i.Id));
 		}
 		[Test]
 		public void GetAllForStore_ReturnAllStocksForStore()
@@ -56,7 +56,7 @@ namespace Product.API.Tests.Unit
 
 			var res = _stockController.GetAllForStore(storeId);
 
-			CollectionAssert.AreEquivalent(res.Value?.Select(i => i.Id), _stockService.GetAll(i=>i.StoreId==storeId).Select(i => i.Id));
+			CollectionAssert.AreEquivalent(res.Value?.Select(i => i.Id), _stockService.GetAll(i => i.StoreId == storeId).Select(i => i.Id));
 		}
 		[Test]
 		public void Create_AddStock()
@@ -86,7 +86,7 @@ namespace Product.API.Tests.Unit
 			};
 			_stockService.Add(stockDTO);
 			stockDTO.Count += 1;
-			var res = _stockController.Update(stockDTO);
+			_stockController.Update(stockDTO);
 
 			var stock = _stockService.GetById(stockDTO.Id);
 			Assert.IsNotNull(stock);

@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Product.Infrastructure.Persist;
 using Services.Shared.AppUtils;
 using Services.Shared.Contracts;
+using System.Linq.Expressions;
 
 namespace Product.Infrastructure.Repositories
 {
@@ -23,6 +24,7 @@ namespace Product.Infrastructure.Repositories
 		{
 			var result = _dbSet.Add(_mapper.Map<TDAO>(entity));
 			_db.SaveChanges();
+			DetachEntity(result.Entity);
 			_mapper.Map(result.Entity, entity);
 		}
 		public virtual void Delete(object id)
@@ -32,15 +34,21 @@ namespace Product.Infrastructure.Repositories
 				return;
 			_dbSet.Remove(_mapper.Map<TDAO>(entity));
 		}
+		public bool Exists(Expression<Func<T, bool>> predicate)
+		{
+			return _dbSet.Any(ExpressionHelper.Convert<T, TDAO>(predicate));
+		}
 
 		public void Delete(T entity)
 		{
-			_dbSet.Remove(_mapper.Map<TDAO>(entity));
+			var entityDAO = _mapper.Map<TDAO>(entity);
+			DetachEntity(entityDAO);
+			_dbSet.Remove(entityDAO);
 		}
 
 		public virtual IEnumerable<T> Get(QueryParams<T> queryParams)
 		{
-			IQueryable<TDAO> query = _dbSet;
+			IQueryable<TDAO> query = _dbSet.AsNoTracking();
 			query = query.Where(
 				ExpressionHelper.Convert<T, TDAO>(queryParams.Expression)
 				);
@@ -58,19 +66,28 @@ namespace Product.Infrastructure.Repositories
 		}
 		public virtual IEnumerable<T> Get()
 		{
-			return _mapper.Map<IEnumerable<T>>(_dbSet.ToList());
+			return _mapper.Map<IEnumerable<T>>(_dbSet.AsNoTracking().ToList());
 		}
 
 		public virtual T Get(object id)
 		{
 			ArgumentNullException.ThrowIfNull(id);
-			return _mapper.Map<T>(_dbSet.Find(id));
+			var entity = _dbSet.Find(id);
+			DetachEntity(entity);
+			return _mapper.Map<T>(entity);
 		}
 
 		public virtual void Update(T entity)
 		{
 			ArgumentNullException.ThrowIfNull(entity);
-			_dbSet.Update(_mapper.Map<TDAO>(entity));
+			var entityDAO = _mapper.Map<TDAO>(entity);
+			DetachEntity(entityDAO);
+			_dbSet.Update(entityDAO);
+		}
+		private void DetachEntity(object entity)
+		{
+			if (entity != null)
+				_db.Entry(entity).State = EntityState.Detached;
 		}
 	}
 }

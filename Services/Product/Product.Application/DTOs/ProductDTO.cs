@@ -14,8 +14,4 @@ public class ProductDTO
 	public virtual DateTime CreatedDateTime { get; set; }
 
 	public string CategoryId { get; set; }
-	#region Relations
-	public virtual ProductCategoryDTO Category { get; set; }
-	public virtual ICollection<ProductImageDTO> Images { get; set; }
-	#endregion
 }

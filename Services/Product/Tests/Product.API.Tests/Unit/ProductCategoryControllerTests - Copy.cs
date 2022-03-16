@@ -43,7 +43,7 @@ namespace Product.API.Tests.Unit
 			{
 				Id = Guid.NewGuid().ToString(),
 				Name = "Name",
-				IsActive = true
+				IsActive = true	
 			};
 			var result = _productCategoryController.Create(productCategory);
 			Assert.IsNotNull(_productCategoryService.GetById(productCategory.Id));

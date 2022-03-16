@@ -10,7 +10,6 @@ namespace Product.Infrastructure.Persist.Mappings
 		{
 			CreateMap<ProductDAO, Domain.Entities.Product>().ReverseMap();
 			CreateMap<BrandDAO, Brand>().ReverseMap();
-			CreateMap<Func<BrandDAO,bool>, Func<Brand,bool>>().ReverseMap();
 			CreateMap<CategoryPropertyDAO, CategoryProperty>().ReverseMap();
 			CreateMap<ProductCategoryDAO, ProductCategory>().ReverseMap();
 			CreateMap<ProductImageDAO, ProductImage>().ReverseMap();

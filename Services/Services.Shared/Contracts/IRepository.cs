@@ -1,4 +1,5 @@
 ﻿using Services.Shared.AppUtils;
+using System.Linq.Expressions;
 
 namespace Services.Shared.Contracts
 {
@@ -15,6 +16,7 @@ namespace Services.Shared.Contracts
 		void Add(T entity);
 
 		void Update(T entity);
-		IEnumerable<T> Get(QueryParams<T> queryParams);
+		IEnumerable<T> Get(QueryParams<T> predicate);
+		bool Exists(Expression<Func<T, bool>> predicate);
 	}
 }

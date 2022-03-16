@@ -3,6 +3,7 @@ using Discount.Infrastructure.Persist;
 using Microsoft.EntityFrameworkCore;
 using Services.Shared.AppUtils;
 using Services.Shared.Contracts;
+using System.Linq.Expressions;
 
 namespace Discount.Infrastructure.Repositories
 {
@@ -36,6 +37,11 @@ namespace Discount.Infrastructure.Repositories
 		public void Delete(T entity)
 		{
 			_dbSet.Remove(_mapper.Map<TDAO>(entity));
+		}
+
+		public bool Exists(Expression<Func<T, bool>> predicate)
+		{
+			return _dbSet.Any(ExpressionHelper.Convert<T, TDAO>(predicate));
 		}
 
 		public virtual IEnumerable<T> Get(QueryParams<T> queryParams)
