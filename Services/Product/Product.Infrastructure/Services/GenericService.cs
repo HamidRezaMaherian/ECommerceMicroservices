@@ -10,9 +10,9 @@ namespace Product.Infrastructure.Services
 	public abstract class GenericBaseService<T, Tdto> : IBaseService<T, Tdto> where T : class
 	{
 		protected readonly IRepository<T> _repo;
-		protected readonly IMapper _mapper;
+		protected readonly ICustomMapper _mapper;
 		protected readonly IUnitOfWork _unitOfWork;
-		public GenericBaseService(IUnitOfWork unitOfWork, IMapper mapper)
+		public GenericBaseService(IUnitOfWork unitOfWork, ICustomMapper mapper)
 		{
 			_unitOfWork = unitOfWork;
 			_mapper = mapper;
@@ -85,7 +85,7 @@ namespace Product.Infrastructure.Services
 	}
 	public abstract class GenericActiveService<T, Tdto> : GenericBaseService<T, Tdto>, IBaseActiveService<T, Tdto> where T : class, IBaseActive
 	{
-		public GenericActiveService(IUnitOfWork unitOfWork, IMapper mapper) : base(unitOfWork, mapper) { }
+		public GenericActiveService(IUnitOfWork unitOfWork, ICustomMapper mapper) : base(unitOfWork, mapper) { }
 
 		public virtual IEnumerable<T> GetAllActive()
 		{

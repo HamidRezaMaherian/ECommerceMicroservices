@@ -13,9 +13,5 @@ namespace Product.API.Tests.Utils
 			dbOptionsBuilder.UseInMemoryDatabase(dbName);
 			return new ApplicationDbContext(dbOptionsBuilder.Options);
 		}
-		public static IMapper MockMapper(Action<IMapperConfigurationExpression> mapperConfigs)
-		{
-			return new Mapper(new MapperConfiguration(mapperConfigs));
-		}
 	}
 }

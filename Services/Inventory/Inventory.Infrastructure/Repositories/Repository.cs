@@ -6,6 +6,7 @@ using MongoDB.Driver.Linq;
 using Services.Shared.AppUtils;
 using Services.Shared.Common;
 using Services.Shared.Contracts;
+using System.Linq.Expressions;
 
 namespace Inventory.Infrastructure.Repositories
 {
@@ -15,8 +16,8 @@ namespace Inventory.Infrastructure.Repositories
 	{
 		protected readonly ApplicationDbContext _db;
 		protected readonly IMongoCollection<TDAO> _dbCollection;
-		private readonly IMapper _mapper;
-		public Repository(ApplicationDbContext db, IMapper mapper)
+		private readonly ICustomMapper _mapper;
+		public Repository(ApplicationDbContext db, ICustomMapper mapper)
 		{
 			_db = db;
 			_dbCollection = _db.DataBase.GetCollection<TDAO>(nameof(T));
@@ -31,12 +32,20 @@ namespace Inventory.Infrastructure.Repositories
 			var entity = Get(id);
 			if (entity == null)
 				return;
-			_dbCollection.DeleteOne(i=>i.Id==entity.Id);
+			_dbCollection.DeleteOne(i => i.Id == entity.Id);
 		}
 
 		public void Delete(T entity)
 		{
-			_dbCollection.DeleteOne(i=>i.Id==entity.Id);
+			_dbCollection.DeleteOne(i => i.Id == entity.Id);
+		}
+
+		public bool Exists(Expression<Func<T, bool>> predicate)
+		{
+			IMongoQueryable<TDAO> query = _dbCollection.AsQueryable();
+			return query.Any(
+				ExpressionHelper.Convert<T, TDAO>(predicate)
+				);
 		}
 
 		public virtual IEnumerable<T> Get(QueryParams<T> queryParams)
@@ -65,7 +74,7 @@ namespace Inventory.Infrastructure.Repositories
 		public virtual T Get(object id)
 		{
 			ArgumentNullException.ThrowIfNull(id);
-			return _mapper.Map<T>(_dbCollection.Find(i=>i.Id==id));
+			return _mapper.Map<T>(_dbCollection.Find(i => i.Id == id));
 		}
 
 		public virtual void Update(T entity)

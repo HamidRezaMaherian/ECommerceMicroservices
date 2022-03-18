@@ -4,6 +4,7 @@ using Product.Infrastructure.Persist.DAOs;
 using Product.Infrastructure.Repositories;
 using Product.Infrastructure.Tests.Utils;
 using Services.Shared.AppUtils;
+using Services.Shared.Tests;
 using System;
 using System.Linq;
 
@@ -19,10 +20,7 @@ namespace Product.Infrastructure.Tests.Unit.Repositories
 		{
 			_db?.Dispose();
 			_db = MockActions.MockDbContext("TestDb");
-			var mapper = MockActions.MockMapper(cfg =>
-			{
-				cfg.CreateMap<Domain.Entities.Product, ProductDAO>().ReverseMap();
-			});
+			var mapper = UtilsExtension.CreateMapper<Domain.Entities.Product, ProductDAO>();
 			_productRepo = new ProductRepo(_db, mapper);
 		}
 

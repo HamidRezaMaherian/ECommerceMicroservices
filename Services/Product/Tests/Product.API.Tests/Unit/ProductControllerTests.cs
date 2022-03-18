@@ -37,7 +37,7 @@ namespace Product.API.Tests.Unit
 				Name = "Name",
 			});
 			var res = _productController.GetAll();
-			Assert.AreEqual(res.Value.Count(), 1);
+			Assert.AreEqual(res.Value?.Count(), 1);
 		}
 		[Test]
 		public void Create_AddProduct()
@@ -49,7 +49,6 @@ namespace Product.API.Tests.Unit
 			};
 			var result = _productController.Create(product);
 			Assert.AreEqual(_products.Count, 1);
-			Assert.AreEqual(typeof(OkResult), result.GetType());
 		}
 	}
 }

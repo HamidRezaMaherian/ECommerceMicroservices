@@ -47,7 +47,6 @@ namespace Product.API.Tests.Unit
 			};
 			var result = _productCategoryController.Create(productCategory);
 			Assert.IsNotNull(_productCategoryService.GetById(productCategory.Id));
-			Assert.AreEqual(typeof(OkResult), result.GetType());
 		}
 	}
 }

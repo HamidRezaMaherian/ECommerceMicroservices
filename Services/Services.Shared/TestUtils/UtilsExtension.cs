@@ -1,22 +1,24 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.DependencyInjection;
+using Services.Shared.Contracts;
+using Services.Shared.Mapper;
 
 namespace Services.Shared.Tests
 {
 	public static class UtilsExtension
 	{
-		public static Mapper CreateMapper<T1, T2>()
+		public static ICustomMapper CreateMapper<T1, T2>()
 		{
 			var automapperConfig = new MapperConfiguration(i => i.CreateMap<T1, T2>().ReverseMap());
-			return new Mapper(automapperConfig);
+
+			return new CustomMapper(new AutoMapper.Mapper(automapperConfig));
 		}
-		public static Mapper CreateMapper(params Profile[] profiles)
+		public static ICustomMapper CreateMapper(params Profile[] profiles)
 		{
 			var automapperConfig = new MapperConfiguration(i => i.AddProfiles(profiles));
-			return new Mapper(automapperConfig);
+			return new CustomMapper(new AutoMapper.Mapper(automapperConfig));
 		}
 	}
 	public class TestingWebAppFactory<TEntryPoint> : WebApplicationFactory<TEntryPoint> where TEntryPoint : class

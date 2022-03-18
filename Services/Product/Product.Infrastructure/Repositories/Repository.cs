@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
+using Product.Application.DTOs;
 using Product.Infrastructure.Persist;
 using Services.Shared.AppUtils;
 using Services.Shared.Contracts;
@@ -13,8 +15,8 @@ namespace Product.Infrastructure.Repositories
 	{
 		protected readonly ApplicationDbContext _db;
 		protected readonly DbSet<TDAO> _dbSet;
-		private readonly IMapper _mapper;
-		public Repository(ApplicationDbContext db, IMapper mapper)
+		private readonly ICustomMapper _mapper;
+		public Repository(ApplicationDbContext db, ICustomMapper mapper)
 		{
 			_db = db;
 			_dbSet = _db.Set<TDAO>();
@@ -22,9 +24,20 @@ namespace Product.Infrastructure.Repositories
 		}
 		public virtual void Add(T entity)
 		{
-			var result = _dbSet.Add(_mapper.Map<TDAO>(entity));
-			_db.SaveChanges();
-			DetachEntity(result.Entity);
+			EntityEntry result;
+			result = _dbSet.Add(_mapper.Map<TDAO>(entity));
+			try
+			{
+				_db.SaveChanges();
+			}
+			catch (Exception e)
+			{
+				throw new InsertOperationException(e.Message, e.InnerException);
+			}
+			finally
+			{
+				DetachEntity(result.Entity);
+			}
 			_mapper.Map(result.Entity, entity);
 		}
 		public virtual void Delete(object id)
@@ -81,8 +94,19 @@ namespace Product.Infrastructure.Repositories
 		{
 			ArgumentNullException.ThrowIfNull(entity);
 			var entityDAO = _mapper.Map<TDAO>(entity);
-			DetachEntity(entityDAO);
-			_dbSet.Update(entityDAO);
+			try
+			{
+				_db.Entry(entityDAO).State = EntityState.Modified;
+				_db.SaveChanges();
+			}
+			catch (Exception e)
+			{
+				throw new UpdateOperationException(e.Message, e.InnerException);
+			}
+			finally
+			{
+				DetachEntity(entityDAO);
+			}
 		}
 		private void DetachEntity(object entity)
 		{

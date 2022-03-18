@@ -3,67 +3,51 @@ using Microsoft.AspNetCore.Mvc;
 using Product.Application.DTOs;
 using Product.Application.Services;
 using Product.Domain.Entities;
+using Services.Shared.Resources;
 
 namespace Product.API.Controllers
 {
 	[ApiController]
-	[Route("[controller]")]
+	[Route("[controller]/[action]")]
 	public class BrandController : ControllerBase
 	{
-		private readonly IBrandService _productService;
+		private readonly IBrandService _brandService;
 
-		public BrandController(IBrandService productService)
+		public BrandController(IBrandService brandService)
 		{
-			_productService = productService;
+			_brandService = brandService;
 		}
 		[HttpGet]
 		public ActionResult<IEnumerable<Brand>> GetAll()
 		{
-			return _productService.GetAll().ToList();
+			return _brandService.GetAll().ToList();
 		}
 		[HttpPost]
 		[ProducesResponseType(StatusCodes.Status200OK)]
 		[ProducesResponseType(StatusCodes.Status400BadRequest)]
-		public IActionResult Create([FromBody] BrandDTO productDTO)
+		public IActionResult Create([FromBody] BrandDTO brandDTO)
 		{
-			try
-			{
-				_productService.Add(productDTO);
-			}
-			catch (Exception e)
-			{
-				return BadRequest(e);
-			}
+			_brandService.Add(brandDTO);
 			return Ok();
 		}
 		[HttpPut]
 		[ProducesResponseType(StatusCodes.Status200OK)]
 		[ProducesResponseType(StatusCodes.Status400BadRequest)]
-		public IActionResult Update([FromBody] BrandDTO productDTO)
+		public IActionResult Update([FromBody] BrandDTO brandDTO)
 		{
-			try
-			{
-				_productService.Update(productDTO);
-			}
-			catch (Exception e)
-			{
-				return BadRequest(e);
-			}
+			_brandService.Update(brandDTO);
 			return Ok();
 		}
-		[HttpDelete]
+		[HttpDelete("{id}")]
 		[ProducesResponseType(StatusCodes.Status200OK)]
 		[ProducesResponseType(StatusCodes.Status400BadRequest)]
-		public IActionResult Delete(object id)
+		public IActionResult Delete(string id)
 		{
-			try
-			{
-				_productService.Delete(id);
-			}
-			catch (Exception e)
-			{
-				return BadRequest(e);
-			}
+			if (!_brandService.Exists(i => i.Id == id))
+				return NotFound(
+					string.Format(Messages.NOT_FOUND, nameof(Domain.Entities.Product)));
+
+			_brandService.Delete(id);
 			return Ok();
 		}
 	}

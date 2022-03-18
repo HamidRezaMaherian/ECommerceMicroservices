@@ -46,7 +46,6 @@ namespace Product.API.Tests.Unit
 			};
 			var result = _brandController.Create(brand);
 			Assert.IsNotNull(_brandService.GetById(brand.Id));
-			Assert.AreEqual(typeof(OkResult), result.GetType());
 		}
 	}
 }

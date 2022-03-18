@@ -7,6 +7,8 @@ using Product.Application.UnitOfWork;
 using Product.Infrastructure.Persist;
 using Product.Infrastructure.Persist.Mappings;
 using Product.Infrastructure.Services;
+using Services.Shared.Contracts;
+using Services.Shared.Mapper;
 
 namespace Product.Infrastructure.IOC
 {
@@ -20,13 +22,14 @@ namespace Product.Infrastructure.IOC
 		}
 		private static void RegisterConfigurations(this IServiceCollection services)
 		{
-			services.AddAutoMapper(typeof(PersistMapperProfile));
-			services.AddAutoMapper(typeof(ServiceMapper));
+			services.AddAutoMapper(typeof(PersistMapperProfile), typeof(ServiceMapper));
+			services.AddSingleton<ICustomMapper,CustomMapper>();
 		}
 		private static void RegisterServices(this IServiceCollection services)
 		{
 			services.AddScoped<IProductService, ProductService>();
 			services.AddScoped<IProductCategoryService, ProductCategoryService>();
+			services.AddScoped<IBrandService, BrandService>();
 		}
 		private static void RegisterPersistant(this IServiceCollection services, IConfiguration configuration)
 		{

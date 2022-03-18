@@ -1,11 +1,12 @@
 using Microsoft.AspNetCore.Mvc;
 using Product.Application.DTOs;
 using Product.Application.Services;
+using Services.Shared.Resources;
 
 namespace Product.API.Controllers;
 
 [ApiController]
-[Route("[controller]")]
+[Route("[controller]/[action]")]
 public class ProductCategoryController : ControllerBase
 {
 	private readonly IProductCategoryService _productCategoryService;
@@ -33,11 +34,15 @@ public class ProductCategoryController : ControllerBase
 		_productCategoryService.Update(productCategoryDTO);
 		return Ok();
 	}
-	[HttpDelete]
+	[HttpDelete("{id}")]
 	[ProducesResponseType(StatusCodes.Status200OK)]
 	[ProducesResponseType(StatusCodes.Status400BadRequest)]
-	public IActionResult Delete(object id)
+	public IActionResult Delete(string id)
 	{
+		if (!_productCategoryService.Exists(i => i.Id == id))
+			return NotFound(
+				string.Format(Messages.NOT_FOUND, nameof(Domain.Entities.Product)));
+
 		_productCategoryService.Delete(id);
 		return Ok();
 	}

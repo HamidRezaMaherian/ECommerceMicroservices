@@ -1,5 +1,6 @@
 
 using Microsoft.AspNetCore.Mvc;
+using Product.API.Configurations.Validations;
 using Product.Application.DTOs;
 using Product.Application.Services;
 using Services.Shared.APIUtils;
@@ -36,15 +37,15 @@ namespace Product.API.Controllers
 			_productService.Update(productDTO);
 			return Ok();
 		}
+
 		[HttpDelete("{id}")]
 		[ProducesResponseType(StatusCodes.Status200OK)]
 		[ProducesResponseType(StatusCodes.Status404NotFound)]
 		public IActionResult Delete(string id)
 		{
-			if (!_productService.Exists(i=>i.Id==id))
-			{
-				return NotFound(string.Format(Messages.NOT_FOUND,nameof(Domain.Entities.Product)));
-			}
+			if (!_productService.Exists(i => i.Id == id))
+				return NotFound(
+					string.Format(Messages.NOT_FOUND, nameof(Domain.Entities.Product)));
 			_productService.Delete(id);
 			return Ok();
 		}

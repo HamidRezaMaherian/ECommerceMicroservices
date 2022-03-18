@@ -9,7 +9,6 @@ using Product.Infrastructure.Persist;
 using Product.Infrastructure.Persist.Mappings;
 using Services.Shared.APIUtils;
 using Services.Shared.AppUtils;
-using Services.Shared.Contracts;
 using Services.Shared.Tests;
 using System;
 using System.Collections.Generic;
@@ -19,7 +18,7 @@ using System.Net;
 namespace Product.API.Tests.Integration
 {
 	[TestFixture]
-	public class ProductEndPointsTests
+	public class ProductCategoryEndPointsTests
 	{
 		private HttpRequestHelper _httpClient;
 		private IUnitOfWork _unitOfWork;
@@ -28,9 +27,10 @@ namespace Product.API.Tests.Integration
 		{
 			string dbName = "test_db";
 			var dbContext = MockActions.MockDbContext(dbName);
+
 			_unitOfWork = new UnitOfWork(dbContext,
-				UtilsExtension.CreateMapper(new PersistMapperProfile())
-				);
+				UtilsExtension.CreateMapper(new PersistMapperProfile()));
+
 			var httpClient = new TestingWebAppFactory<Program>(s =>
 			{
 				var dbContextConfiguration = s.SingleOrDefault(opt => opt.ServiceType == typeof(DbContextOptions<ApplicationDbContext>));
@@ -43,10 +43,10 @@ namespace Product.API.Tests.Integration
 		[TearDown]
 		public void TearDown()
 		{
-			var products = _unitOfWork.ProductRepo.Get();
-			foreach (var item in products)
+			var productCategorys = _unitOfWork.ProductCategoryRepo.Get();
+			foreach (var item in productCategorys)
 			{
-				_unitOfWork.ProductRepo.Delete(item);
+				_unitOfWork.ProductCategoryRepo.Delete(item);
 			}
 			_unitOfWork.Save();
 		}
@@ -57,88 +57,76 @@ namespace Product.API.Tests.Integration
 			_unitOfWork.Dispose();
 		}
 		[Test]
-		public void GetAll_ReturnAllProducts()
+		public void GetAll_ReturnAllProductCategorys()
 		{
-			var res = _httpClient.Get("/product/getall");
+			var res = _httpClient.Get("/productCategory/getall");
 
-			var resList = JsonHelper.Parse<IEnumerable<Domain.Entities.Product>>(res.Content.ReadAsStringAsync().Result);
+			var resList = JsonHelper.Parse<IEnumerable<ProductCategory>>(res.Content.ReadAsStringAsync().Result);
 			CollectionAssert.AreEquivalent(resList.Select(i => i.Id),
-				_unitOfWork.ProductRepo.Get().Select(i => i.Id));
+				_unitOfWork.ProductCategoryRepo.Get().Select(i => i.Id));
 		}
 		[Test]
 		public void Create_PassValidObject_AddObject()
 		{
-			var product = new ProductDTO()
+			var productCategory = new ProductCategoryDTO()
 			{
 				Name = "test",
-				CategoryId = CreateMockCategoryObj().Id,
-				CreatedDateTime = DateTime.Now,
-				Description = "no desc",
-				ShortDesc = "no description",
-				MainImagePath = "no path",
-				UnitPrice = 29348
 			};
-			var res = _httpClient.Post("/product/create", product);
+			var res = _httpClient.Post("/productCategory/create", productCategory);
 
 			Assert.AreEqual(res.StatusCode, HttpStatusCode.OK);
 
-			Assert.IsTrue(_unitOfWork.ProductRepo.Exists(i => i.Name == product.Name));
+			Assert.IsTrue(_unitOfWork.ProductCategoryRepo.Exists(i => i.Name == productCategory.Name));
 		}
 		[Test]
 		public void Create_PassInvalidObject_ReturnBadRequest()
 		{
-			var product = new ProductDTO()
-			{
-				CategoryId = Guid.NewGuid().ToString(),
-				CreatedDateTime = DateTime.Now,
-				MainImagePath = "no path",
-			};
-			var res = _httpClient.Post("/product/create", product);
+			var productCategory = new ProductCategoryDTO();
+			var res = _httpClient.Post("/productCategory/create", productCategory);
 
 			Assert.AreEqual(res.StatusCode, HttpStatusCode.BadRequest);
-			Assert.IsFalse(_unitOfWork.ProductRepo.Exists(i => i.Name == "test"));
+			Assert.IsFalse(_unitOfWork.ProductCategoryRepo.Exists(i => i.Name == "test"));
 		}
 		[Test]
 		public void Update_PassValidObject_UpdateObject()
 		{
-			var product = CreateMockObj();
-			product.Name = "test2";
-			var res = _httpClient.Put("/product/update", product);
-			var updatedProduct = _unitOfWork.ProductRepo.Get(product.Id);
+			var productCategory = CreateMockCategoryObj();
+			productCategory.Name = "test2";
+			var res = _httpClient.Put("/productCategory/update", productCategory);
+			var updatedProductCategory = _unitOfWork.ProductCategoryRepo.Get(productCategory.Id);
 
 			Assert.AreEqual(res.StatusCode, HttpStatusCode.OK);
-			Assert.AreEqual(updatedProduct.Name, product.Name);
+			Assert.AreEqual(updatedProductCategory.Name, productCategory.Name);
 		}
 		[Test]
 		public void Update_PassInvalidObject_ReturnBadRequest()
 		{
-			var product = CreateMockObj();
-			product.Name = "test2";
-			var res = _httpClient.Put("/product/update", new
+			var productCategory = CreateMockCategoryObj();
+			productCategory.Name = "test2";
+			var res = _httpClient.Put("/productCategory/update", new
 			{
-				Id=product.Id,
+				Id=productCategory.Id,
 			});
-			var updatedProduct = _unitOfWork.ProductRepo.Get(product.Id);
+			var updatedProductCategory = _unitOfWork.ProductCategoryRepo.Get(productCategory.Id);
 
 			Assert.AreEqual(res.StatusCode, HttpStatusCode.BadRequest);
-			Assert.AreNotEqual(updatedProduct.Name, product.Name);
+			Assert.AreNotEqual(updatedProductCategory.Name, productCategory.Name);
 		}
 		[Test]
 		public void Delete_PassValidId_DeleteRecord()
 		{
-			var product = CreateMockObj();
-			var res = _httpClient.Delete($"/product/delete/{product.Id}");
-			Assert.IsNull(_unitOfWork.ProductRepo.Get(product.Id));
+			var productCategory = CreateMockCategoryObj();
+			var res = _httpClient.Delete($"/productCategory/delete/{productCategory.Id}");
 			Assert.AreEqual(HttpStatusCode.OK, res.StatusCode);
+			Assert.IsNull(_unitOfWork.ProductCategoryRepo.Get(productCategory.Id));
 		}
 		[Test]
 		public void Delete_PassInvalidId_ReturnNotFound()
 		{
 			var fakeId = Guid.NewGuid().ToString();
-			var res = _httpClient.Delete($"/product/delete/{fakeId}");
+			var res = _httpClient.Delete($"/productCategory/delete/{fakeId}");
 			Assert.AreEqual(HttpStatusCode.NotFound, res.StatusCode);
 		}
-
 		#region HelperMethods
 		private ProductCategory CreateMockCategoryObj()
 		{
@@ -150,21 +138,7 @@ namespace Product.API.Tests.Integration
 			_unitOfWork.ProductCategoryRepo.Add(productCateogry);
 			return productCateogry;
 		}
-		private Domain.Entities.Product CreateMockObj()
-		{
-			var product = new Domain.Entities.Product()
-			{
-				Name = "test",
-				CategoryId = CreateMockCategoryObj().Id,
-				CreatedDateTime = DateTime.Now,
-				Description = "no desc",
-				ShortDesc = "no description",
-				MainImagePath = "no path",
-				UnitPrice = 29348
-			};
-			_unitOfWork.ProductRepo.Add(product);
-			return product;
-		}
+
 		#endregion
 	}
 }

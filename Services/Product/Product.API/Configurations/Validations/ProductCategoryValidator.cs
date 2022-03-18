@@ -4,47 +4,28 @@ using FluentValidation.Results;
 using Microsoft.AspNetCore.Mvc;
 using Product.Application.DTOs;
 using Product.Application.UnitOfWork;
-using Services.Shared.Resources;
 
 namespace Product.API.Configurations.Validations
 {
-	public class ProductValidator : AbstractValidator<ProductDTO>, IValidatorInterceptor
+	public class ProductCategoryValidator : AbstractValidator<ProductCategoryDTO>, IValidatorInterceptor
 	{
-		public ProductValidator(IUnitOfWork unitOfWork)
+		public ProductCategoryValidator(IUnitOfWork unitOfWork)
 		{
 			RuleSet("update-model", () =>
 			{
-				RuleFor(i => i.Id)
-				.NotNull()
-				.Must(id =>
+				RuleFor(i => i.Id).NotNull().Must(id =>
 				{
-					return unitOfWork.ProductRepo.Exists(i => i.Id == id);
+					return unitOfWork.ProductCategoryRepo.Exists(i => i.Id == id);
 				});
 			});
-
-			RuleFor(i => i.Name)
-				.NotEmpty()
-				.NotNull();
-
-			RuleFor(i => i.CategoryId)
-				.Must(categoryId =>
-				{
-					return unitOfWork.ProductCategoryRepo.Exists(i => i.Id == categoryId);
-				}).WithMessage(obj => string.Format(Messages.NOT_FOUND, nameof(obj.CategoryId)))
-				.NotEmpty()
-				.NotNull();
-			RuleFor(i => i.CreatedDateTime)
-				.NotEmpty()
-				.NotNull();
-			RuleFor(i => i.UnitPrice)
-				.NotEmpty()
-				.NotNull();
+			RuleFor(i => i.Name).NotEmpty().NotNull();
 		}
+
 		public ValidationResult AfterAspNetValidation(ActionContext actionContext, IValidationContext validationContext, ValidationResult result)
 		{
 			if (actionContext.HttpContext.Request.Method.ToLower() == HttpMethod.Put.Method.ToLower())
 			{
-				var updateModelRes = this.Validate(validationContext.InstanceToValidate as ProductDTO,
+				var updateModelRes = this.Validate(validationContext.InstanceToValidate as ProductCategoryDTO,
 				(opt) =>
 				{
 					opt.IncludeRuleSets("update-model");
@@ -58,6 +39,5 @@ namespace Product.API.Configurations.Validations
 		{
 			return commonContext;
 		}
-
 	}
 }
