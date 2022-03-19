@@ -8,6 +8,7 @@ using Services.Shared.Tests;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using static Services.Shared.Tests.TestUtilsExtension;
 
 namespace Product.API.Tests.Unit
 {

@@ -20,7 +20,7 @@ namespace Product.Infrastructure.Tests.Unit.Repositories
 		{
 			_db?.Dispose();
 			_db = MockActions.MockDbContext("TestDb");
-			var mapper = UtilsExtension.CreateMapper<Domain.Entities.Product, ProductDAO>();
+			var mapper = TestUtilsExtension.CreateMapper<Domain.Entities.Product, ProductDAO>();
 			_productRepo = new ProductRepo(_db, mapper);
 		}
 

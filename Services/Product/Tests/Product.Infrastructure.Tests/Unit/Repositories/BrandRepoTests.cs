@@ -25,7 +25,7 @@ namespace Product.Infrastructure.Tests.Unit.Repositories
 		{
 			_db?.Dispose();
 			_db = MockActions.MockDbContext("TestDb");
-			_mapper = UtilsExtension.CreateMapper(new PersistMapperProfile());
+			_mapper = TestUtilsExtension.CreateMapper(new PersistMapperProfile());
 			_brandRepo = new BrandRepo(_db, _mapper);
 		}
 		[Test]

@@ -11,6 +11,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using static Services.Shared.Tests.TestUtilsExtension;
 
 namespace Discount.API.Tests.Unit
 {

@@ -74,7 +74,7 @@ namespace Inventory.Infrastructure.Repositories
 		public virtual T Get(object id)
 		{
 			ArgumentNullException.ThrowIfNull(id);
-			return _mapper.Map<T>(_dbCollection.Find(i => i.Id == id));
+			return _mapper.Map<T>(_dbCollection.AsQueryable().FirstOrDefault(i => i.Id == id));
 		}
 
 		public virtual void Update(T entity)
