@@ -1,4 +1,5 @@
-﻿using Services.Shared.Common;
+﻿using MongoDB.Bson.Serialization.Attributes;
+using Services.Shared.Common;
 
 namespace UI.Infrastructure.Persist.DAOs
 {
@@ -13,8 +14,8 @@ namespace UI.Infrastructure.Persist.DAOs
 	}
 	public abstract class EntityPrimaryBaseDAO<T>
 	{
-		//[BsonId]
-		//[BsonRepresentation(MongoDB.Bson.BsonType.ObjectId)]
+		[BsonId]
+		[BsonRepresentation(MongoDB.Bson.BsonType.ObjectId)]
 		public virtual T Id { get; set; }
 	}
 	public abstract class EntityBaseDAO<T> : EntityPrimaryBaseDAO<T>, IBaseActive, IBaseDelete
