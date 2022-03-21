@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Product.Application.DTOs;
+using Product.Application.Exceptions;
 using Product.Infrastructure.Persist;
 using Services.Shared.AppUtils;
 using Services.Shared.Contracts;

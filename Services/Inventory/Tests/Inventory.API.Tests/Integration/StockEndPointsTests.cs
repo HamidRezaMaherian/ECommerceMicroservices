@@ -8,7 +8,6 @@ using Microsoft.Extensions.DependencyInjection;
 using MongoDB.Driver;
 using NUnit.Framework;
 using Services.Shared.APIUtils;
-using Services.Shared.AppUtils;
 using Services.Shared.Tests;
 using System;
 using System.Collections.Generic;
@@ -24,22 +23,18 @@ namespace Inventory.API.Tests.Integration
 		[OneTimeSetUp]
 		public void OneTimeSetUp()
 		{
-			var testDB = new Dictionary<string, IList<object>>();
-			string dbName = "test_db";
-			var dbContext = MockActions.MockDbContext(dbName, testDB);
-
-			_unitOfWork = new UnitOfWork(dbContext,
-				TestUtilsExtension.CreateMapper(new PersistMapperProfile()));
+			var db = MockActions.MockDbContext();
+			_unitOfWork = MockActions.MockUnitOfWork
+				(db, TestUtilsExtension.CreateMapper(new PersistMapperProfile()));
 
 			var httpClient = new TestingWebAppFactory<Program>(s =>
 			{
-				var dbContextConfiguration = s.SingleOrDefault(opt => opt.ServiceType == typeof(MongoClient));
-				var applicationDbContext = s.SingleOrDefault(opt => opt.ServiceType == typeof(ApplicationDbContext));
+				var dbContextConfiguration = s.SingleOrDefault(opt => opt.ServiceType == typeof(ApplicationDbContext));
 				if (dbContextConfiguration != null)
 					s.Remove(dbContextConfiguration);
 				s.AddScoped(opt =>
 				{
-					return dbContext;
+					return db;
 				});
 			}).CreateClient();
 			_httpClient = new HttpRequestHelper(httpClient);
@@ -60,14 +55,14 @@ namespace Inventory.API.Tests.Integration
 			_unitOfWork.Dispose();
 		}
 		[Test]
-		public void GetAll_ReturnAllStocks()
+		public void GetAllForProduct_ReturnAllProductStocks()
 		{
-			var res = _httpClient.Get("/stock/getall");
+			var stock = CreateStock();
+			var res = _httpClient.Get<IEnumerable<Stock>>($"/stock/getallForProduct/{stock.ProductId}");
 
-			var resList = JsonHelper.Parse<IEnumerable<Stock>>(res.Content.ReadAsStringAsync().Result);
-
-			CollectionAssert.AreEquivalent(resList.Select(i => i.Id),
-				_unitOfWork.StockRepo.Get().Select(i => i.Id));
+			CollectionAssert.AreEquivalent(res.Select(i => i.Id),
+				_unitOfWork.StockRepo.Get().Where(i => i.ProductId == stock.ProductId)
+				.Select(i => i.Id));
 		}
 		[Test]
 		public void Create_PassValidObject_AddObject()
@@ -163,12 +158,25 @@ namespace Inventory.API.Tests.Integration
 		{
 			var store = new Store()
 			{
-				Name = "test",
+				Name = "testStore",
+				Description = "no desc",
+				IsActive = true,
 				ShortDesc = "no desc",
-				Description = "no desc"
 			};
 			_unitOfWork.StoreRepo.Add(store);
 			return store;
+		}
+
+		private Stock CreateStock()
+		{
+			var stock = new Stock()
+			{
+				ProductId = Guid.NewGuid().ToString(),
+				Count = 12,
+				StoreId = CreateStore().Id
+			};
+			_unitOfWork.StockRepo.Add(stock);
+			return stock;
 		}
 
 		#endregion

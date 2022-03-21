@@ -10,7 +10,7 @@ using System.Collections.Generic;
 using System.Linq;
 using static Services.Shared.Tests.TestUtilsExtension;
 
-namespace Product.API.Tests.Unit
+namespace Inventory.API.Tests.Unit
 {
 	[TestFixture]
 	public class StockControllerTests

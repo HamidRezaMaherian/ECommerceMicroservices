@@ -1,6 +1,6 @@
 ﻿using System.Runtime.Serialization;
 
-namespace Product.Application.DTOs;
+namespace Product.Application.Exceptions;
 
 public class InsertOperationException : Exception
 {
@@ -11,11 +11,11 @@ public class InsertOperationException : Exception
 		: base(info, context)
 	{
 	}
-	public InsertOperationException(string? message)
+	public InsertOperationException(string message)
 		: base(message)
 	{
 	}
-	public InsertOperationException(string? message, Exception? innerException)
+	public InsertOperationException(string message, Exception innerException)
 		: base(message, innerException)
 	{
 	}

@@ -5,6 +5,6 @@ public class ProductCategoryDTO : EntityBase<string>
 {
 	public virtual string Name { get; set; }
 
-	public string? ParentId { get; set; }
+	public string ParentId { get; set; }
 }
 

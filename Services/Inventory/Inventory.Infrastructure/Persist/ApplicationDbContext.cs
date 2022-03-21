@@ -10,9 +10,9 @@ namespace Inventory.Infrastructure.Persist
 		private IMongoCollection<StockDAO> _stocks;
 		private IMongoCollection<StoreDAO> _stores;
 
-		public ApplicationDbContext(MongoClient client,IConfiguration configuration)
+		public ApplicationDbContext(MongoClient client,string dbName)
 		{
-			DataBase = client.GetDatabase(configuration["DatabaseSettings:DatabaseName"]);
+			DataBase = client.GetDatabase(dbName);
 		}
 
 		public IMongoDatabase DataBase { get; }

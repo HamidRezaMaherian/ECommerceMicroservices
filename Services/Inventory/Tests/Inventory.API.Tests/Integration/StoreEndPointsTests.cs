@@ -14,7 +14,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
-namespace Product.API.Tests.Integration
+namespace Inventory.API.Tests.Integration
 {
 	[TestFixture]
 	public class StoreEndPointsTests
@@ -24,22 +24,18 @@ namespace Product.API.Tests.Integration
 		[OneTimeSetUp]
 		public void OneTimeSetUp()
 		{
-			var testDB = new Dictionary<string, IList<object>>();
-			string dbName = "test_db";
-			var dbContext = MockActions.MockDbContext(dbName, testDB);
-
-			_unitOfWork = new UnitOfWork(dbContext,
-				TestUtilsExtension.CreateMapper(new PersistMapperProfile()));
+			var db = MockActions.MockDbContext();
+			_unitOfWork = MockActions.MockUnitOfWork
+				(db, TestUtilsExtension.CreateMapper(new PersistMapperProfile()));
 
 			var httpClient = new TestingWebAppFactory<Program>(s =>
 			{
-				var dbContextConfiguration = s.SingleOrDefault(opt => opt.ServiceType == typeof(MongoClient));
-				var applicationDbContext = s.SingleOrDefault(opt => opt.ServiceType == typeof(ApplicationDbContext));
+				var dbContextConfiguration = s.SingleOrDefault(opt => opt.ServiceType == typeof(ApplicationDbContext));
 				if (dbContextConfiguration != null)
 					s.Remove(dbContextConfiguration);
 				s.AddScoped(opt =>
 				{
-					return dbContext;
+					return db;
 				});
 			}).CreateClient();
 			_httpClient = new HttpRequestHelper(httpClient);

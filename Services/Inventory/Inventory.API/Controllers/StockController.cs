@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Inventory.API.Controllers
 {
 	[ApiController]
-	[Route("[controller]")]
+	[Route("[controller]/[action]")]
 	public class StockController : ControllerBase
 	{
 		private readonly IStockService _stockService;

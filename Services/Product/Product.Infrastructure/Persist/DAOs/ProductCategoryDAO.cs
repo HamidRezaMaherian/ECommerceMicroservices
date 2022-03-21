@@ -8,7 +8,7 @@ namespace Product.Infrastructure.Persist.DAOs
 		[MaxLength(150)]
 		[Required]
 		public string Name { get; set; }
-		public string? ParentId { get; set; }
+		public string ParentId { get; set; }
 
 		#region Relations
 		[ForeignKey(nameof(ParentId))]

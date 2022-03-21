@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using NUnit.Framework;
-using Product.Application.DTOs;
+using Product.Application.Exceptions;
 using Product.Domain.Entities;
 using Product.Infrastructure.Persist;
 using Product.Infrastructure.Persist.DAOs;
@@ -9,7 +9,6 @@ using Product.Infrastructure.Repositories;
 using Product.Infrastructure.Tests.Utils;
 using Services.Shared.Contracts;
 using Services.Shared.Tests;
-using System;
 using System.Linq;
 
 namespace Product.Infrastructure.Tests.Unit.Repositories
@@ -34,7 +33,7 @@ namespace Product.Infrastructure.Tests.Unit.Repositories
 			var brand = new Brand()
 			{
 				Name = "Test",
-				ImagePath="no image",
+				ImagePath = "no image",
 				IsActive = true,
 			};
 			_brandRepo.Add(brand);
@@ -85,7 +84,7 @@ namespace Product.Infrastructure.Tests.Unit.Repositories
 			var brand = new BrandDAO()
 			{
 				Name = "test",
-				IsActive=true
+				IsActive = true
 			};
 			var result = _db.Brands.Add(brand);
 			brand.Id = result.Entity.Id;

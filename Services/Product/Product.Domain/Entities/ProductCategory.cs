@@ -7,7 +7,7 @@ namespace Product.Domain.Entities
 		public string Name { get; set; }
 
 		#region Relations
-		public string? ParentId { get; set; }
+		public string ParentId { get; set; }
 		public ProductCategory Parent { get; set; }
 		#endregion
 	}

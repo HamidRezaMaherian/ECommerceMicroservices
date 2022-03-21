@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using NUnit.Framework;
-using Product.Application.DTOs;
+using Product.Application.Exceptions;
 using Product.Domain.Entities;
 using Product.Infrastructure.Persist;
 using Product.Infrastructure.Persist.DAOs;
@@ -9,7 +9,6 @@ using Product.Infrastructure.Repositories;
 using Product.Infrastructure.Tests.Utils;
 using Services.Shared.Contracts;
 using Services.Shared.Tests;
-using System;
 using System.Linq;
 
 namespace Product.Infrastructure.Tests.Unit.Repositories
@@ -33,7 +32,7 @@ namespace Product.Infrastructure.Tests.Unit.Repositories
 		{
 			var product = new ProductCategory()
 			{
-				Name = "Test",				
+				Name = "Test",
 				IsActive = true,
 			};
 			_productCategoryRepo.Add(product);

@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using NUnit.Framework;
-using Product.Application.DTOs;
+using Product.Application.Exceptions;
 using Product.Infrastructure.Persist;
 using Product.Infrastructure.Persist.DAOs;
 using Product.Infrastructure.Persist.Mappings;

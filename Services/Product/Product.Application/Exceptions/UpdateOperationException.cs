@@ -1,6 +1,6 @@
 ﻿using System.Runtime.Serialization;
 
-namespace Product.Application.DTOs;
+namespace Product.Application.Exceptions;
 
 public class UpdateOperationException : Exception
 {
@@ -11,11 +11,11 @@ public class UpdateOperationException : Exception
 		: base(info, context)
 	{
 	}
-	public UpdateOperationException(string? message)
+	public UpdateOperationException(string message)
 		: base(message)
 	{
 	}
-	public UpdateOperationException(string? message, Exception? innerException)
+	public UpdateOperationException(string message, Exception innerException)
 		: base(message, innerException)
 	{
 	}
