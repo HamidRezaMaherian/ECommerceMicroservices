@@ -2,6 +2,7 @@ using Inventory.Application.DTOs;
 using Inventory.Application.Services;
 using Inventory.Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
+using Services.Shared.Resources;
 
 namespace Inventory.API.Controllers
 {
@@ -41,6 +42,10 @@ namespace Inventory.API.Controllers
 		[HttpDelete("{stockId}")]
 		public IActionResult Delete(string stockId)
 		{
+			if (!_stockService.Exists(i => i.Id == stockId))
+				return NotFound(
+					string.Format(Messages.NOT_FOUND, nameof(Stock)));
+
 			_stockService.Delete(stockId);
 			return Ok();
 		}

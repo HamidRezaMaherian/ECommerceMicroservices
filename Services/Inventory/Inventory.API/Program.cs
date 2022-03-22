@@ -1,4 +1,7 @@
+using FluentValidation.AspNetCore;
 using Inventory.Infrastructure.IOC;
+using System.Reflection;
+
 public class Program
 {
 	public static void Main(string[] args)
@@ -8,7 +11,12 @@ public class Program
 
 		// Add services to the container.
 
-		builder.Services.AddControllers();
+		builder.Services.AddControllers()
+			.AddFluentValidation(cfg =>
+			{
+				cfg.DisableDataAnnotationsValidation = true;
+				cfg.RegisterValidatorsFromAssembly(Assembly.GetAssembly(typeof(Program)));
+			});
 		// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 		builder.Services.AddEndpointsApiExplorer();
 		builder.Services.AddSwaggerGen();

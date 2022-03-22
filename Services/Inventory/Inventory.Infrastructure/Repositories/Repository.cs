@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using Inventory.Infrastructure.Persist;
+﻿using Inventory.Infrastructure.Persist;
 using Inventory.Infrastructure.Persist.DAOs;
 using MongoDB.Driver;
 using MongoDB.Driver.Linq;
@@ -20,11 +19,12 @@ namespace Inventory.Infrastructure.Repositories
 		public Repository(ApplicationDbContext db, ICustomMapper mapper)
 		{
 			_db = db;
-			_dbCollection = _db.DataBase.GetCollection<TDAO>(nameof(T));
+			_dbCollection = _db.DataBase.GetCollection<TDAO>(typeof(TDAO).Name);
 			_mapper = mapper;
 		}
 		public virtual void Add(T entity)
 		{
+			entity.Id = Guid.NewGuid().ToString().Replace("-","").Substring(0, 24);
 			_dbCollection.InsertOne(_mapper.Map<TDAO>(entity));
 		}
 		public virtual void Delete(object id)

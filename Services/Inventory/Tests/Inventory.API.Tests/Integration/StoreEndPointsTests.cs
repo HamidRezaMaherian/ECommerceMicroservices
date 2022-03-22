@@ -5,6 +5,7 @@ using Inventory.Domain.Entities;
 using Inventory.Infrastructure.Persist;
 using Inventory.Infrastructure.Persist.Mappings;
 using Microsoft.Extensions.DependencyInjection;
+using Mongo2Go;
 using MongoDB.Driver;
 using NUnit.Framework;
 using Services.Shared.APIUtils;
@@ -21,10 +22,15 @@ namespace Inventory.API.Tests.Integration
 	{
 		private HttpRequestHelper _httpClient;
 		private IUnitOfWork _unitOfWork;
+		private MongoDbRunner _mongoDbRunner;
+
 		[OneTimeSetUp]
 		public void OneTimeSetUp()
 		{
-			var db = MockActions.MockDbContext();
+			_mongoDbRunner = MongoDbRunner.Start();
+			var db = new ApplicationDbContext(
+				new MongoClient(_mongoDbRunner.ConnectionString),
+				"test_db");
 			_unitOfWork = MockActions.MockUnitOfWork
 				(db, TestUtilsExtension.CreateMapper(new PersistMapperProfile()));
 
@@ -35,7 +41,7 @@ namespace Inventory.API.Tests.Integration
 					s.Remove(dbContextConfiguration);
 				s.AddScoped(opt =>
 				{
-					return db;
+					return new ApplicationDbContext(new MongoClient(_mongoDbRunner.ConnectionString), "test_db");
 				});
 			}).CreateClient();
 			_httpClient = new HttpRequestHelper(httpClient);
@@ -71,8 +77,8 @@ namespace Inventory.API.Tests.Integration
 			var store = new StoreDTO()
 			{
 				Name = "test",
-				Description="no desc",
-				ShortDesc="no desc"
+				Description = "no desc",
+				ShortDesc = "no desc"
 			};
 			var res = _httpClient.Post("/store/create", store);
 

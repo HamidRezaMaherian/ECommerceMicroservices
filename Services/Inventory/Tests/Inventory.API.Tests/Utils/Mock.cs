@@ -1,5 +1,6 @@
 ﻿using Inventory.Application.UnitOfWork;
 using Inventory.Infrastructure.Persist;
+using Mongo2Go;
 using MongoDB.Driver;
 using Services.Shared.Contracts;
 
@@ -9,7 +10,8 @@ namespace Inventory.API.Tests.Utils
 	{
 		public static ApplicationDbContext MockDbContext()
 		{
-			var mongoClient = new MongoClient("mongodb//localhost:27017");
+			var mongoRunner = MongoDbRunner.Start();
+			var mongoClient = new MongoClient(mongoRunner.ConnectionString);
 			return new ApplicationDbContext(mongoClient, "test-db");
 		}
 		public static IUnitOfWork MockUnitOfWork(ApplicationDbContext db, ICustomMapper mapper)
