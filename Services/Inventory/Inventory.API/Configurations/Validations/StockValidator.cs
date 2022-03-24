@@ -22,12 +22,11 @@ namespace Inventory.API.Configurations.Validations
 			RuleFor(i => i.ProductId).NotEmpty().NotNull();
 			RuleFor(i => i.Count).NotEmpty().NotNull();
 			RuleFor(i => i.StoreId)
+				.Length(24,24)
 				.Must(storeId =>
 				{
 					return unitOfWork.StoreRepo.Exists(i => i.Id == storeId);
-				}).WithMessage(obj => string.Format(Messages.NOT_FOUND, nameof(obj.StoreId)))
-				.NotEmpty()
-				.NotNull();
+				}).WithMessage(obj => string.Format(Messages.NOT_FOUND, nameof(obj.StoreId)));
 		}
 
 		public ValidationResult AfterAspNetValidation(ActionContext actionContext, IValidationContext validationContext, ValidationResult result)

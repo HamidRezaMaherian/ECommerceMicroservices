@@ -1,4 +1,5 @@
 ﻿using Inventory.API.Tests.Utils;
+using Inventory.Application.Configurations;
 using Inventory.Application.DTOs;
 using Inventory.Application.UnitOfWork;
 using Inventory.Domain.Entities;
@@ -10,6 +11,7 @@ using MongoDB.Driver;
 using NUnit.Framework;
 using Services.Shared.APIUtils;
 using Services.Shared.AppUtils;
+using Services.Shared.Contracts;
 using Services.Shared.Tests;
 using System;
 using System.Collections.Generic;
@@ -23,14 +25,15 @@ namespace Inventory.API.Tests.Integration
 		private HttpRequestHelper _httpClient;
 		private IUnitOfWork _unitOfWork;
 		private MongoDbRunner _mongoDbRunner;
+		private ICustomMapper _mapper;
 
 		[OneTimeSetUp]
 		public void OneTimeSetUp()
 		{
 			_mongoDbRunner = MongoDbRunner.Start();
 			var db = MockActions.MockDbContext(_mongoDbRunner);
-			_unitOfWork = MockActions.MockUnitOfWork
-			(db, TestUtilsExtension.CreateMapper(new PersistMapperProfile()));
+			_mapper = TestUtilsExtension.CreateMapper(new PersistMapperProfile(), new ServiceMapper());
+			_unitOfWork = MockActions.MockUnitOfWork(db, _mapper);
 
 			var httpClient = new TestingWebAppFactory<Program>(s =>
 			{
@@ -62,11 +65,8 @@ namespace Inventory.API.Tests.Integration
 		[Test]
 		public void GetAll_ReturnAllStores()
 		{
-			var res = _httpClient.Get("/store/getall");
-
-			var resList = JsonHelper.Parse<IEnumerable<Store>>(res.Content.ReadAsStringAsync().Result);
-
-			CollectionAssert.AreEquivalent(resList.Select(i => i.Id),
+			var res = _httpClient.Get<IEnumerable<Store>>("/store/getall");
+			CollectionAssert.AreEquivalent(res.Select(i => i.Id),
 				_unitOfWork.StoreRepo.Get().Select(i => i.Id));
 		}
 		[Test]
@@ -80,65 +80,52 @@ namespace Inventory.API.Tests.Integration
 			};
 			var res = _httpClient.Post("/store/create", store);
 
-			Assert.AreEqual(res.StatusCode, HttpStatusCode.OK);
-
+			Assert.AreEqual(HttpStatusCode.OK,res.StatusCode);
 			Assert.IsTrue(_unitOfWork.StoreRepo.Exists(i => i.Name == store.Name));
 		}
 		[Test]
 		public void Create_PassInvalidObject_ReturnBadRequest()
 		{
-			var store = new StoreDTO();
+			var store = new StoreDTO()
+			{
+				Name="test",
+			};
 			var res = _httpClient.Post("/store/create", store);
 
-			Assert.AreEqual(res.StatusCode, HttpStatusCode.BadRequest);
-			Assert.IsFalse(_unitOfWork.StoreRepo.Exists(i => i.Name == "test"));
+			Assert.AreEqual(HttpStatusCode.BadRequest,res.StatusCode);
+			Assert.IsFalse(_unitOfWork.StoreRepo.Exists(i=> true));
 		}
 		[Test]
 		public void Update_PassValidObject_UpdateObject()
 		{
-			var store = new Store()
-			{
-				Name = "test",
-				Description = "no desc",
-				ShortDesc = "no desc"
-			};
-			_unitOfWork.StoreRepo.Add(store);
+			var store = CreateStore();
 			store.Name = "test2";
 			var res = _httpClient.Put("/store/update", store);
-			var updatedStore = _unitOfWork.StoreRepo.Get(store.Id);
+			var updatedStore = _mapper.Map<StoreDTO>(
+				_unitOfWork.StoreRepo.Get(store.Id));
 
-			Assert.AreEqual(res.StatusCode, HttpStatusCode.OK);
+			Assert.AreEqual(HttpStatusCode.OK,res.StatusCode);
 			Assert.AreEqual(updatedStore.Name, store.Name);
 		}
 		[Test]
 		public void Update_PassInvalidObject_ReturnBadRequest()
 		{
-			var store = new Store()
-			{
-				Name = "test",
-				Description = "no desc",
-				ShortDesc = "no desc",
-				IsActive = true,
-			};
-			_unitOfWork.StoreRepo.Add(store);
+			var store = CreateStore();
 			store.Name = "test2";
 			var res = _httpClient.Put("/store/update", new
 			{
 				Id = store.Id,
 			});
-			var updatedStore = _unitOfWork.StoreRepo.Get(store.Id);
+			var updatedStore = _mapper.Map<StoreDTO>(
+				_unitOfWork.StoreRepo.Get(store.Id));
 
-			Assert.AreEqual(res.StatusCode, HttpStatusCode.BadRequest);
+			Assert.AreEqual(HttpStatusCode.BadRequest,res.StatusCode);
 			Assert.AreNotEqual(updatedStore.Name, store.Name);
 		}
 		[Test]
 		public void Delete_PassValidId_DeleteRecord()
 		{
-			var store = new Store()
-			{
-				Name = "test",
-			};
-			_unitOfWork.StoreRepo.Add(store);
+			var store = CreateStore();
 			var res = _httpClient.Delete($"/store/delete/{store.Id}");
 			Assert.AreEqual(HttpStatusCode.OK, res.StatusCode);
 			Assert.IsNull(_unitOfWork.StoreRepo.Get(store.Id));
@@ -150,5 +137,19 @@ namespace Inventory.API.Tests.Integration
 			var res = _httpClient.Delete($"/store/delete/{fakeId}");
 			Assert.AreEqual(HttpStatusCode.NotFound, res.StatusCode);
 		}
+		#region HelperMethods
+		private Store CreateStore()
+		{
+			var store = new Store()
+			{
+				Name = "testStore",
+				Description = "no desc",
+				IsActive = true,
+				ShortDesc = "no desc",
+			};
+			_unitOfWork.StoreRepo.Add(store);
+			return store;
+		}
+		#endregion
 	}
 }

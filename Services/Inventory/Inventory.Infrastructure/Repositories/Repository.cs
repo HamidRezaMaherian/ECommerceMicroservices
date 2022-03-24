@@ -1,4 +1,5 @@
-﻿using Inventory.Infrastructure.Persist;
+﻿using Inventory.Application.Exceptions;
+using Inventory.Infrastructure.Persist;
 using Inventory.Infrastructure.Persist.DAOs;
 using MongoDB.Driver;
 using MongoDB.Driver.Linq;
@@ -6,6 +7,7 @@ using Services.Shared.AppUtils;
 using Services.Shared.Common;
 using Services.Shared.Contracts;
 using System.Linq.Expressions;
+using UI.Application.Exceptions;
 
 namespace Inventory.Infrastructure.Repositories
 {
@@ -19,68 +21,121 @@ namespace Inventory.Infrastructure.Repositories
 		public Repository(ApplicationDbContext db, ICustomMapper mapper)
 		{
 			_db = db;
-			_dbCollection = _db.DataBase.GetCollection<TDAO>(typeof(TDAO).Name);
+			_dbCollection = _db.DataBase.GetCollection<TDAO>(typeof(T).Name);
 			_mapper = mapper;
 		}
 		public virtual void Add(T entity)
 		{
-			entity.Id = Guid.NewGuid().ToString().Replace("-","").Substring(0, 24);
-			_dbCollection.InsertOne(_mapper.Map<TDAO>(entity));
+			try
+			{
+				entity.Id = Guid.NewGuid().ToString().Replace("-", "").Substring(0, 24);
+				_dbCollection.InsertOne(_mapper.Map<TDAO>(entity));
+			}
+			catch (Exception e)
+			{
+				throw new InsertOperationException(e.Message, e.InnerException);
+			}
 		}
 		public virtual void Delete(object id)
 		{
-			var entity = Get(id);
-			if (entity == null)
-				return;
-			_dbCollection.DeleteOne(i => i.Id == entity.Id);
+			try
+			{
+				_dbCollection.DeleteOne(i => i.Id == id.ToString());
+			}
+			catch (Exception e)
+			{
+				throw new DeleteOperationException(e.Message, e.InnerException);
+			}
 		}
 
 		public void Delete(T entity)
 		{
-			_dbCollection.DeleteOne(i => i.Id == entity.Id);
+			try
+			{
+				_dbCollection.DeleteOne(i => i.Id == entity.Id);
+			}
+			catch (Exception e)
+			{
+				throw new DeleteOperationException(e.Message, e.InnerException);
+			}
 		}
 
 		public bool Exists(Expression<Func<T, bool>> predicate)
 		{
-			IMongoQueryable<TDAO> query = _dbCollection.AsQueryable();
-			return query.Any(
-				ExpressionHelper.Convert<T, TDAO>(predicate)
-				);
+			try
+			{
+				IMongoQueryable<TDAO> query = _dbCollection.AsQueryable();
+				return query.Any(
+					ExpressionHelper.Convert<T, TDAO>(predicate)
+					);
+			}
+			catch (Exception e)
+			{
+				throw new ReadOperationException(e.Message, e.InnerException);
+			}
 		}
 
 		public virtual IEnumerable<T> Get(QueryParams<T> queryParams)
 		{
-			IMongoQueryable<TDAO> query = _dbCollection.AsQueryable();
-			query = query.Where(
-				ExpressionHelper.Convert<T, TDAO>(queryParams.Expression)
-				);
+			try
+			{
+				IMongoQueryable<TDAO> query = _dbCollection.AsQueryable();
+				query = query.Where(
+					ExpressionHelper.Convert<T, TDAO>(queryParams.Expression)
+					);
 
-			//foreach (var includeProperty in queryParams.IncludeProperties.Split
-			//			(',', StringSplitOptions.RemoveEmptyEntries))
-			//	query = query.Include(includeProperty);
+				//foreach (var includeProperty in queryParams.IncludeProperties.Split
+				//			(',', StringSplitOptions.RemoveEmptyEntries))
+				//	query = query.Include(includeProperty);
 
-			//if (queryParams.OrderBy != null)
-			//	queryParams.OrderBy(query);
+				//if (queryParams.OrderBy != null)
+				//	queryParams.OrderBy(query);
 
-			query = queryParams.Skip != 0 ? query.Skip(queryParams.Skip) : query;
-			query = queryParams.Take != 0 ? query.Take(queryParams.Take) : query;
-			return _mapper.Map<IEnumerable<T>>(query.ToList());
+				query = queryParams.Skip != 0 ? query.Skip(queryParams.Skip) : query;
+				query = queryParams.Take != 0 ? query.Take(queryParams.Take) : query;
+				return _mapper.Map<IEnumerable<T>>(query.ToList());
+			}
+			catch (Exception e)
+			{
+				throw new ReadOperationException(e.Message, e.InnerException);
+			}
 		}
 		public virtual IEnumerable<T> Get()
 		{
-			return _mapper.Map<IEnumerable<T>>(_dbCollection.AsQueryable().ToList());
+			try
+			{
+				return _mapper.Map<IEnumerable<T>>(_dbCollection.AsQueryable().ToList());
+			}
+			catch (Exception e)
+			{
+				throw new ReadOperationException(e.Message, e.InnerException);
+			}
 		}
 
 		public virtual T Get(object id)
 		{
 			ArgumentNullException.ThrowIfNull(id);
-			return _mapper.Map<T>(_dbCollection.AsQueryable().FirstOrDefault(i => i.Id == id.ToString()));
+			try
+			{
+				return _mapper.Map<T>(_dbCollection.AsQueryable().FirstOrDefault(i => i.Id == id));
+			}
+			catch (Exception e)
+			{
+				throw new ReadOperationException(e.Message, e.InnerException);
+			}
 		}
 
 		public virtual void Update(T entity)
 		{
 			ArgumentNullException.ThrowIfNull(entity);
-			_dbCollection.ReplaceOne(i => i.Id == entity.Id, _mapper.Map<TDAO>(entity));
+			try
+			{
+				_dbCollection.ReplaceOne(i => i.Id == entity.Id, _mapper.Map<TDAO>(entity));
+			}
+			catch (Exception e)
+			{
+				throw new UpdateOperationException(e.Message, e.InnerException);
+			}
 		}
 	}
 }
