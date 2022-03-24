@@ -28,11 +28,9 @@ namespace Inventory.API.Tests.Integration
 		public void OneTimeSetUp()
 		{
 			_mongoDbRunner = MongoDbRunner.Start();
-			var db = new ApplicationDbContext(
-				new MongoClient(_mongoDbRunner.ConnectionString),
-				"test_db");
+			var db = MockActions.MockDbContext(_mongoDbRunner);
 			_unitOfWork = MockActions.MockUnitOfWork
-				(db, TestUtilsExtension.CreateMapper(new PersistMapperProfile()));
+			(db, TestUtilsExtension.CreateMapper(new PersistMapperProfile()));
 
 			var httpClient = new TestingWebAppFactory<Program>(s =>
 			{
@@ -41,7 +39,7 @@ namespace Inventory.API.Tests.Integration
 					s.Remove(dbContextConfiguration);
 				s.AddScoped(opt =>
 				{
-					return new ApplicationDbContext(new MongoClient(_mongoDbRunner.ConnectionString), "test_db");
+					return MockActions.MockDbContext(_mongoDbRunner);
 				});
 			}).CreateClient();
 			_httpClient = new HttpRequestHelper(httpClient);

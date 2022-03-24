@@ -8,9 +8,8 @@ namespace Inventory.API.Tests.Utils
 {
 	public static class MockActions
 	{
-		public static ApplicationDbContext MockDbContext()
+		public static ApplicationDbContext MockDbContext(MongoDbRunner mongoRunner)
 		{
-			var mongoRunner = MongoDbRunner.Start();
 			var mongoClient = new MongoClient(mongoRunner.ConnectionString);
 			return new ApplicationDbContext(mongoClient, "test-db");
 		}
@@ -18,6 +17,5 @@ namespace Inventory.API.Tests.Utils
 		{
 			return new UnitOfWork(db, mapper);
 		}
-
 	}
 }

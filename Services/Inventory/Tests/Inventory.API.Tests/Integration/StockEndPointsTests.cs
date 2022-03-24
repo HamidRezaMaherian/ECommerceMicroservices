@@ -27,11 +27,9 @@ namespace Inventory.API.Tests.Integration
 		public void OneTimeSetUp()
 		{
 			_mongoDbRunner = MongoDbRunner.Start();
-			var db = new ApplicationDbContext(
-				new MongoClient(_mongoDbRunner.ConnectionString),
-				"test_db");
+			var db = MockActions.MockDbContext(_mongoDbRunner);
 			_unitOfWork = MockActions.MockUnitOfWork
-				(db, TestUtilsExtension.CreateMapper(new PersistMapperProfile()));
+			(db, TestUtilsExtension.CreateMapper(new PersistMapperProfile()));
 
 			var httpClient = new TestingWebAppFactory<Program>(s =>
 			{
@@ -40,7 +38,7 @@ namespace Inventory.API.Tests.Integration
 					s.Remove(dbContextConfiguration);
 				s.AddScoped(opt =>
 				{
-					return new ApplicationDbContext(new MongoClient(_mongoDbRunner.ConnectionString),"test_db");
+					return MockActions.MockDbContext(_mongoDbRunner);
 				});
 			}).CreateClient();
 			_httpClient = new HttpRequestHelper(httpClient);
@@ -61,102 +59,92 @@ namespace Inventory.API.Tests.Integration
 			_unitOfWork.Dispose();
 		}
 		[Test]
-		public void GetAllForProduct_ReturnAllProductStocks()
+		public void GetAll_ReturnAllStores()
 		{
-			var stock = CreateStock();
-			var res = _httpClient.Get<IEnumerable<Stock>>($"/stock/getallForProduct/{stock.ProductId}");
+			var res = _httpClient.Get<IEnumerable<Store>>("/store/getall");
 
 			CollectionAssert.AreEquivalent(res.Select(i => i.Id),
-				_unitOfWork.StockRepo.Get().Where(i => i.ProductId == stock.ProductId)
-				.Select(i => i.Id));
+				_unitOfWork.StoreRepo.Get().Select(i => i.Id));
 		}
 		[Test]
 		public void Create_PassValidObject_AddObject()
 		{
-			var stock = new StockDTO()
+			var store = new StoreDTO()
 			{
-				StoreId = CreateStore().Id,
-				Count = 12,
-				ProductId = Guid.NewGuid().ToString(),
-				IsActive = true,
+				Name = "test",
+				Description = "no desc",
+				ShortDesc = "no desc"
 			};
-			var res = _httpClient.Post("/stock/create", stock);
+			var res = _httpClient.Post("/store/create", store);
 
 			Assert.AreEqual(res.StatusCode, HttpStatusCode.OK);
 
-			Assert.IsTrue(_unitOfWork.StockRepo.Exists(i => i.ProductId == stock.ProductId));
+			Assert.IsTrue(_unitOfWork.StoreRepo.Exists(i => i.Name == store.Name));
 		}
 		[Test]
 		public void Create_PassInvalidObject_ReturnBadRequest()
 		{
-			var stock = new StockDTO()
-			{
-				ProductId = Guid.NewGuid().ToString(),
-			};
-			var res = _httpClient.Post("/stock/create", stock);
+			var store = new StoreDTO();
+			var res = _httpClient.Post("/store/create", store);
 
 			Assert.AreEqual(res.StatusCode, HttpStatusCode.BadRequest);
-			Assert.IsFalse(_unitOfWork.StockRepo.Exists(i => i.ProductId == stock.ProductId));
+			Assert.IsFalse(_unitOfWork.StoreRepo.Exists(i => i.Name == "test"));
 		}
 		[Test]
 		public void Update_PassValidObject_UpdateObject()
 		{
-			var stock = new Stock()
+			var store = new Store()
 			{
-				StoreId = CreateStore().Id,
-				Count = 12,
-				ProductId = Guid.NewGuid().ToString(),
-				IsActive = true,
+				Name = "test",
+				Description = "no desc",
+				ShortDesc = "no desc"
 			};
-			_unitOfWork.StockRepo.Add(stock);
-			stock.Count = 14;
-			var res = _httpClient.Put("/stock/update", stock);
-			var updatedStock = _unitOfWork.StockRepo.Get(stock.Id);
+			_unitOfWork.StoreRepo.Add(store);
+			store.Name = "test2";
+			var res = _httpClient.Put("/store/update", store);
+			var updatedStore = _unitOfWork.StoreRepo.Get(store.Id);
 
 			Assert.AreEqual(res.StatusCode, HttpStatusCode.OK);
-			Assert.AreEqual(updatedStock.Count, stock.Count);
+			Assert.AreEqual(updatedStore.Name, store.Name);
 		}
 		[Test]
 		public void Update_PassInvalidObject_ReturnBadRequest()
 		{
-			var stock = new Stock()
+			var store = new Store()
 			{
-				StoreId = CreateStore().Id,
-				Count = 12,
-				ProductId = Guid.NewGuid().ToString(),
+				Name = "test",
+				Description = "no desc",
+				ShortDesc = "no desc",
 				IsActive = true,
 			};
-			_unitOfWork.StockRepo.Add(stock);
-			stock.Count = 14;
-			var res = _httpClient.Put("/stock/update", new
+			_unitOfWork.StoreRepo.Add(store);
+			store.Name = "test2";
+			var res = _httpClient.Put("/store/update", new
 			{
-				Id = stock.Id,
+				Id = store.Id,
 			});
-			var updatedStock = _unitOfWork.StockRepo.Get(stock.Id);
+			var updatedStore = _unitOfWork.StoreRepo.Get(store.Id);
 
 			Assert.AreEqual(res.StatusCode, HttpStatusCode.BadRequest);
-			Assert.AreNotEqual(updatedStock.Count, stock.Count);
+			Assert.AreNotEqual(updatedStore.Name, store.Name);
 		}
 		[Test]
 		public void Delete_PassValidId_DeleteRecord()
 		{
-			var stock = new Stock()
+			var store = new Store()
 			{
-				StoreId = CreateStore().Id,
-				Count = 12,
-				ProductId = Guid.NewGuid().ToString(),
-				IsActive = true,
+				Name = "test",
 			};
-			_unitOfWork.StockRepo.Add(stock);
-			var res = _httpClient.Delete($"/stock/delete/{stock.Id}");
+			_unitOfWork.StoreRepo.Add(store);
+			var res = _httpClient.Delete($"/store/delete/{store.Id}");
 			Assert.AreEqual(HttpStatusCode.OK, res.StatusCode);
-			Assert.IsNull(_unitOfWork.StockRepo.Get(stock.Id));
+			Assert.IsNull(_unitOfWork.StoreRepo.Get(store.Id));
 		}
 		[Test]
 		public void Delete_PassInvalidId_ReturnNotFound()
 		{
 			var fakeId = Guid.NewGuid().ToString();
-			var res = _httpClient.Delete($"/stock/delete/{fakeId}");
+			var res = _httpClient.Delete($"/store/delete/{fakeId}");
 			Assert.AreEqual(HttpStatusCode.NotFound, res.StatusCode);
 		}
 		#region HelperMethods

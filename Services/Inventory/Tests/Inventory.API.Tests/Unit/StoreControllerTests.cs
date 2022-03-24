@@ -1,4 +1,5 @@
-﻿using Inventory.API.Controllers;
+﻿using Inventory.API.Configurations.Validations;
+using Inventory.API.Controllers;
 using Inventory.Application.DTOs;
 using Inventory.Application.Services;
 using Inventory.Domain.Entities;
