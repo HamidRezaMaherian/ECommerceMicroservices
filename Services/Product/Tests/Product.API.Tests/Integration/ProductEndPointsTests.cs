@@ -2,6 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using NUnit.Framework;
 using Product.API.Tests.Utils;
+using Product.Application.Configurations;
 using Product.Application.DTOs;
 using Product.Application.UnitOfWork;
 using Product.Domain.Entities;
@@ -23,14 +24,14 @@ namespace Product.API.Tests.Integration
 	{
 		private HttpRequestHelper _httpClient;
 		private IUnitOfWork _unitOfWork;
+		private ICustomMapper _mapper;
 		[OneTimeSetUp]
 		public void OneTimeSetUp()
 		{
 			string dbName = "test_db";
 			var dbContext = MockActions.MockDbContext(dbName);
-			_unitOfWork = new UnitOfWork(dbContext,
-				TestUtilsExtension.CreateMapper(new PersistMapperProfile())
-				);
+			_mapper = TestUtilsExtension.CreateMapper(new PersistMapperProfile(),new ServiceMapper());
+			_unitOfWork = new UnitOfWork(dbContext,_mapper);
 			var httpClient = new TestingWebAppFactory<Program>(s =>
 			{
 				var dbContextConfiguration = s.SingleOrDefault(opt => opt.ServiceType == typeof(DbContextOptions<ApplicationDbContext>));
@@ -80,7 +81,7 @@ namespace Product.API.Tests.Integration
 			};
 			var res = _httpClient.Post("/product/create", product);
 
-			Assert.AreEqual(res.StatusCode, HttpStatusCode.OK);
+			Assert.AreEqual(HttpStatusCode.OK,res.StatusCode);
 
 			Assert.IsTrue(_unitOfWork.ProductRepo.Exists(i => i.Name == product.Name));
 		}
@@ -95,7 +96,7 @@ namespace Product.API.Tests.Integration
 			};
 			var res = _httpClient.Post("/product/create", product);
 
-			Assert.AreEqual(res.StatusCode, HttpStatusCode.BadRequest);
+			Assert.AreEqual(HttpStatusCode.BadRequest,res.StatusCode);
 			Assert.IsFalse(_unitOfWork.ProductRepo.Exists(i => i.Name == "test"));
 		}
 		[Test]
@@ -104,9 +105,11 @@ namespace Product.API.Tests.Integration
 			var product = CreateMockObj();
 			product.Name = "test2";
 			var res = _httpClient.Put("/product/update", product);
-			var updatedProduct = _unitOfWork.ProductRepo.Get(product.Id);
 
-			Assert.AreEqual(res.StatusCode, HttpStatusCode.OK);
+			var updatedProduct = _mapper.Map<ProductDTO>(
+				_unitOfWork.ProductRepo.Get(product.Id));
+
+			Assert.AreEqual(HttpStatusCode.OK,res.StatusCode);
 			Assert.AreEqual(updatedProduct.Name, product.Name);
 		}
 		[Test]
@@ -116,11 +119,12 @@ namespace Product.API.Tests.Integration
 			product.Name = "test2";
 			var res = _httpClient.Put("/product/update", new
 			{
-				Id=product.Id,
+				Id = product.Id,
 			});
-			var updatedProduct = _unitOfWork.ProductRepo.Get(product.Id);
+			var updatedProduct = _mapper.Map<ProductDTO>(
+				_unitOfWork.ProductRepo.Get(product.Id));
 
-			Assert.AreEqual(res.StatusCode, HttpStatusCode.BadRequest);
+			Assert.AreEqual(HttpStatusCode.BadRequest,res.StatusCode);
 			Assert.AreNotEqual(updatedProduct.Name, product.Name);
 		}
 		[Test]
@@ -140,7 +144,7 @@ namespace Product.API.Tests.Integration
 		}
 
 		#region HelperMethods
-		private ProductCategory CreateMockCategoryObj()
+		private ProductCategoryDTO CreateMockCategoryObj()
 		{
 			var productCateogry = new ProductCategory()
 			{
@@ -148,7 +152,7 @@ namespace Product.API.Tests.Integration
 				IsActive = true,
 			};
 			_unitOfWork.ProductCategoryRepo.Add(productCateogry);
-			return productCateogry;
+			return _mapper.Map<ProductCategoryDTO>(productCateogry);
 		}
 		private Domain.Entities.Product CreateMockObj()
 		{
