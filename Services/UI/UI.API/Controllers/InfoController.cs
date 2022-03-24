@@ -6,7 +6,7 @@ using UI.Domain.Entities;
 
 namespace UI.API.Controllers
 {
-	[Route("api/[controller]")]
+	[Route("[controller]")]
 	[ApiController]
 	public class InfoController : ControllerBase
 	{
@@ -18,21 +18,27 @@ namespace UI.API.Controllers
 			_aboutUsService = aboutUsService;
 			_contactUsService = contactUsService;
 		}
+		[HttpGet("aboutus")]
 		public ActionResult<AboutUs> GetAboutUs()
 		{
 			return _aboutUsService.FirstOrDefault();
 		}
+		[HttpGet("contactus")]
 		public ActionResult<ContactUs> GetContactUs()
 		{
 			return _contactUsService.FirstOrDefault();
 		}
+		[HttpPut("aboutus")]
 		public IActionResult UpdateAboutUs(AboutUsDTO aboutUs)
 		{
-			throw new NotImplementedException();
+			_aboutUsService.Update(aboutUs);
+			return Ok();
 		}
+		[HttpPut("contactus")]
 		public IActionResult UpdateContactUs(ContactUsDTO contactUs)
 		{
-			throw new NotImplementedException();
+			_contactUsService.Update(contactUs);
+			return Ok();
 		}
 	}
 }

@@ -6,34 +6,41 @@ using UI.Domain.Entities;
 
 namespace UI.API.Controllers
 {
-	[Route("api/[controller]")]
+	[Route("[controller]/[action]")]
 	[ApiController]
 	public class FaqController : ControllerBase
 	{
-		private readonly IFaqService _sliderService;
+		private readonly IFaqService _faqService;
 
-		public FaqController(IFaqService sliderService)
+		public FaqController(IFaqService faqService)
 		{
-			_sliderService = sliderService;
+			_faqService = faqService;
 		}
 
+		[HttpGet]
 		public ActionResult<IEnumerable<FAQ>> GetAll()
 		{
-			return _sliderService.GetAll().ToList();
+			return _faqService.GetAll().ToList();
 		}
-		public IActionResult Create(FaqDTO slider)
+		[HttpPost]
+		public IActionResult Create([FromBody] FaqDTO faq)
 		{
-			_sliderService.Add(slider);
+			_faqService.Add(faq);
 			return Ok(string.Format(Messages.SUCCEDED, "CREATION"));
 		}
-		public IActionResult Update(FaqDTO slider)
+		[HttpPut]
+		public IActionResult Update([FromBody] FaqDTO faq)
 		{
-			_sliderService.Update(slider);
+			_faqService.Update(faq);
 			return Ok(string.Format(Messages.SUCCEDED, "UPDATE"));
 		}
+		[HttpDelete("{id}")]
 		public IActionResult Delete(string id)
 		{
-			_sliderService.Delete(id);
+			if (!_faqService.Exists(i => i.Id == id))
+				return NotFound(
+					string.Format(Messages.NOT_FOUND, nameof(FAQ)));
+			_faqService.Delete(id);
 			return Ok(string.Format(Messages.SUCCEDED, "Deletion"));
 		}
 	}

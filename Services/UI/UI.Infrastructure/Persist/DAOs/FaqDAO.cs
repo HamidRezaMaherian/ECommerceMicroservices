@@ -7,7 +7,7 @@ public class FaqDAO : EntityBaseDAO<string>
 	public string Question { get; set; }
 	[BsonRequired]
 	public string Answer { get; set; }
-	public int CategoryId { get; set; }
+	public string CategoryId { get; set; }
 	#region NavigationProps
 	public FaqCategoryDAO Category { get; set; }
 	#endregion

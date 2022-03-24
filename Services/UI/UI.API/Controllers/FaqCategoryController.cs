@@ -6,8 +6,8 @@ using UI.Domain.Entities;
 
 namespace UI.API.Controllers
 {
-	[Route("api/[controller]")]
 	[ApiController]
+	[Route("[controller]/[action]")]
 	public class FaqCategoryController : ControllerBase
 	{
 		private readonly IFaqCategoryService _faqCategoryService;
@@ -17,22 +17,30 @@ namespace UI.API.Controllers
 			_faqCategoryService = sliderService;
 		}
 
+		[HttpGet]
 		public ActionResult<IEnumerable<FaqCategory>> GetAll()
 		{
 			return _faqCategoryService.GetAll().ToList();
 		}
-		public IActionResult Create(FaqCategoryDTO slider)
+		[HttpPost]
+		public IActionResult Create([FromBody] FaqCategoryDTO slider)
 		{
 			_faqCategoryService.Add(slider);
 			return Ok(string.Format(Messages.SUCCEDED, "CREATION"));
 		}
-		public IActionResult Update(FaqCategoryDTO slider)
+		[HttpPut]
+		public IActionResult Update([FromBody] FaqCategoryDTO slider)
 		{
 			_faqCategoryService.Update(slider);
 			return Ok(string.Format(Messages.SUCCEDED, "UPDATE"));
 		}
+		[HttpDelete("{id}")]
 		public IActionResult Delete(string id)
 		{
+			if (!_faqCategoryService.Exists(i => i.Id == id))
+				return NotFound(
+					string.Format(Messages.NOT_FOUND, nameof(FaqCategory)));
+
 			_faqCategoryService.Delete(id);
 			return Ok(string.Format(Messages.SUCCEDED, "Deletion"));
 		}

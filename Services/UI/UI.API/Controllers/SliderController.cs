@@ -6,7 +6,7 @@ using UI.Domain.Entities;
 
 namespace UI.API.Controllers
 {
-	[Route("api/[controller]")]
+	[Route("[controller]/[action]")]
 	[ApiController]
 	public class SliderController : ControllerBase
 	{
@@ -17,22 +17,29 @@ namespace UI.API.Controllers
 			_sliderService = sliderService;
 		}
 
+		[HttpGet]
 		public ActionResult<IEnumerable<Slider>> GetAll()
 		{
 			return _sliderService.GetAll().ToList();
 		}
-		public IActionResult Create(SliderDTO slider)
+		[HttpPost]
+		public IActionResult Create([FromBody] SliderDTO slider)
 		{
 			_sliderService.Add(slider);
 			return Ok(string.Format(Messages.SUCCEDED, "CREATION"));
 		}
-		public IActionResult Update(SliderDTO slider)
+		[HttpPut]
+		public IActionResult Update([FromBody] SliderDTO slider)
 		{
 			_sliderService.Update(slider);
 			return Ok(string.Format(Messages.SUCCEDED, "UPDATE"));
 		}
+		[HttpDelete("{id}")]
 		public IActionResult Delete(string id)
 		{
+			if (!_sliderService.Exists(i => i.Id == id))
+				return NotFound(
+					string.Format(Messages.NOT_FOUND, nameof(FAQ)));
 			_sliderService.Delete(id);
 			return Ok(string.Format(Messages.SUCCEDED, "Deletion"));
 		}

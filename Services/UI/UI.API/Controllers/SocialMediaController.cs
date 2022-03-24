@@ -6,7 +6,7 @@ using UI.Domain.Entities;
 
 namespace UI.API.Controllers
 {
-	[Route("api/[controller]")]
+	[Route("[controller]/[action]")]
 	[ApiController]
 	public class SocialMediaController : ControllerBase
 	{
@@ -16,23 +16,30 @@ namespace UI.API.Controllers
 		{
 			_sliderService = sliderService;
 		}
-
+		[HttpGet]
 		public ActionResult<IEnumerable<SocialMedia>> GetAll()
 		{
 			return _sliderService.GetAll().ToList();
 		}
-		public IActionResult Create(SocialMediaDTO slider)
+		[HttpPost]
+		public IActionResult Create([FromBody]SocialMediaDTO slider)
 		{
 			_sliderService.Add(slider);
 			return Ok(string.Format(Messages.SUCCEDED, "CREATION"));
 		}
-		public IActionResult Update(SocialMediaDTO slider)
+		[HttpPut]
+		public IActionResult Update([FromBody] SocialMediaDTO slider)
 		{
 			_sliderService.Update(slider);
 			return Ok(string.Format(Messages.SUCCEDED, "UPDATE"));
 		}
+		[HttpDelete("{id}")]
 		public IActionResult Delete(string id)
 		{
+			if (!_sliderService.Exists(i => i.Id == id))
+				return NotFound(
+					string.Format(Messages.NOT_FOUND, nameof(FAQ)));
+
 			_sliderService.Delete(id);
 			return Ok(string.Format(Messages.SUCCEDED, "Deletion"));
 		}

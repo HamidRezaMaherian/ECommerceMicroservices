@@ -19,7 +19,7 @@ using UI.Infrastructure.Persist.Mappings;
 namespace UI.API.Tests.Integration
 {
 	[TestFixture]
-	public class SliderEndPointsTests
+	public class SocialMediaEndPointsTests
 	{
 		private HttpRequestHelper _httpClient;
 		private IUnitOfWork _unitOfWork;
@@ -49,10 +49,10 @@ namespace UI.API.Tests.Integration
 		[TearDown]
 		public void TearDown()
 		{
-			var sliders = _unitOfWork.SliderRepo.Get();
-			foreach (var item in sliders)
+			var socialMedias = _unitOfWork.SocialMediaRepo.Get();
+			foreach (var item in socialMedias)
 			{
-				_unitOfWork.SliderRepo.Delete(item);
+				_unitOfWork.SocialMediaRepo.Delete(item);
 			}
 		}
 		[OneTimeTearDown]
@@ -62,91 +62,97 @@ namespace UI.API.Tests.Integration
 			_unitOfWork.Dispose();
 		}
 		[Test]
-		public void GetAll_ReturnAllSliders()
+		public void GetAll_ReturnAllSocialMedias()
 		{
-			var slider = CreateSlider();
-			var res = _httpClient.Get<IEnumerable<Slider>>($"/slider/getall");
+			var socialMedia = CreateSocialMedia();
+			var res = _httpClient.Get<IEnumerable<SocialMedia>>($"/socialMedia/getall");
 
 			CollectionAssert.AreEquivalent(res.Select(i => i.Id),
-				_unitOfWork.SliderRepo.Get().Select(i => i.Id));
+				_unitOfWork.SocialMediaRepo.Get().Select(i => i.Id));
 		}
 		[Test]
 		public void Create_PassValidObject_AddObject()
 		{
-			var slider = new SliderDTO()
+			var socialMedia = new SocialMediaDTO()
 			{
-				Title = Guid.NewGuid().ToString(),
+				Name=Guid.NewGuid().ToString(),
+				Link="no link",
 				ImagePath = "no image",
 				IsActive = true,
 			};
-			var res = _httpClient.Post("/slider/create", slider);
+			var res = _httpClient.Post("/socialMedia/create", socialMedia);
 
 			Assert.AreEqual(HttpStatusCode.OK,res.StatusCode);
 
-			Assert.IsTrue(_unitOfWork.SliderRepo.Exists(i => i.Title == slider.Title));
+			Assert.IsTrue(_unitOfWork.SocialMediaRepo.Exists(i => i.Name == socialMedia.Name));
 		}
 		[Test]
 		public void Create_PassInvalidObject_ReturnBadRequest()
 		{
-			var slider = new SliderDTO();
-			var res = _httpClient.Post("/slider/create", slider);
+			var socialMedia = new SocialMediaDTO()
+			{
+				Name = Guid.NewGuid().ToString(),
+			};
+			var res = _httpClient.Post("/socialMedia/create", socialMedia);
 			Assert.AreEqual(HttpStatusCode.BadRequest,res.StatusCode);
-			Assert.IsFalse(_unitOfWork.SliderRepo.Exists(i => i.Title == slider.Title));
+			Assert.IsFalse(_unitOfWork.SocialMediaRepo.Exists(i => i.Name == socialMedia.Name));
 		}
 		[Test]
 		public void Update_PassValidObject_UpdateObject()
 		{
-			var slider = CreateSlider();
-			slider.Title = "updated-test";
-			var res = _httpClient.Put("/slider/update", slider);
-			var updatedSlider = _mapper.Map<SliderDTO>(
-				_unitOfWork.SliderRepo.Get(slider.Id));
+			var socialMedia = CreateSocialMedia();
+			socialMedia.Name = "updated-test";
+			var res = _httpClient.Put("/socialMedia/update", socialMedia);
+			var updatedSocialMedia = _mapper.Map<SocialMediaDTO>(
+				_unitOfWork.SocialMediaRepo.Get(socialMedia.Id));
 
 			Assert.AreEqual(HttpStatusCode.OK,res.StatusCode);
-			Assert.AreEqual(updatedSlider.Title, slider.Title);
+			Assert.AreEqual(updatedSocialMedia.Name, socialMedia.Name);
 		}
 		[Test]
 		public void Update_PassInvalidObject_ReturnBadRequest()
 		{
-			var slider = CreateSlider();
-			slider.Title = "updated-title";
-			var res = _httpClient.Put("/slider/update", new
+			var socialMedia = CreateSocialMedia();
+			socialMedia.Name = "updated-title";
+			var res = _httpClient.Put("/socialMedia/update", new
 			{
-				Id = slider.Id,
+				Id = socialMedia.Id,
 			});
-			var updatedSlider = _mapper.Map<SliderDTO>(
-				_unitOfWork.SliderRepo.Get(slider.Id));
+			var updatedSocialMedia = _mapper.Map<SocialMediaDTO>(
+				_unitOfWork.SocialMediaRepo.Get(socialMedia.Id));
 
 			Assert.AreEqual(HttpStatusCode.BadRequest,res.StatusCode);
-			Assert.AreNotEqual(updatedSlider.Title, slider.Title);
+			Assert.AreNotEqual(updatedSocialMedia.Name, socialMedia.Name);
 		}
 		[Test]
 		public void Delete_PassValidId_DeleteRecord()
 		{
-			var slider = CreateSlider();
-			var res = _httpClient.Delete($"/slider/delete/{slider.Id}");
+			var socialMedia = CreateSocialMedia();
+			var res = _httpClient.Delete($"/socialMedia/delete/{socialMedia.Id}");
 			Assert.AreEqual(HttpStatusCode.OK, res.StatusCode);
-			Assert.IsNull(_unitOfWork.SliderRepo.Get(slider.Id));
+			Assert.IsNull(_unitOfWork.SocialMediaRepo.Get(socialMedia.Id));
 		}
 		[Test]
 		public void Delete_PassInvalidId_ReturnNotFound()
 		{
 			var fakeId = Guid.NewGuid().ToString();
-			var res = _httpClient.Delete($"/slider/delete/{fakeId}");
+			var res = _httpClient.Delete($"/socialMedia/delete/{fakeId}");
 			Assert.AreEqual(HttpStatusCode.NotFound, res.StatusCode);
 		}
 		#region HelperMethods
-		private SliderDTO CreateSlider()
+		private SocialMedia CreateSocialMedia()
 		{
-			var slider = new Slider()
+			var socialMedia = new SocialMedia()
 			{
+				Name="no name",
+				Link="no link",
 				ImagePath = "no image",
-				Title = "no title",
 				IsActive = true
 			};
-			_unitOfWork.SliderRepo.Add(slider);
-			return _mapper.Map<SliderDTO>(slider);
+			_unitOfWork.SocialMediaRepo.Add(socialMedia);
+			return socialMedia;
 		}
+
 		#endregion
 	}
 }

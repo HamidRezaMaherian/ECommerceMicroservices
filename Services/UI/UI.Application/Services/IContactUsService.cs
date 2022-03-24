@@ -9,7 +9,6 @@ namespace UI.Application.Services
 		ContactUs FirstOrDefault();
 		TypeDTO FirstOrDefault<TypeDTO>() where TypeDTO : class;
 		void Update(ContactUsDTO entityDTO);
-		void Delete(object id);
 		bool Exists(Expression<Func<ContactUs, bool>> condition);
 	}
 }

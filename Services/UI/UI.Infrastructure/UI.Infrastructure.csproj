@@ -16,10 +16,6 @@
 		<PackageReference Include="Automapper.Extensions.Microsoft.DependencyInjection" Version="11.0.0" />
 	</ItemGroup>
 
-	<ItemGroup>
-    <Folder Include="IOC\" />
-  </ItemGroup>
-
   <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.3" />
   </ItemGroup>

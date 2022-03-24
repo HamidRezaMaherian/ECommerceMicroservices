@@ -5,7 +5,7 @@ public class FAQ : EntityBase<string>
 {
 	public string Question { get; set; }
 	public string Answer { get; set; }
-	public int CategoryId { get; set; }
+	public string CategoryId { get; set; }
 	#region NavigationProps
 	public FaqCategory Category { get; set; }
 	#endregion

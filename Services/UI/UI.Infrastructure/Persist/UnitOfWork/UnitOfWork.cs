@@ -80,12 +80,12 @@ namespace UI.Infrastructure.Persist
 
 		public void Dispose()
 		{
-			throw new NotImplementedException();
+			_db.Dispose();
 		}
 
 		public ValueTask DisposeAsync()
 		{
-			throw new NotImplementedException();
+			return _db.DisposeAsync();
 		}
 
 		public IRepository<T> GetRepo<T>()

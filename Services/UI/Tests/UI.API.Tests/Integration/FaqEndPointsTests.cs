@@ -19,7 +19,7 @@ using UI.Infrastructure.Persist.Mappings;
 namespace UI.API.Tests.Integration
 {
 	[TestFixture]
-	public class SliderEndPointsTests
+	public class FaqEndPointsTests
 	{
 		private HttpRequestHelper _httpClient;
 		private IUnitOfWork _unitOfWork;
@@ -49,10 +49,10 @@ namespace UI.API.Tests.Integration
 		[TearDown]
 		public void TearDown()
 		{
-			var sliders = _unitOfWork.SliderRepo.Get();
-			foreach (var item in sliders)
+			var faqs = _unitOfWork.FaqRepo.Get();
+			foreach (var item in faqs)
 			{
-				_unitOfWork.SliderRepo.Delete(item);
+				_unitOfWork.FaqRepo.Delete(item);
 			}
 		}
 		[OneTimeTearDown]
@@ -62,90 +62,105 @@ namespace UI.API.Tests.Integration
 			_unitOfWork.Dispose();
 		}
 		[Test]
-		public void GetAll_ReturnAllSliders()
+		public void GetAll_ReturnAllFaqs()
 		{
-			var slider = CreateSlider();
-			var res = _httpClient.Get<IEnumerable<Slider>>($"/slider/getall");
+			var faq = CreateFaq();
+			var res = _httpClient.Get<IEnumerable<FAQ>>($"/faq/getall");
 
 			CollectionAssert.AreEquivalent(res.Select(i => i.Id),
-				_unitOfWork.SliderRepo.Get().Select(i => i.Id));
+				_unitOfWork.FaqRepo.Get().Select(i => i.Id));
 		}
 		[Test]
 		public void Create_PassValidObject_AddObject()
 		{
-			var slider = new SliderDTO()
+			var faq = new FaqDTO()
 			{
-				Title = Guid.NewGuid().ToString(),
-				ImagePath = "no image",
+				Question = "no q",
+				Answer = "no a",
+				CategoryId = CreateCategory().Id,
 				IsActive = true,
 			};
-			var res = _httpClient.Post("/slider/create", slider);
+			var res = _httpClient.Post("/faq/create", faq);
 
 			Assert.AreEqual(HttpStatusCode.OK,res.StatusCode);
 
-			Assert.IsTrue(_unitOfWork.SliderRepo.Exists(i => i.Title == slider.Title));
+			Assert.IsTrue(_unitOfWork.FaqRepo.Exists(i => i.Question == faq.Question));
 		}
+
 		[Test]
 		public void Create_PassInvalidObject_ReturnBadRequest()
 		{
-			var slider = new SliderDTO();
-			var res = _httpClient.Post("/slider/create", slider);
+			var faq = new FaqDTO()
+			{
+				Question = "no q",
+				IsActive = true,
+			};
+			var res = _httpClient.Post("/faq/create", faq);
 			Assert.AreEqual(HttpStatusCode.BadRequest,res.StatusCode);
-			Assert.IsFalse(_unitOfWork.SliderRepo.Exists(i => i.Title == slider.Title));
+			Assert.IsFalse(_unitOfWork.FaqRepo.Exists(i => i.Question == faq.Question));
 		}
 		[Test]
 		public void Update_PassValidObject_UpdateObject()
 		{
-			var slider = CreateSlider();
-			slider.Title = "updated-test";
-			var res = _httpClient.Put("/slider/update", slider);
-			var updatedSlider = _mapper.Map<SliderDTO>(
-				_unitOfWork.SliderRepo.Get(slider.Id));
+			var faq = CreateFaq();
+			faq.Question = "updated-test";
+			var res = _httpClient.Put("/faq/update", faq);
+			var updatedFaq = _mapper.Map<FaqDTO>(_unitOfWork.FaqRepo.Get(faq.Id));
 
 			Assert.AreEqual(HttpStatusCode.OK,res.StatusCode);
-			Assert.AreEqual(updatedSlider.Title, slider.Title);
+			Assert.AreEqual(updatedFaq.Question, faq.Question);
 		}
 		[Test]
 		public void Update_PassInvalidObject_ReturnBadRequest()
 		{
-			var slider = CreateSlider();
-			slider.Title = "updated-title";
-			var res = _httpClient.Put("/slider/update", new
+			var faq = CreateFaq();
+			faq.Question = "updated-title";
+			var res = _httpClient.Put("/faq/update", new
 			{
-				Id = slider.Id,
+				Id = faq.Id,
 			});
-			var updatedSlider = _mapper.Map<SliderDTO>(
-				_unitOfWork.SliderRepo.Get(slider.Id));
+			var updatedFaq = _mapper.Map<FaqDTO>(_unitOfWork.FaqRepo.Get(faq.Id));
 
 			Assert.AreEqual(HttpStatusCode.BadRequest,res.StatusCode);
-			Assert.AreNotEqual(updatedSlider.Title, slider.Title);
+			Assert.AreNotEqual(updatedFaq.Question, faq.Question);
 		}
 		[Test]
 		public void Delete_PassValidId_DeleteRecord()
 		{
-			var slider = CreateSlider();
-			var res = _httpClient.Delete($"/slider/delete/{slider.Id}");
+			var faq = CreateFaq();
+			var res = _httpClient.Delete($"/faq/delete/{faq.Id}");
 			Assert.AreEqual(HttpStatusCode.OK, res.StatusCode);
-			Assert.IsNull(_unitOfWork.SliderRepo.Get(slider.Id));
+			Assert.IsNull(_unitOfWork.FaqRepo.Get(faq.Id));
 		}
 		[Test]
 		public void Delete_PassInvalidId_ReturnNotFound()
 		{
 			var fakeId = Guid.NewGuid().ToString();
-			var res = _httpClient.Delete($"/slider/delete/{fakeId}");
+			var res = _httpClient.Delete($"/faq/delete/{fakeId}");
 			Assert.AreEqual(HttpStatusCode.NotFound, res.StatusCode);
 		}
 		#region HelperMethods
-		private SliderDTO CreateSlider()
+		private FaqDTO CreateFaq()
 		{
-			var slider = new Slider()
+			var faq = new FAQ()
 			{
-				ImagePath = "no image",
-				Title = "no title",
-				IsActive = true
+				IsActive = true,
+				CategoryId = CreateCategory().Id,
+				Question = "no q",
+				Answer = "no a"
 			};
-			_unitOfWork.SliderRepo.Add(slider);
-			return _mapper.Map<SliderDTO>(slider);
+			_unitOfWork.FaqRepo.Add(faq);
+			return _mapper.Map<FaqDTO>(faq);
+		}
+		private FaqCategory CreateCategory()
+		{
+			var faqCategory = new FaqCategory()
+			{
+				Name = "testC",
+				IsActive = true,
+			};
+			_unitOfWork.FaqCategoryRepo.Add(faqCategory);
+			return faqCategory;
 		}
 		#endregion
 	}
