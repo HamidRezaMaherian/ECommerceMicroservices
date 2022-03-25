@@ -1,8 +1,7 @@
-﻿using System.IO.Compression;
+﻿using PostSharp.Patterns.Diagnostics;
+using PostSharp.Patterns.Diagnostics.Backends.Console;
+using Services.Shared.Behaviours;
 using System.Net.Http.Json;
-using System.Text;
-using System.Text.Json;
-
 namespace Services.Shared.APIUtils
 {
 	public class HttpRequestHelper : IDisposable
@@ -14,6 +13,7 @@ namespace Services.Shared.APIUtils
 		public HttpRequestHelper(HttpClient httpClient)
 		{
 			_httpClient = httpClient;
+			LoggingServices.DefaultBackend = new ConsoleLoggingBackend();
 		}
 
 		#region Non Async
@@ -48,6 +48,7 @@ namespace Services.Shared.APIUtils
 		/// <param name="headers"></param>
 		/// <param name="gZip">فلگ فعال سازی دیتا برای فشرده سازی</param>
 		/// <returns></returns>
+		[LoggingAspect]
 		public HttpResponseMessage Get(string partialUrl, List<KeyValuePair<string, IEnumerable<string>>> headers = null, bool gZip = false)
 		{
 			_httpClient.DefaultRequestHeaders.Accept.Clear();
@@ -70,6 +71,7 @@ namespace Services.Shared.APIUtils
 		/// <param name="headers"></param>
 		/// <param name="gZip">فلگ فعال سازی دیتا برای فشرده سازی</param>
 		/// <returns></returns>
+		[LoggingAspect]
 		public HttpResponseMessage Post(string partialUrl, object request, List<KeyValuePair<string, IEnumerable<string>>> headers = null, bool gZip = false)
 		{
 			_httpClient.DefaultRequestHeaders.Accept.Clear();
@@ -92,6 +94,7 @@ namespace Services.Shared.APIUtils
 		/// <param name="headers"></param>
 		/// <param name="gZip">فلگ فعال سازی دیتا برای فشرده سازی</param>
 		/// <returns></returns>
+		[LoggingAspect]
 		public HttpResponseMessage Put(string partialUrl, object request, List<KeyValuePair<string, IEnumerable<string>>> headers = null, bool gZip = false)
 		{
 			_httpClient.DefaultRequestHeaders.Accept.Clear();
@@ -113,6 +116,7 @@ namespace Services.Shared.APIUtils
 		/// <param name="headers"></param>
 		/// <param name="gZip">فلگ فعال سازی دیتا برای فشرده سازی</param>
 		/// <returns></returns>
+		[LoggingAspect]
 		public HttpResponseMessage Delete(string partialUrl, List<KeyValuePair<string, IEnumerable<string>>> headers = null, bool gZip = false)
 		{
 			_httpClient.DefaultRequestHeaders.Accept.Clear();
@@ -130,7 +134,7 @@ namespace Services.Shared.APIUtils
 		#endregion
 		#region Common
 
-		public void SetHeaders(IEnumerable<KeyValuePair<string, IEnumerable<string>>> headers, HttpClient _httpClient)
+		private void SetHeaders(IEnumerable<KeyValuePair<string, IEnumerable<string>>> headers, HttpClient _httpClient)
 		{
 			//Set global headers.
 			if (DefaultRequestHeaders != null)

@@ -1,6 +1,6 @@
 ﻿using Services.Shared.Common;
 
-namespace Discount.Domain.Entities
+namespace Discount.Application.DTOs
 {
 	public class PriceDiscountDTO : EntityBase<string>
 	{

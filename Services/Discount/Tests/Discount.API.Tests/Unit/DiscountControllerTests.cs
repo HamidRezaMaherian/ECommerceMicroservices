@@ -6,7 +6,6 @@ using Discount.Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 using NUnit.Framework;
-using Services.Shared.Tests;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -76,8 +75,22 @@ namespace Discount.API.Tests.Unit
 			var res = _discountController.AddPercentDiscount(percentDiscunt);
 
 			Assert.IsNotNull(_percentDiscountService.GetById(percentDiscunt.Id));
-			Assert.AreEqual(typeof(OkResult), res.GetType());
 		}
+		[Test]
+		public void AddPriceDiscount_ReturnOk()
+		{
+			var priceDiscount = new PriceDiscountDTO()
+			{
+				ProductId = "testId",
+				StartDateTime = DateTime.Now,
+				EndDateTime = DateTime.Now.AddDays(2),
+				Price = 10
+			};
+			var res = _discountController.AddPriceDiscount(priceDiscount);
+
+			Assert.IsNotNull(_priceDiscountService.GetById(priceDiscount.Id));
+		}
+
 		private static class TestUtils
 		{
 			public static IDiscountBaseService MockDiscountBaseService(IList<DiscountBase> list)

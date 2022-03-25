@@ -9,9 +9,9 @@ namespace Discount.Infrastructure.Persist
 	public class UnitOfWork : IUnitOfWork
 	{
 		private readonly ApplicationDbContext _db;
-		private readonly IMapper _mapper;
+		private readonly ICustomMapper _mapper;
 
-		public UnitOfWork(ApplicationDbContext db, IMapper mapper)
+		public UnitOfWork(ApplicationDbContext db, ICustomMapper mapper)
 		{
 			_db = db;
 			_mapper = mapper;

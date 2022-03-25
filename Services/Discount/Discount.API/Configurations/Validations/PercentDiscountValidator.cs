@@ -1,9 +1,9 @@
-using Discount.Domain.Entities;
+using Discount.Application.DTOs;
 using FluentValidation;
 
 namespace Discount.Configurations.Valiations
 {
-	public class PercentDiscountValidator : AbstractValidator<PercentDiscount>
+	public class PercentDiscountValidator : AbstractValidator<PercentDiscountDTO>
 	{
 		public PercentDiscountValidator()
 		{
@@ -11,6 +11,7 @@ namespace Discount.Configurations.Valiations
 			RuleFor(i => i.EndDateTime).NotEmpty();
 			RuleFor(i => i.ProductId).NotEmpty();
 			RuleFor(i => i.Percent).GreaterThan(0).LessThan(100).NotEmpty();
+			RuleFor(i => i.StoreId).NotNull().NotEmpty();
 		}
 	}
 }

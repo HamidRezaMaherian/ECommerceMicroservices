@@ -19,21 +19,22 @@ namespace Discount.API.Controllers
 			_priceDiscountService = priceDiscountService;
 			_discountBaseService = discountBaseService;
 		}
-		[HttpGet]
-		public ActionResult<IEnumerable<DiscountBase>> GetActiveDiscounts(object productId)
+		[HttpGet("all/{productId}")]
+		public ActionResult<IEnumerable<DiscountBase>> GetActiveDiscounts(string productId)
 		{
 			return _discountBaseService.GetAll(i => i.ProductId == productId).ToList();
 		}
-		[HttpPost]
+		[HttpPost("percent")]
 		public IActionResult AddPercentDiscount(PercentDiscountDTO discountDTO)
 		{
 			_percentDiscountService.Add(discountDTO);
 			return Ok();
 		}
-		[HttpPost]
+		[HttpPost("price")]
 		public IActionResult AddPriceDiscount(PriceDiscountDTO discountDTO)
 		{
-			throw new NotImplementedException();
+			_priceDiscountService.Add(discountDTO);
+			return Ok();
 		}
 	}
 }

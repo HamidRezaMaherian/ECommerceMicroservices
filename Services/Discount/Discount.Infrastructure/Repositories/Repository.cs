@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
+using Discount.Application.Exceptions;
 using Discount.Infrastructure.Persist;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Services.Shared.AppUtils;
 using Services.Shared.Contracts;
 using System.Linq.Expressions;
@@ -13,8 +15,8 @@ namespace Discount.Infrastructure.Repositories
 	{
 		protected readonly ApplicationDbContext _db;
 		protected readonly DbSet<TDAO> _dbSet;
-		private readonly IMapper _mapper;
-		public Repository(ApplicationDbContext db, IMapper mapper)
+		private readonly ICustomMapper _mapper;
+		public Repository(ApplicationDbContext db, ICustomMapper mapper)
 		{
 			_db = db;
 			_dbSet = _db.Set<TDAO>();
@@ -22,61 +24,134 @@ namespace Discount.Infrastructure.Repositories
 		}
 		public virtual void Add(T entity)
 		{
-			var result = _dbSet.Add(_mapper.Map<TDAO>(entity));
-			_db.SaveChanges();
+			EntityEntry result;
+			result = _dbSet.Add(_mapper.Map<TDAO>(entity));
+			try
+			{
+				_db.SaveChanges();
+			}
+			catch (Exception e)
+			{
+				throw new InsertOperationException(e.Message, e.InnerException);
+			}
+			finally
+			{
+				DetachEntity(result.Entity);
+			}
 			_mapper.Map(result.Entity, entity);
 		}
 		public virtual void Delete(object id)
 		{
-			var entity = Get(id);
-			if (entity == null)
-				return;
-			_dbSet.Remove(_mapper.Map<TDAO>(entity));
+			try
+			{
+				var entity = Get(id);
+				_dbSet.Remove(_mapper.Map<TDAO>(entity));
+			}
+			catch (Exception e)
+			{
+				throw new DeleteOperationException(e.Message, e.InnerException);
+			}
+		}
+		public bool Exists(Expression<Func<T, bool>> predicate)
+		{
+			try
+			{
+				return _dbSet.Any(ExpressionHelper.Convert<T, TDAO>(predicate));
+			}
+			catch (Exception e)
+			{
+				throw new ReadOperationException(e.Message, e.InnerException);
+			}
 		}
 
 		public void Delete(T entity)
 		{
-			_dbSet.Remove(_mapper.Map<TDAO>(entity));
-		}
-
-		public bool Exists(Expression<Func<T, bool>> predicate)
-		{
-			return _dbSet.Any(ExpressionHelper.Convert<T, TDAO>(predicate));
+			try
+			{
+				var entityDAO = _mapper.Map<TDAO>(entity);
+				DetachEntity(entityDAO);
+				_dbSet.Remove(entityDAO);
+			}
+			catch (Exception e)
+			{
+				throw new DeleteOperationException(e.Message, e.InnerException);
+			}
 		}
 
 		public virtual IEnumerable<T> Get(QueryParams<T> queryParams)
 		{
-			IQueryable<TDAO> query = _dbSet;
-			query = query.Where(
-				ExpressionHelper.Convert<T, TDAO>(queryParams.Expression)
-				);
+			try
+			{
+				IQueryable<TDAO> query = _dbSet.AsNoTracking();
+				query = query.Where(
+					ExpressionHelper.Convert<T, TDAO>(queryParams.Expression)
+					);
 
-			//foreach (var includeProperty in queryParams.IncludeProperties.Split
-			//			(',', StringSplitOptions.RemoveEmptyEntries))
-			//	query = query.Include(includeProperty);
+				//foreach (var includeProperty in queryParams.IncludeProperties.Split
+				//			(',', StringSplitOptions.RemoveEmptyEntries))
+				//	query = query.Include(includeProperty);
 
-			//if (queryParams.OrderBy != null)
-			//	queryParams.OrderBy(query);
+				//if (queryParams.OrderBy != null)
+				//	queryParams.OrderBy(query);
 
-			query = queryParams.Skip != 0 ? query.Skip(queryParams.Skip) : query;
-			query = queryParams.Take != 0 ? query.Take(queryParams.Take) : query;
-			return _mapper.Map<IEnumerable<T>>(query.ToList());
+				query = queryParams.Skip != 0 ? query.Skip(queryParams.Skip) : query;
+				query = queryParams.Take != 0 ? query.Take(queryParams.Take) : query;
+				return _mapper.Map<IEnumerable<T>>(query.ToList());
+			}
+			catch (Exception e)
+			{
+				throw new ReadOperationException(e.Message, e.InnerException);
+			}
 		}
 		public virtual IEnumerable<T> Get()
 		{
-			return _mapper.Map<IEnumerable<T>>(_dbSet.ToList());
+			try
+			{
+				return _mapper.Map<IEnumerable<T>>(_dbSet.AsNoTracking().ToList());
+			}
+			catch (Exception e)
+			{
+				throw new ReadOperationException(e.Message, e.InnerException);
+			}
 		}
 
 		public virtual T Get(object id)
 		{
 			ArgumentNullException.ThrowIfNull(id);
-			return _mapper.Map<T>(_dbSet.Find(id));
+			try
+			{
+				var entity = _dbSet.Find(id);
+				DetachEntity(entity);
+				return _mapper.Map<T>(entity);
+			}
+			catch (Exception e)
+			{
+				throw new ReadOperationException(e.Message, e.InnerException);
+			}
 		}
 
 		public virtual void Update(T entity)
 		{
 			ArgumentNullException.ThrowIfNull(entity);
-			_dbSet.Update(_mapper.Map<TDAO>(entity));
+			var entityDAO = _mapper.Map<TDAO>(entity);
+			try
+			{
+				_db.Entry(entityDAO).State = EntityState.Modified;
+				_db.SaveChanges();
+			}
+			catch (Exception e)
+			{
+				throw new UpdateOperationException(e.Message, e.InnerException);
+			}
+			finally
+			{
+				DetachEntity(entityDAO);
+			}
+		}
+		private void DetachEntity(object entity)
+		{
+			if (entity != null)
+				_db.Entry(entity).State = EntityState.Detached;
 		}
 	}
 }
