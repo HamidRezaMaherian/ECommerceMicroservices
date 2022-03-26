@@ -1,8 +1,8 @@
-﻿using Services.Shared.Common;
+﻿using Inventory.Domain.Common;
 
 namespace Inventory.Domain.Entities
 {
-	public class Store :EntityBase<string> 
+	public class Store : EntityBase<string>
 	{
 		public string Name { get; set; }
 		public string ShortDesc { get; set; }

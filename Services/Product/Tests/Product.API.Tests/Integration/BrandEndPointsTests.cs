@@ -4,14 +4,13 @@ using NUnit.Framework;
 using Product.API.Tests.Utils;
 using Product.Application.Configurations;
 using Product.Application.DTOs;
+using Product.Application.Tools;
 using Product.Application.UnitOfWork;
 using Product.Domain.Entities;
 using Product.Infrastructure.Persist;
 using Product.Infrastructure.Persist.Mappings;
 using Services.Shared.APIUtils;
 using Services.Shared.AppUtils;
-using Services.Shared.Contracts;
-using Services.Shared.Tests;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -77,7 +76,7 @@ namespace Product.API.Tests.Integration
 			};
 			var res = _httpClient.Post("/brand/create", brand);
 
-			Assert.AreEqual(HttpStatusCode.OK,res.StatusCode);
+			Assert.AreEqual(HttpStatusCode.OK, res.StatusCode);
 
 			Assert.IsTrue(_unitOfWork.BrandRepo.Exists(i => i.Name == brand.Name));
 		}
@@ -87,7 +86,7 @@ namespace Product.API.Tests.Integration
 			var brand = new BrandDTO();
 			var res = _httpClient.Post("/brand/create", brand);
 
-			Assert.AreEqual(HttpStatusCode.BadRequest,res.StatusCode);
+			Assert.AreEqual(HttpStatusCode.BadRequest, res.StatusCode);
 			Assert.IsFalse(_unitOfWork.BrandRepo.Exists(i => i.Name == "test"));
 		}
 		[Test]
@@ -98,7 +97,7 @@ namespace Product.API.Tests.Integration
 			var res = _httpClient.Put("/brand/update", brand);
 			var updatedBrand = _mapper.Map<BrandDTO>(_unitOfWork.BrandRepo.Get(brand.Id));
 
-			Assert.AreEqual(HttpStatusCode.OK,res.StatusCode);
+			Assert.AreEqual(HttpStatusCode.OK, res.StatusCode);
 			Assert.AreEqual(updatedBrand.Name, brand.Name);
 		}
 		[Test]
@@ -112,7 +111,7 @@ namespace Product.API.Tests.Integration
 			});
 			var updatedBrand = _mapper.Map<BrandDTO>(_unitOfWork.BrandRepo.Get(brand.Id));
 
-			Assert.AreEqual(HttpStatusCode.BadRequest,res.StatusCode);
+			Assert.AreEqual(HttpStatusCode.BadRequest, res.StatusCode);
 			Assert.AreNotEqual(updatedBrand.Name, brand.Name);
 		}
 		[Test]

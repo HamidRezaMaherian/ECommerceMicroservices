@@ -1,5 +1,5 @@
-﻿using MongoDB.Bson.Serialization.Attributes;
-using Services.Shared.Common;
+﻿using Inventory.Domain.Common;
+using MongoDB.Bson.Serialization.Attributes;
 
 namespace Inventory.Infrastructure.Persist.DAOs
 {

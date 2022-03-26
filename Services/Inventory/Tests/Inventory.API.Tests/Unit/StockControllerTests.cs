@@ -4,11 +4,10 @@ using Inventory.Application.Services;
 using Inventory.Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
 using NUnit.Framework;
-using Services.Shared.Tests;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using static Services.Shared.Tests.TestUtilsExtension;
+using static Inventory.API.Tests.Utils.TestUtilsExtension;
 
 namespace Inventory.API.Tests.Unit
 {

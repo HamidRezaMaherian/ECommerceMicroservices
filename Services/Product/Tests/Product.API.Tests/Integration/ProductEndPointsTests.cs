@@ -4,14 +4,13 @@ using NUnit.Framework;
 using Product.API.Tests.Utils;
 using Product.Application.Configurations;
 using Product.Application.DTOs;
+using Product.Application.Tools;
 using Product.Application.UnitOfWork;
 using Product.Domain.Entities;
 using Product.Infrastructure.Persist;
 using Product.Infrastructure.Persist.Mappings;
 using Services.Shared.APIUtils;
 using Services.Shared.AppUtils;
-using Services.Shared.Contracts;
-using Services.Shared.Tests;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -30,8 +29,8 @@ namespace Product.API.Tests.Integration
 		{
 			string dbName = "test_db";
 			var dbContext = MockActions.MockDbContext(dbName);
-			_mapper = TestUtilsExtension.CreateMapper(new PersistMapperProfile(),new ServiceMapper());
-			_unitOfWork = new UnitOfWork(dbContext,_mapper);
+			_mapper = TestUtilsExtension.CreateMapper(new PersistMapperProfile(), new ServiceMapper());
+			_unitOfWork = new UnitOfWork(dbContext, _mapper);
 			var httpClient = new TestingWebAppFactory<Program>(s =>
 			{
 				var dbContextConfiguration = s.SingleOrDefault(opt => opt.ServiceType == typeof(DbContextOptions<ApplicationDbContext>));
@@ -81,7 +80,7 @@ namespace Product.API.Tests.Integration
 			};
 			var res = _httpClient.Post("/product/create", product);
 
-			Assert.AreEqual(HttpStatusCode.OK,res.StatusCode);
+			Assert.AreEqual(HttpStatusCode.OK, res.StatusCode);
 
 			Assert.IsTrue(_unitOfWork.ProductRepo.Exists(i => i.Name == product.Name));
 		}
@@ -96,7 +95,7 @@ namespace Product.API.Tests.Integration
 			};
 			var res = _httpClient.Post("/product/create", product);
 
-			Assert.AreEqual(HttpStatusCode.BadRequest,res.StatusCode);
+			Assert.AreEqual(HttpStatusCode.BadRequest, res.StatusCode);
 			Assert.IsFalse(_unitOfWork.ProductRepo.Exists(i => i.Name == "test"));
 		}
 		[Test]
@@ -109,7 +108,7 @@ namespace Product.API.Tests.Integration
 			var updatedProduct = _mapper.Map<ProductDTO>(
 				_unitOfWork.ProductRepo.Get(product.Id));
 
-			Assert.AreEqual(HttpStatusCode.OK,res.StatusCode);
+			Assert.AreEqual(HttpStatusCode.OK, res.StatusCode);
 			Assert.AreEqual(updatedProduct.Name, product.Name);
 		}
 		[Test]
@@ -124,7 +123,7 @@ namespace Product.API.Tests.Integration
 			var updatedProduct = _mapper.Map<ProductDTO>(
 				_unitOfWork.ProductRepo.Get(product.Id));
 
-			Assert.AreEqual(HttpStatusCode.BadRequest,res.StatusCode);
+			Assert.AreEqual(HttpStatusCode.BadRequest, res.StatusCode);
 			Assert.AreNotEqual(updatedProduct.Name, product.Name);
 		}
 		[Test]

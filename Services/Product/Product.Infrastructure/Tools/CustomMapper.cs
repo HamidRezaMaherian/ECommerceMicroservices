@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
-using Services.Shared.Contracts;
+using Product.Application.Tools;
 
-namespace Services.Shared.Mapper
+namespace Product.Infrastructure.Tools
 {
 	public class CustomMapper : ICustomMapper
 	{

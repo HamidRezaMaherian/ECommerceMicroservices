@@ -1,4 +1,4 @@
-﻿using Services.Shared.Common;
+﻿using UI.Domain.Common;
 
 namespace UI.Domain.Entities;
 public class Slider : EntityBase<string>

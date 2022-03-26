@@ -1,12 +1,10 @@
-﻿using AutoMapper;
-using Inventory.Application.Exceptions;
+﻿using Inventory.Application.Exceptions;
 using Inventory.Application.Repositories;
+using Inventory.Application.Tools;
 using Inventory.Domain.Entities;
 using Inventory.Infrastructure.Persist;
 using Inventory.Infrastructure.Persist.DAOs;
 using MongoDB.Driver;
-using Services.Shared.Contracts;
-using System;
 
 namespace Inventory.Infrastructure.Repositories
 {

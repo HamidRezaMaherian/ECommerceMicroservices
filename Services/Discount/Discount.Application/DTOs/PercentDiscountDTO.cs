@@ -1,4 +1,4 @@
-﻿using Services.Shared.Common;
+﻿using Discount.Domain.Common;
 
 namespace Discount.Application.DTOs
 {

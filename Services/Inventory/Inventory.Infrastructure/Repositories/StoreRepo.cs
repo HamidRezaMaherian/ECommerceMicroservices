@@ -1,8 +1,8 @@
 ﻿using Inventory.Application.Repositories;
+using Inventory.Application.Tools;
 using Inventory.Domain.Entities;
 using Inventory.Infrastructure.Persist;
 using Inventory.Infrastructure.Persist.DAOs;
-using Services.Shared.Contracts;
 
 namespace Inventory.Infrastructure.Repositories
 {

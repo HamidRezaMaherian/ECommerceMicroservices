@@ -1,4 +1,4 @@
-﻿using Services.Shared.Common;
+﻿using Product.Domain.Common;
 
 namespace Product.Domain.Entities;
 

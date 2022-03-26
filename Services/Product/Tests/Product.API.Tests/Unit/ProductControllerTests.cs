@@ -1,12 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using Product.API.Controllers;
 using Product.Application.DTOs;
 using Product.Application.Services;
-using Services.Shared.Tests;
 using System.Collections.Generic;
 using System.Linq;
-using static Services.Shared.Tests.TestUtilsExtension;
+using static Product.API.Tests.Utils.TestUtilsExtension;
 
 namespace Product.API.Tests.Unit
 {

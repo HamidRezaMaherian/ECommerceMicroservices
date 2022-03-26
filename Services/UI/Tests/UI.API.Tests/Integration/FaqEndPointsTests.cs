@@ -3,8 +3,6 @@ using Mongo2Go;
 using MongoDB.Driver;
 using NUnit.Framework;
 using Services.Shared.APIUtils;
-using Services.Shared.Contracts;
-using Services.Shared.Tests;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,6 +10,7 @@ using System.Net;
 using UI.API.Tests.Utils;
 using UI.Application.Configurations;
 using UI.Application.DTOs;
+using UI.Application.Tools;
 using UI.Application.UnitOfWork;
 using UI.Domain.Entities;
 using UI.Infrastructure.Persist;
@@ -82,7 +81,7 @@ namespace UI.API.Tests.Integration
 			};
 			var res = _httpClient.Post("/faq/create", faq);
 
-			Assert.AreEqual(HttpStatusCode.OK,res.StatusCode);
+			Assert.AreEqual(HttpStatusCode.OK, res.StatusCode);
 
 			Assert.IsTrue(_unitOfWork.FaqRepo.Exists(i => i.Question == faq.Question));
 		}
@@ -96,7 +95,7 @@ namespace UI.API.Tests.Integration
 				IsActive = true,
 			};
 			var res = _httpClient.Post("/faq/create", faq);
-			Assert.AreEqual(HttpStatusCode.BadRequest,res.StatusCode);
+			Assert.AreEqual(HttpStatusCode.BadRequest, res.StatusCode);
 			Assert.IsFalse(_unitOfWork.FaqRepo.Exists(i => i.Question == faq.Question));
 		}
 		[Test]
@@ -107,7 +106,7 @@ namespace UI.API.Tests.Integration
 			var res = _httpClient.Put("/faq/update", faq);
 			var updatedFaq = _mapper.Map<FaqDTO>(_unitOfWork.FaqRepo.Get(faq.Id));
 
-			Assert.AreEqual(HttpStatusCode.OK,res.StatusCode);
+			Assert.AreEqual(HttpStatusCode.OK, res.StatusCode);
 			Assert.AreEqual(updatedFaq.Question, faq.Question);
 		}
 		[Test]
@@ -117,11 +116,11 @@ namespace UI.API.Tests.Integration
 			faq.Question = "updated-title";
 			var res = _httpClient.Put("/faq/update", new
 			{
-				Id = faq.Id,
+				faq.Id,
 			});
 			var updatedFaq = _mapper.Map<FaqDTO>(_unitOfWork.FaqRepo.Get(faq.Id));
 
-			Assert.AreEqual(HttpStatusCode.BadRequest,res.StatusCode);
+			Assert.AreEqual(HttpStatusCode.BadRequest, res.StatusCode);
 			Assert.AreNotEqual(updatedFaq.Question, faq.Question);
 		}
 		[Test]

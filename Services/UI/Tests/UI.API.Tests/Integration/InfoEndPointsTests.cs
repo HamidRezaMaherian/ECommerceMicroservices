@@ -3,13 +3,12 @@ using Mongo2Go;
 using MongoDB.Driver;
 using NUnit.Framework;
 using Services.Shared.APIUtils;
-using Services.Shared.Contracts;
-using Services.Shared.Tests;
 using System.Linq;
 using System.Net;
 using UI.API.Tests.Utils;
 using UI.Application.Configurations;
 using UI.Application.DTOs;
+using UI.Application.Tools;
 using UI.Application.UnitOfWork;
 using UI.Domain.Entities;
 using UI.Infrastructure.Persist;
@@ -81,21 +80,21 @@ namespace UI.API.Tests.Integration
 			var res = _httpClient.Put("/info/contactUs", contactUs);
 			var updatedContactUs = _unitOfWork.ContactUsRepo.Get().FirstOrDefault();
 
-			Assert.AreEqual(HttpStatusCode.OK,res.StatusCode);
+			Assert.AreEqual(HttpStatusCode.OK, res.StatusCode);
 			Assert.AreEqual(contactUs.Email, updatedContactUs?.Email);
 		}
 		[Test]
 		public void UpdateContactUs_PassInvalidObject_ReturnBadRequest()
 		{
-			var contactUs = _unitOfWork.ContactUsRepo.Get().FirstOrDefault();
+			var contactUs = _unitOfWork.ContactUsRepo.Get().First();
 			contactUs.Email = "updatedtest@test.com";
 			var res = _httpClient.Put("/info/contactUs", new
 			{
-				Email = contactUs.Email
+				contactUs.Email
 			});
 			var updatedContactUs = _unitOfWork.ContactUsRepo.Get().FirstOrDefault();
 
-			Assert.AreEqual(HttpStatusCode.BadRequest,res.StatusCode);
+			Assert.AreEqual(HttpStatusCode.BadRequest, res.StatusCode);
 			Assert.AreNotEqual(updatedContactUs?.Email, contactUs.Email);
 		}
 		[Test]
@@ -107,17 +106,17 @@ namespace UI.API.Tests.Integration
 			var res = _httpClient.Put("/info/aboutUs/", aboutUs);
 			var updatedAboutUs = _unitOfWork.AboutUsRepo.Get().FirstOrDefault();
 
-			Assert.AreEqual(HttpStatusCode.OK,res.StatusCode);
+			Assert.AreEqual(HttpStatusCode.OK, res.StatusCode);
 			Assert.AreEqual(aboutUs.Title, updatedAboutUs?.Title);
 		}
 		[Test]
 		public void UpdateAboutUs_PassInvalidObject_ReturnBadRequest()
 		{
-			var aboutUs = _unitOfWork.AboutUsRepo.Get().FirstOrDefault();
+			var aboutUs = _unitOfWork.AboutUsRepo.Get().First();
 			aboutUs.Title = "updatedtest";
 			var res = _httpClient.Put("/info/aboutUs", new
 			{
-				Title = aboutUs.Title
+					aboutUs.Title
 			});
 			var updatedAboutUs = _unitOfWork.AboutUsRepo.Get().FirstOrDefault();
 
@@ -149,7 +148,7 @@ namespace UI.API.Tests.Integration
 				PhoneNumber = "09304422204"
 			};
 			_unitOfWork.ContactUsRepo.Add(contactUs);
-			return  contactUs;
+			return contactUs;
 		}
 
 		#endregion

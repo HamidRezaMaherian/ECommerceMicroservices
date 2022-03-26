@@ -1,9 +1,7 @@
-﻿using AutoMapper;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
+using Product.Application.Tools;
 using Product.Application.UnitOfWork;
 using Product.Infrastructure.Persist;
-using Services.Shared.Contracts;
-using System;
 
 namespace Product.API.Tests.Utils
 {
@@ -15,9 +13,9 @@ namespace Product.API.Tests.Utils
 			dbOptionsBuilder.UseInMemoryDatabase(dbName);
 			return new ApplicationDbContext(dbOptionsBuilder.Options);
 		}
-		public static IUnitOfWork MockUnitOfWork(string dbName,ICustomMapper mapper)
+		public static IUnitOfWork MockUnitOfWork(string dbName, ICustomMapper mapper)
 		{
-			return new UnitOfWork(MockDbContext(dbName),mapper);
+			return new UnitOfWork(MockDbContext(dbName), mapper);
 		}
 	}
 }

@@ -1,5 +1,4 @@
 ﻿using Inventory.Application.Repositories;
-using Services.Shared.Contracts;
 
 namespace Inventory.Application.UnitOfWork
 {

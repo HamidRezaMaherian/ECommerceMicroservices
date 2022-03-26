@@ -1,5 +1,5 @@
 ﻿using Product.Domain.Enums;
-using Services.Shared.Common;
+using Product.Domain.Common;
 
 namespace Product.Application.DTOs;
 public class PropertyDTO : EntityBase<string>

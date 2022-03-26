@@ -1,7 +1,7 @@
 ﻿using MongoDB.Driver;
-using Services.Shared.Contracts;
 using UI.Application.Exceptions;
 using UI.Application.Repositories;
+using UI.Application.Tools;
 using UI.Domain.Entities;
 using UI.Infrastructure.Persist;
 using UI.Infrastructure.Persist.DAOs;

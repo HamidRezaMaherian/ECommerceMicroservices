@@ -4,7 +4,6 @@ using Product.Infrastructure.Persist.DAOs;
 using Product.Infrastructure.Repositories;
 using Product.Infrastructure.Tests.Utils;
 using Services.Shared.AppUtils;
-using Services.Shared.Tests;
 using System;
 using System.Linq;
 

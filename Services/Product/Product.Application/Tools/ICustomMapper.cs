@@ -1,6 +1,6 @@
 ﻿using System.Linq.Expressions;
 
-namespace Services.Shared.Contracts;
+namespace Product.Application.Tools;
 
 public interface ICustomMapper
 {

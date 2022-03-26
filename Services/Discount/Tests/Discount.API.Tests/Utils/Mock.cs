@@ -1,7 +1,7 @@
-﻿using Discount.Application.UnitOfWork;
+﻿using Discount.Application.Services;
+using Discount.Application.UnitOfWork;
 using Discount.Infrastructure.Persist;
 using Microsoft.EntityFrameworkCore;
-using Services.Shared.Contracts;
 
 namespace Discount.API.Tests.Utils
 {

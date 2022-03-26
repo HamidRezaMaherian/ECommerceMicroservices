@@ -3,8 +3,6 @@ using Mongo2Go;
 using MongoDB.Driver;
 using NUnit.Framework;
 using Services.Shared.APIUtils;
-using Services.Shared.Contracts;
-using Services.Shared.Tests;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,6 +10,7 @@ using System.Net;
 using UI.API.Tests.Utils;
 using UI.Application.Configurations;
 using UI.Application.DTOs;
+using UI.Application.Tools;
 using UI.Application.UnitOfWork;
 using UI.Domain.Entities;
 using UI.Infrastructure.Persist;
@@ -80,7 +79,7 @@ namespace UI.API.Tests.Integration
 			};
 			var res = _httpClient.Post("/faqCategory/create", faqCategory);
 
-			Assert.AreEqual(HttpStatusCode.OK,res.StatusCode);
+			Assert.AreEqual(HttpStatusCode.OK, res.StatusCode);
 
 			Assert.IsTrue(_unitOfWork.FaqCategoryRepo.Exists(i => i.Name == faqCategory.Name));
 		}
@@ -92,7 +91,7 @@ namespace UI.API.Tests.Integration
 				IsActive = true,
 			};
 			var res = _httpClient.Post("/faqCategory/create", faqCategory);
-			Assert.AreEqual(HttpStatusCode.BadRequest,res.StatusCode);
+			Assert.AreEqual(HttpStatusCode.BadRequest, res.StatusCode);
 			Assert.IsFalse(_unitOfWork.FaqCategoryRepo.Exists(i => true));
 		}
 		[Test]
@@ -104,7 +103,7 @@ namespace UI.API.Tests.Integration
 			var updatedFaqCategory = _mapper.Map<FaqCategoryDTO>
 				(_unitOfWork.FaqCategoryRepo.Get(faqCategory.Id));
 
-			Assert.AreEqual(HttpStatusCode.OK,res.StatusCode);
+			Assert.AreEqual(HttpStatusCode.OK, res.StatusCode);
 			Assert.AreEqual(updatedFaqCategory.Name, faqCategory.Name);
 		}
 		[Test]
@@ -114,11 +113,11 @@ namespace UI.API.Tests.Integration
 			faqCategory.Name = "updated-title";
 			var res = _httpClient.Put("/faqCategory/update", new
 			{
-				Id = faqCategory.Id,
+				faqCategory.Id,
 			});
 			var updatedFaqCategory = _mapper.Map<FaqCategoryDTO>(_unitOfWork.FaqCategoryRepo.Get(faqCategory.Id));
 
-			Assert.AreEqual(HttpStatusCode.BadRequest,res.StatusCode);
+			Assert.AreEqual(HttpStatusCode.BadRequest, res.StatusCode);
 			Assert.AreNotEqual(updatedFaqCategory.Name, faqCategory.Name);
 		}
 		[Test]

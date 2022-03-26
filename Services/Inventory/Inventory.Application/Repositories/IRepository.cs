@@ -1,7 +1,7 @@
 ﻿using Services.Shared.AppUtils;
 using System.Linq.Expressions;
 
-namespace Services.Shared.Contracts
+namespace Inventory.Application.Repositories
 {
 	public interface IRepository<T>
 		where T : class

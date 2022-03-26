@@ -1,6 +1,7 @@
 ﻿using Discount.API.Tests.Utils;
 using Discount.Application.Configurations;
 using Discount.Application.DTOs;
+using Discount.Application.Services;
 using Discount.Application.UnitOfWork;
 using Discount.Domain.Common;
 using Discount.Domain.Entities;
@@ -10,9 +11,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using NUnit.Framework;
 using Services.Shared.APIUtils;
-using Services.Shared.AppUtils;
-using Services.Shared.Contracts;
-using Services.Shared.Tests;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -90,7 +88,7 @@ namespace Discount.API.Tests.Integration
 			_unitOfWork.Save();
 			var res = _httpClient.Get<IEnumerable<object>>($"/discount/all/{productId}");
 
-			CollectionAssert.AreEquivalent(res.Select(i => ((JsonElement) i).GetProperty("id").GetString()),
+			CollectionAssert.AreEquivalent(res.Select(i => ((JsonElement)i).GetProperty("id").GetString()),
 				Enumerable.Concat<DiscountBase>(
 				_unitOfWork.PercentDiscountRepo.Get(),
 				_unitOfWork.PriceDiscountRepo.Get())

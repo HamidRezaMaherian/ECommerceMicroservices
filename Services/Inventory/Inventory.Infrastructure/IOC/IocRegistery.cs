@@ -1,15 +1,14 @@
-﻿using Inventory.Application.UnitOfWork;
+﻿using Inventory.Application.Configurations;
+using Inventory.Application.Services;
+using Inventory.Application.Tools;
+using Inventory.Application.UnitOfWork;
 using Inventory.Infrastructure.Persist;
 using Inventory.Infrastructure.Persist.Mappings;
-using Microsoft.Extensions.DependencyInjection;
-using AutoMapper;
-using MongoDB.Driver;
-using Microsoft.Extensions.Configuration;
-using Inventory.Application.Services;
 using Inventory.Infrastructure.Services;
-using Services.Shared.Contracts;
-using Services.Shared.Mapper;
-using Inventory.Application.Configurations;
+using Inventory.Infrastructure.Tools;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using MongoDB.Driver;
 
 namespace Inventory.Infrastructure.IOC
 {

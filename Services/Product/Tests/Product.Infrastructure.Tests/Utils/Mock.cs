@@ -1,8 +1,5 @@
-﻿using AutoMapper;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Product.Infrastructure.Persist;
-using Services.Shared.Contracts;
-using System;
 
 namespace Product.Infrastructure.Tests.Utils
 {

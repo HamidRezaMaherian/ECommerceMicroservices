@@ -1,4 +1,4 @@
-﻿using Services.Shared.Common;
+﻿using Product.Domain.Common;
 
 namespace Product.Application.DTOs;
 public class ProductCategoryDTO : EntityBase<string>

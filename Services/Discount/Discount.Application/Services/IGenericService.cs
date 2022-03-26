@@ -1,7 +1,7 @@
-﻿using Services.Shared.Common;
+﻿using Discount.Domain.Common;
 using System.Linq.Expressions;
 
-namespace Services.Shared.Contracts;
+namespace Discount.Application.Services;
 
 public interface IEntityBaseService<T, Tdto> : IBaseActiveService<T, Tdto> where T : IBaseActive
 {

@@ -1,14 +1,14 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using MongoDB.Driver;
-using Services.Shared.Contracts;
-using Services.Shared.Mapper;
 using UI.Application.Configurations;
 using UI.Application.Services;
+using UI.Application.Tools;
 using UI.Application.UnitOfWork;
 using UI.Infrastructure.Persist;
 using UI.Infrastructure.Persist.Mappings;
 using UI.Infrastructure.Services;
+using UI.Infrastructure.Tools;
 
 namespace UI.Infrastructure.IOC
 {

@@ -1,8 +1,6 @@
-﻿using AutoMapper;
-using Discount.Application.DTOs;
+﻿using Discount.Application.DTOs;
 using Discount.Application.UnitOfWork;
 using Discount.Domain.Entities;
-using Services.Shared.Contracts;
 
 namespace Discount.Application.Services
 {

@@ -1,13 +1,12 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using NUnit.Framework;
 using Product.Application.Exceptions;
+using Product.Application.Tools;
 using Product.Infrastructure.Persist;
 using Product.Infrastructure.Persist.DAOs;
 using Product.Infrastructure.Persist.Mappings;
 using Product.Infrastructure.Repositories;
 using Product.Infrastructure.Tests.Utils;
-using Services.Shared.Contracts;
-using Services.Shared.Tests;
 using System;
 using System.Linq;
 

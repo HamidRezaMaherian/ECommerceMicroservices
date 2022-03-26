@@ -1,8 +1,7 @@
-﻿using AutoMapper;
-using Discount.Application.Repositories;
+﻿using Discount.Application.Repositories;
+using Discount.Application.Services;
 using Discount.Application.UnitOfWork;
 using Discount.Infrastructure.Repositories;
-using Services.Shared.Contracts;
 
 namespace Discount.Infrastructure.Persist
 {

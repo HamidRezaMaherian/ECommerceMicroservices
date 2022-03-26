@@ -1,5 +1,5 @@
 ﻿using MongoDB.Bson.Serialization.Attributes;
-using Services.Shared.Common;
+using UI.Domain.Common;
 
 namespace UI.Infrastructure.Persist.DAOs
 {

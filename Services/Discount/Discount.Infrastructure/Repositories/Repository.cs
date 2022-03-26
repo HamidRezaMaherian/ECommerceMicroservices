@@ -1,10 +1,10 @@
-﻿using AutoMapper;
-using Discount.Application.Exceptions;
+﻿using Discount.Application.Exceptions;
+using Discount.Application.Repositories;
+using Discount.Application.Services;
 using Discount.Infrastructure.Persist;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Services.Shared.AppUtils;
-using Services.Shared.Contracts;
 using System.Linq.Expressions;
 
 namespace Discount.Infrastructure.Repositories

@@ -1,8 +1,8 @@
 ﻿using Discount.Application.Repositories;
+using Discount.Application.Services;
 using Discount.Domain.Entities;
 using Discount.Infrastructure.Persist;
 using Discount.Infrastructure.Persist.DAOs;
-using Services.Shared.Contracts;
 
 namespace Discount.Infrastructure.Repositories
 {

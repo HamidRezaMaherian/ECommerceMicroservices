@@ -3,8 +3,6 @@ using Mongo2Go;
 using MongoDB.Driver;
 using NUnit.Framework;
 using Services.Shared.APIUtils;
-using Services.Shared.Contracts;
-using Services.Shared.Tests;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,6 +10,7 @@ using System.Net;
 using UI.API.Tests.Utils;
 using UI.Application.Configurations;
 using UI.Application.DTOs;
+using UI.Application.Tools;
 using UI.Application.UnitOfWork;
 using UI.Domain.Entities;
 using UI.Infrastructure.Persist;
@@ -81,7 +80,7 @@ namespace UI.API.Tests.Integration
 			};
 			var res = _httpClient.Post("/slider/create", slider);
 
-			Assert.AreEqual(HttpStatusCode.OK,res.StatusCode);
+			Assert.AreEqual(HttpStatusCode.OK, res.StatusCode);
 
 			Assert.IsTrue(_unitOfWork.SliderRepo.Exists(i => i.Title == slider.Title));
 		}
@@ -90,7 +89,7 @@ namespace UI.API.Tests.Integration
 		{
 			var slider = new SliderDTO();
 			var res = _httpClient.Post("/slider/create", slider);
-			Assert.AreEqual(HttpStatusCode.BadRequest,res.StatusCode);
+			Assert.AreEqual(HttpStatusCode.BadRequest, res.StatusCode);
 			Assert.IsFalse(_unitOfWork.SliderRepo.Exists(i => i.Title == slider.Title));
 		}
 		[Test]
@@ -102,7 +101,7 @@ namespace UI.API.Tests.Integration
 			var updatedSlider = _mapper.Map<SliderDTO>(
 				_unitOfWork.SliderRepo.Get(slider.Id));
 
-			Assert.AreEqual(HttpStatusCode.OK,res.StatusCode);
+			Assert.AreEqual(HttpStatusCode.OK, res.StatusCode);
 			Assert.AreEqual(updatedSlider.Title, slider.Title);
 		}
 		[Test]
@@ -112,12 +111,12 @@ namespace UI.API.Tests.Integration
 			slider.Title = "updated-title";
 			var res = _httpClient.Put("/slider/update", new
 			{
-				Id = slider.Id,
+				slider.Id,
 			});
 			var updatedSlider = _mapper.Map<SliderDTO>(
 				_unitOfWork.SliderRepo.Get(slider.Id));
 
-			Assert.AreEqual(HttpStatusCode.BadRequest,res.StatusCode);
+			Assert.AreEqual(HttpStatusCode.BadRequest, res.StatusCode);
 			Assert.AreNotEqual(updatedSlider.Title, slider.Title);
 		}
 		[Test]

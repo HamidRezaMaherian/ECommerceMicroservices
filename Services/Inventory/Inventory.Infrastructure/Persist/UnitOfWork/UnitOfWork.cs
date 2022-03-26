@@ -1,8 +1,7 @@
-﻿using AutoMapper;
-using Inventory.Application.Repositories;
+﻿using Inventory.Application.Repositories;
+using Inventory.Application.Tools;
 using Inventory.Application.UnitOfWork;
 using Inventory.Infrastructure.Repositories;
-using Services.Shared.Contracts;
 
 namespace Inventory.Infrastructure.Persist
 {

@@ -1,5 +1,4 @@
-﻿using Services.Shared.Contracts;
-using UI.Domain.Entities;
+﻿using UI.Domain.Entities;
 
 namespace UI.Application.Repositories
 {

@@ -1,11 +1,12 @@
 ﻿using Inventory.Application.Exceptions;
+using Inventory.Application.Repositories;
+using Inventory.Application.Tools;
+using Inventory.Domain.Common;
 using Inventory.Infrastructure.Persist;
 using Inventory.Infrastructure.Persist.DAOs;
 using MongoDB.Driver;
 using MongoDB.Driver.Linq;
 using Services.Shared.AppUtils;
-using Services.Shared.Common;
-using Services.Shared.Contracts;
 using System.Linq.Expressions;
 using UI.Application.Exceptions;
 

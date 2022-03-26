@@ -4,14 +4,13 @@ using NUnit.Framework;
 using Product.API.Tests.Utils;
 using Product.Application.Configurations;
 using Product.Application.DTOs;
+using Product.Application.Tools;
 using Product.Application.UnitOfWork;
 using Product.Domain.Entities;
 using Product.Infrastructure.Persist;
 using Product.Infrastructure.Persist.Mappings;
 using Services.Shared.APIUtils;
 using Services.Shared.AppUtils;
-using Services.Shared.Contracts;
-using Services.Shared.Tests;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -76,7 +75,7 @@ namespace Product.API.Tests.Integration
 			};
 			var res = _httpClient.Post("/productCategory/create", productCategory);
 
-			Assert.AreEqual(HttpStatusCode.OK,res.StatusCode);
+			Assert.AreEqual(HttpStatusCode.OK, res.StatusCode);
 
 			Assert.IsTrue(_unitOfWork.ProductCategoryRepo.Exists(i => i.Name == productCategory.Name));
 		}
@@ -86,7 +85,7 @@ namespace Product.API.Tests.Integration
 			var productCategory = new ProductCategoryDTO();
 			var res = _httpClient.Post("/productCategory/create", productCategory);
 
-			Assert.AreEqual(HttpStatusCode.BadRequest,res.StatusCode);
+			Assert.AreEqual(HttpStatusCode.BadRequest, res.StatusCode);
 			Assert.IsFalse(_unitOfWork.ProductCategoryRepo.Exists(i => i.Name == "test"));
 		}
 		[Test]
@@ -99,7 +98,7 @@ namespace Product.API.Tests.Integration
 				_mapper.Map<ProductCategoryDTO>(
 					_unitOfWork.ProductCategoryRepo.Get(productCategory.Id));
 
-			Assert.AreEqual(HttpStatusCode.OK,res.StatusCode);
+			Assert.AreEqual(HttpStatusCode.OK, res.StatusCode);
 			Assert.AreEqual(updatedProductCategory.Name, productCategory.Name);
 		}
 		[Test]
@@ -114,7 +113,7 @@ namespace Product.API.Tests.Integration
 			var updatedProductCategory = _mapper.Map<ProductCategoryDTO>
 				(_unitOfWork.ProductCategoryRepo.Get(productCategory.Id));
 
-			Assert.AreEqual(HttpStatusCode.BadRequest,res.StatusCode);
+			Assert.AreEqual(HttpStatusCode.BadRequest, res.StatusCode);
 			Assert.AreNotEqual(updatedProductCategory.Name, productCategory.Name);
 		}
 		[Test]

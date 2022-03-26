@@ -1,8 +1,8 @@
 ﻿using Product.Application.Repositories;
+using Product.Application.Tools;
 using Product.Domain.Entities;
 using Product.Infrastructure.Persist;
 using Product.Infrastructure.Persist.DAOs;
-using Services.Shared.Contracts;
 
 namespace Product.Infrastructure.Repositories
 {

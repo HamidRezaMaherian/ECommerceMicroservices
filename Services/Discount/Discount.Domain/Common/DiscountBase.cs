@@ -1,6 +1,4 @@
-﻿using Services.Shared.Common;
-
-namespace Discount.Domain.Common
+﻿namespace Discount.Domain.Common
 {
 	public abstract class DiscountBase : EntityBase<string>
 	{

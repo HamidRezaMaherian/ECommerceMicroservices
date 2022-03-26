@@ -1,11 +1,10 @@
-﻿using AutoMapper;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
-using Product.Application.DTOs;
 using Product.Application.Exceptions;
+using Product.Application.Repositories;
+using Product.Application.Tools;
 using Product.Infrastructure.Persist;
 using Services.Shared.AppUtils;
-using Services.Shared.Contracts;
 using System.Linq.Expressions;
 
 namespace Product.Infrastructure.Repositories

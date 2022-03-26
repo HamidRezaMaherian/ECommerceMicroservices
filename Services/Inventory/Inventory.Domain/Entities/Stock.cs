@@ -1,4 +1,4 @@
-﻿using Services.Shared.Common;
+﻿using Inventory.Domain.Common;
 
 namespace Inventory.Domain.Entities
 {

@@ -1,6 +1,7 @@
 ﻿using Inventory.API.Tests.Utils;
 using Inventory.Application.Configurations;
 using Inventory.Application.DTOs;
+using Inventory.Application.Tools;
 using Inventory.Application.UnitOfWork;
 using Inventory.Domain.Entities;
 using Inventory.Infrastructure.Persist;
@@ -10,8 +11,6 @@ using Mongo2Go;
 using MongoDB.Driver;
 using NUnit.Framework;
 using Services.Shared.APIUtils;
-using Services.Shared.Contracts;
-using Services.Shared.Tests;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -30,7 +29,7 @@ namespace Inventory.API.Tests.Integration
 		{
 			_mongoDbRunner = MongoDbRunner.Start();
 			var db = MockActions.MockDbContext(_mongoDbRunner);
-			_mapper = TestUtilsExtension.CreateMapper(new PersistMapperProfile(),new ServiceMapper());
+			_mapper = TestUtilsExtension.CreateMapper(new PersistMapperProfile(), new ServiceMapper());
 			_unitOfWork = MockActions.MockUnitOfWork(db, _mapper);
 
 			var httpClient = new TestingWebAppFactory<Program>(s =>
@@ -90,7 +89,7 @@ namespace Inventory.API.Tests.Integration
 			};
 			var res = _httpClient.Post("/stock/create", stock);
 
-			Assert.AreEqual(HttpStatusCode.OK,res.StatusCode);
+			Assert.AreEqual(HttpStatusCode.OK, res.StatusCode);
 
 			Assert.IsTrue(_unitOfWork.StockRepo.Exists(i => i.StoreId == stock.StoreId));
 		}
@@ -99,11 +98,11 @@ namespace Inventory.API.Tests.Integration
 		{
 			var stock = new StockDTO()
 			{
-				StoreId = Guid.NewGuid().ToString().Replace("-","").Substring(0,24)
+				StoreId = Guid.NewGuid().ToString().Replace("-", "").Substring(0, 24)
 			};
 			var res = _httpClient.Post("/stock/create", stock);
 
-			Assert.AreEqual(HttpStatusCode.BadRequest,res.StatusCode);
+			Assert.AreEqual(HttpStatusCode.BadRequest, res.StatusCode);
 			Assert.IsFalse(_unitOfWork.StockRepo.Exists(i => i.StoreId == stock.StoreId));
 		}
 		[Test]
@@ -115,7 +114,7 @@ namespace Inventory.API.Tests.Integration
 			var updatedStock = _mapper.Map<StockDTO>(
 				_unitOfWork.StockRepo.Get(stock.Id));
 
-			Assert.AreEqual(HttpStatusCode.OK,res.StatusCode);
+			Assert.AreEqual(HttpStatusCode.OK, res.StatusCode);
 			Assert.AreEqual(updatedStock.Count, stock.Count);
 		}
 		[Test]
@@ -130,7 +129,7 @@ namespace Inventory.API.Tests.Integration
 			var updatedStock = _mapper.Map<StockDTO>(
 				_unitOfWork.StockRepo.Get(stock.Id));
 
-			Assert.AreEqual(HttpStatusCode.BadRequest,res.StatusCode);
+			Assert.AreEqual(HttpStatusCode.BadRequest, res.StatusCode);
 			Assert.AreNotEqual(updatedStock.Count, stock.Count);
 		}
 		[Test]
@@ -166,7 +165,7 @@ namespace Inventory.API.Tests.Integration
 		{
 			var stock = new Stock()
 			{
-				ProductId = Guid.NewGuid().ToString().Replace("-","").Substring(0,24),
+				ProductId = Guid.NewGuid().ToString().Replace("-", "").Substring(0, 24),
 				Count = 12,
 				StoreId = CreateStore().Id
 			};

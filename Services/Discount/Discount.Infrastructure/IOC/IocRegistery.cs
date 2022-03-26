@@ -3,9 +3,8 @@ using Discount.Application.Services;
 using Discount.Application.UnitOfWork;
 using Discount.Infrastructure.Persist;
 using Discount.Infrastructure.Persist.Mappings;
+using Discount.Infrastructure.Tools;
 using Microsoft.Extensions.DependencyInjection;
-using Services.Shared.Contracts;
-using Services.Shared.Mapper;
 
 namespace Discount.Infrastructure.IOC
 {

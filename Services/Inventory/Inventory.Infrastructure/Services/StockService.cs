@@ -1,8 +1,8 @@
 ﻿using Inventory.Application.DTOs;
 using Inventory.Application.Services;
+using Inventory.Application.Tools;
 using Inventory.Application.UnitOfWork;
 using Inventory.Domain.Entities;
-using Services.Shared.Contracts;
 
 namespace Inventory.Infrastructure.Services
 {

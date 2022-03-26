@@ -1,8 +1,10 @@
-﻿using UI.Application.UnitOfWork;
-using Services.Shared.AppUtils;
-using Services.Shared.Common;
-using Services.Shared.Contracts;
+﻿using Services.Shared.AppUtils;
 using System.Linq.Expressions;
+using UI.Application.Repositories;
+using UI.Application.Services;
+using UI.Application.Tools;
+using UI.Application.UnitOfWork;
+using UI.Domain.Common;
 
 namespace UI.Infrastructure.Services
 {

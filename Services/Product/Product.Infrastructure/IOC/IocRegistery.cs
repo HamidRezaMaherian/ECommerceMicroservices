@@ -3,12 +3,12 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Product.Application.Configurations;
 using Product.Application.Services;
+using Product.Application.Tools;
 using Product.Application.UnitOfWork;
 using Product.Infrastructure.Persist;
 using Product.Infrastructure.Persist.Mappings;
 using Product.Infrastructure.Services;
-using Services.Shared.Contracts;
-using Services.Shared.Mapper;
+using Product.Infrastructure.Tools;
 
 namespace Product.Infrastructure.IOC
 {
@@ -23,7 +23,7 @@ namespace Product.Infrastructure.IOC
 		private static void RegisterConfigurations(this IServiceCollection services)
 		{
 			services.AddAutoMapper(typeof(PersistMapperProfile), typeof(ServiceMapper));
-			services.AddSingleton<ICustomMapper,CustomMapper>();
+			services.AddSingleton<ICustomMapper, CustomMapper>();
 		}
 		private static void RegisterServices(this IServiceCollection services)
 		{

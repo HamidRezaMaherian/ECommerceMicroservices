@@ -1,9 +1,7 @@
-﻿using Microsoft.Extensions.Configuration;
-using MongoDB.Driver;
-using Services.Shared.Contracts;
+﻿using MongoDB.Driver;
 using UI.Application.Repositories;
+using UI.Application.Tools;
 using UI.Application.UnitOfWork;
-using UI.Domain.Entities;
 using UI.Infrastructure.Repositories;
 
 namespace UI.Infrastructure.Persist

@@ -1,8 +1,8 @@
-﻿using Inventory.Application.UnitOfWork;
+﻿using Inventory.Application.Tools;
+using Inventory.Application.UnitOfWork;
 using Inventory.Infrastructure.Persist;
 using Mongo2Go;
 using MongoDB.Driver;
-using Services.Shared.Contracts;
 
 namespace Inventory.API.Tests.Utils
 {

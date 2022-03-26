@@ -1,4 +1,4 @@
-﻿using Services.Shared.Common;
+﻿using Product.Domain.Common;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 

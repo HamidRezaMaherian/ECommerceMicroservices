@@ -1,15 +1,19 @@
 ﻿using AutoMapper;
+using Discount.Application.Repositories;
+using Discount.Application.Services;
+using Discount.Domain.Common;
+using Discount.Infrastructure.Tools;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.DependencyInjection;
 using Moq;
 using Services.Shared.AppUtils;
-using Services.Shared.Common;
-using Services.Shared.Contracts;
-using Services.Shared.Mapper;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Expressions;
 
-namespace Services.Shared.Tests
+namespace Discount.API.Tests.Utils
 {
 	public static class TestUtilsExtension
 	{

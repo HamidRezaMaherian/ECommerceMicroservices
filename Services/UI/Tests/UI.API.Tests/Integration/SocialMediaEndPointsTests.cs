@@ -3,8 +3,6 @@ using Mongo2Go;
 using MongoDB.Driver;
 using NUnit.Framework;
 using Services.Shared.APIUtils;
-using Services.Shared.Contracts;
-using Services.Shared.Tests;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,6 +10,7 @@ using System.Net;
 using UI.API.Tests.Utils;
 using UI.Application.Configurations;
 using UI.Application.DTOs;
+using UI.Application.Tools;
 using UI.Application.UnitOfWork;
 using UI.Domain.Entities;
 using UI.Infrastructure.Persist;
@@ -75,14 +74,14 @@ namespace UI.API.Tests.Integration
 		{
 			var socialMedia = new SocialMediaDTO()
 			{
-				Name=Guid.NewGuid().ToString(),
-				Link="no link",
+				Name = Guid.NewGuid().ToString(),
+				Link = "no link",
 				ImagePath = "no image",
 				IsActive = true,
 			};
 			var res = _httpClient.Post("/socialMedia/create", socialMedia);
 
-			Assert.AreEqual(HttpStatusCode.OK,res.StatusCode);
+			Assert.AreEqual(HttpStatusCode.OK, res.StatusCode);
 
 			Assert.IsTrue(_unitOfWork.SocialMediaRepo.Exists(i => i.Name == socialMedia.Name));
 		}
@@ -94,7 +93,7 @@ namespace UI.API.Tests.Integration
 				Name = Guid.NewGuid().ToString(),
 			};
 			var res = _httpClient.Post("/socialMedia/create", socialMedia);
-			Assert.AreEqual(HttpStatusCode.BadRequest,res.StatusCode);
+			Assert.AreEqual(HttpStatusCode.BadRequest, res.StatusCode);
 			Assert.IsFalse(_unitOfWork.SocialMediaRepo.Exists(i => i.Name == socialMedia.Name));
 		}
 		[Test]
@@ -106,7 +105,7 @@ namespace UI.API.Tests.Integration
 			var updatedSocialMedia = _mapper.Map<SocialMediaDTO>(
 				_unitOfWork.SocialMediaRepo.Get(socialMedia.Id));
 
-			Assert.AreEqual(HttpStatusCode.OK,res.StatusCode);
+			Assert.AreEqual(HttpStatusCode.OK, res.StatusCode);
 			Assert.AreEqual(updatedSocialMedia.Name, socialMedia.Name);
 		}
 		[Test]
@@ -116,12 +115,12 @@ namespace UI.API.Tests.Integration
 			socialMedia.Name = "updated-title";
 			var res = _httpClient.Put("/socialMedia/update", new
 			{
-				Id = socialMedia.Id,
+				socialMedia.Id,
 			});
 			var updatedSocialMedia = _mapper.Map<SocialMediaDTO>(
 				_unitOfWork.SocialMediaRepo.Get(socialMedia.Id));
 
-			Assert.AreEqual(HttpStatusCode.BadRequest,res.StatusCode);
+			Assert.AreEqual(HttpStatusCode.BadRequest, res.StatusCode);
 			Assert.AreNotEqual(updatedSocialMedia.Name, socialMedia.Name);
 		}
 		[Test]
@@ -144,8 +143,8 @@ namespace UI.API.Tests.Integration
 		{
 			var socialMedia = new SocialMedia()
 			{
-				Name="no name",
-				Link="no link",
+				Name = "no name",
+				Link = "no link",
 				ImagePath = "no image",
 				IsActive = true
 			};

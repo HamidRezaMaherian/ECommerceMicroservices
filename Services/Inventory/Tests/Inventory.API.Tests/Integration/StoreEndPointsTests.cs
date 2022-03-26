@@ -1,6 +1,7 @@
 ﻿using Inventory.API.Tests.Utils;
 using Inventory.Application.Configurations;
 using Inventory.Application.DTOs;
+using Inventory.Application.Tools;
 using Inventory.Application.UnitOfWork;
 using Inventory.Domain.Entities;
 using Inventory.Infrastructure.Persist;
@@ -10,9 +11,6 @@ using Mongo2Go;
 using MongoDB.Driver;
 using NUnit.Framework;
 using Services.Shared.APIUtils;
-using Services.Shared.AppUtils;
-using Services.Shared.Contracts;
-using Services.Shared.Tests;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -80,7 +78,7 @@ namespace Inventory.API.Tests.Integration
 			};
 			var res = _httpClient.Post("/store/create", store);
 
-			Assert.AreEqual(HttpStatusCode.OK,res.StatusCode);
+			Assert.AreEqual(HttpStatusCode.OK, res.StatusCode);
 			Assert.IsTrue(_unitOfWork.StoreRepo.Exists(i => i.Name == store.Name));
 		}
 		[Test]
@@ -88,12 +86,12 @@ namespace Inventory.API.Tests.Integration
 		{
 			var store = new StoreDTO()
 			{
-				Name="test",
+				Name = "test",
 			};
 			var res = _httpClient.Post("/store/create", store);
 
-			Assert.AreEqual(HttpStatusCode.BadRequest,res.StatusCode);
-			Assert.IsFalse(_unitOfWork.StoreRepo.Exists(i=> true));
+			Assert.AreEqual(HttpStatusCode.BadRequest, res.StatusCode);
+			Assert.IsFalse(_unitOfWork.StoreRepo.Exists(i => true));
 		}
 		[Test]
 		public void Update_PassValidObject_UpdateObject()
@@ -104,7 +102,7 @@ namespace Inventory.API.Tests.Integration
 			var updatedStore = _mapper.Map<StoreDTO>(
 				_unitOfWork.StoreRepo.Get(store.Id));
 
-			Assert.AreEqual(HttpStatusCode.OK,res.StatusCode);
+			Assert.AreEqual(HttpStatusCode.OK, res.StatusCode);
 			Assert.AreEqual(updatedStore.Name, store.Name);
 		}
 		[Test]
@@ -119,7 +117,7 @@ namespace Inventory.API.Tests.Integration
 			var updatedStore = _mapper.Map<StoreDTO>(
 				_unitOfWork.StoreRepo.Get(store.Id));
 
-			Assert.AreEqual(HttpStatusCode.BadRequest,res.StatusCode);
+			Assert.AreEqual(HttpStatusCode.BadRequest, res.StatusCode);
 			Assert.AreNotEqual(updatedStore.Name, store.Name);
 		}
 		[Test]

@@ -1,14 +1,10 @@
-﻿using AutoMapper;
-using Discount.Application.UnitOfWork;
+﻿using Discount.Application.UnitOfWork;
 using Discount.Domain.Common;
-using Services.Shared.AppUtils;
-using Services.Shared.Common;
-using Services.Shared.Contracts;
 using System.Linq.Expressions;
 
 namespace Discount.Application.Services
 {
-	public class DiscountBaseService: IDiscountBaseService
+	public class DiscountBaseService : IDiscountBaseService
 	{
 		protected readonly ICustomMapper _mapper;
 		protected readonly IUnitOfWork _unitOfWork;

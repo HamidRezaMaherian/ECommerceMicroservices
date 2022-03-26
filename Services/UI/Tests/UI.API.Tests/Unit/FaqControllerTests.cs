@@ -6,7 +6,7 @@ using UI.API.Controllers;
 using UI.Application.DTOs;
 using UI.Application.Services;
 using UI.Domain.Entities;
-using static Services.Shared.Tests.TestUtilsExtension;
+using static UI.API.Tests.Utils.TestUtilsExtension;
 
 namespace UI.API.Tests.Unit
 {
@@ -40,7 +40,7 @@ namespace UI.API.Tests.Unit
 				Answer = "no answer",
 				IsActive = true
 			};
-			var result = _faqController.Create(faq);
+			_faqController.Create(faq);
 			Assert.IsNotNull(_faqService.GetById(faq.Id));
 		}
 		[Test]
@@ -48,7 +48,7 @@ namespace UI.API.Tests.Unit
 		{
 			var faq = CreateFaq();
 			faq.Question = "updatedQuestion";
-			var result = _faqController.Update(faq);
+			_faqController.Update(faq);
 
 			Assert.AreEqual(_faqService.GetById(faq.Id).Question, faq.Question);
 		}
@@ -56,7 +56,7 @@ namespace UI.API.Tests.Unit
 		public void Delete_PasValidId_DeleteFaq()
 		{
 			var faq = CreateFaq();
-			var result = _faqController.Delete(faq.Id);
+			_faqController.Delete(faq.Id);
 
 			Assert.IsFalse(_faqService.Exists(i => i.Id == faq.Id));
 		}

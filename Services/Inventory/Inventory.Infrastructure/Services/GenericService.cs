@@ -1,7 +1,9 @@
-﻿using Inventory.Application.UnitOfWork;
+﻿using Inventory.Application.Repositories;
+using Inventory.Application.Services;
+using Inventory.Application.Tools;
+using Inventory.Application.UnitOfWork;
+using Inventory.Domain.Common;
 using Services.Shared.AppUtils;
-using Services.Shared.Common;
-using Services.Shared.Contracts;
 using System.Linq.Expressions;
 
 namespace Inventory.Infrastructure.Services

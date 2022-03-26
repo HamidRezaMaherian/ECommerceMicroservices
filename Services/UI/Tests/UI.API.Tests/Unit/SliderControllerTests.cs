@@ -1,15 +1,11 @@
 ﻿using NUnit.Framework;
-using Services.Shared.Contracts;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using UI.API.Controllers;
-using UI.Application.Configurations;
 using UI.Application.DTOs;
-using UI.Application.Exceptions;
 using UI.Application.Services;
 using UI.Domain.Entities;
-using static Services.Shared.Tests.TestUtilsExtension;
+using static UI.API.Tests.Utils.TestUtilsExtension;
 
 namespace UI.API.Tests.Unit
 {
@@ -42,7 +38,7 @@ namespace UI.API.Tests.Unit
 				IsActive = true,
 				Title = "no title"
 			};
-			var result = _sliderController.Create(slider);
+			_sliderController.Create(slider);
 			Assert.IsNotNull(_sliderervice.GetById(slider.Id));
 		}
 		[Test]
@@ -50,7 +46,7 @@ namespace UI.API.Tests.Unit
 		{
 			var slider = CreateSlider();
 			slider.Title = "updatedTest";
-			var result = _sliderController.Update(slider);
+			_sliderController.Update(slider);
 
 			Assert.AreEqual(_sliderervice.GetById(slider.Id).Title, slider.Title);
 		}

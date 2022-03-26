@@ -3,14 +3,13 @@ using Discount.Application.DTOs;
 using Discount.Application.Services;
 using Discount.Domain.Common;
 using Discount.Domain.Entities;
-using Microsoft.AspNetCore.Mvc;
 using Moq;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using static Services.Shared.Tests.TestUtilsExtension;
+using static Discount.API.Tests.Utils.TestUtilsExtension;
 
 namespace Discount.API.Tests.Unit
 {

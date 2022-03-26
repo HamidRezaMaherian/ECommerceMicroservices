@@ -1,12 +1,11 @@
 ﻿using Mongo2Go;
 using MongoDB.Driver;
 using Moq;
-using Services.Shared.Contracts;
-using Services.Shared.Tests;
 using System.Collections.Generic;
 using System.Linq;
 using UI.Application.DTOs;
 using UI.Application.Services;
+using UI.Application.Tools;
 using UI.Application.UnitOfWork;
 using UI.Domain.Entities;
 using UI.Infrastructure.Persist;
@@ -31,7 +30,7 @@ namespace UI.API.Tests.Utils
 			var repository = TestUtilsExtension.MockAction<AboutUs, AboutUsDTO>.MockRepository(list);
 
 			store.Setup(i => i.FirstOrDefault())
-				.Returns(list.FirstOrDefault());
+				.Returns(list.First());
 
 			store.Setup(i => i.Update(It.IsAny<AboutUsDTO>()))
 				.Callback<AboutUsDTO>(c => repository.Update(mapper.Map<AboutUs>(c)));
@@ -46,7 +45,7 @@ namespace UI.API.Tests.Utils
 			var repository = TestUtilsExtension.MockAction<ContactUs, ContactUsDTO>.MockRepository(list);
 
 			store.Setup(i => i.FirstOrDefault())
-				.Returns(list.FirstOrDefault());
+				.Returns(list.First());
 
 			store.Setup(i => i.Update(It.IsAny<ContactUsDTO>()))
 				.Callback<ContactUsDTO>(c => repository.Update(mapper.Map<ContactUs>(c)));

@@ -1,15 +1,12 @@
-﻿using Inventory.API.Configurations.Validations;
-using Inventory.API.Controllers;
+﻿using Inventory.API.Controllers;
 using Inventory.Application.DTOs;
 using Inventory.Application.Services;
 using Inventory.Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
 using NUnit.Framework;
-using Services.Shared.Tests;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using static Services.Shared.Tests.TestUtilsExtension;
+using static Inventory.API.Tests.Utils.TestUtilsExtension;
 
 namespace Inventory.API.Tests.Unit
 {
@@ -48,9 +45,9 @@ namespace Inventory.API.Tests.Unit
 		{
 			var store = new StoreDTO()
 			{
-				Name="test",
-				ShortDesc="no descs",
-				Description="no desc",
+				Name = "test",
+				ShortDesc = "no descs",
+				Description = "no desc",
 				IsActive = true,
 			};
 			var res = _storeController.Create(store);

@@ -1,8 +1,9 @@
-﻿using AutoMapper;
+﻿using Product.Application.Repositories;
+using Product.Application.Services;
+using Product.Application.Tools;
 using Product.Application.UnitOfWork;
+using Product.Domain.Common;
 using Services.Shared.AppUtils;
-using Services.Shared.Common;
-using Services.Shared.Contracts;
 using System.Linq.Expressions;
 
 namespace Product.Infrastructure.Services
@@ -63,7 +64,7 @@ namespace Product.Infrastructure.Services
 		{
 			var entity = _mapper.Map<T>(entityDTO);
 			_repo.Add(entity);
-			_mapper.Map(entity,entityDTO);
+			_mapper.Map(entity, entityDTO);
 		}
 		public virtual void Update(Tdto entityDTO)
 		{

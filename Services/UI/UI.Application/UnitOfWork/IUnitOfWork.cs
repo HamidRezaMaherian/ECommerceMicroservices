@@ -1,5 +1,4 @@
-﻿using Services.Shared.Contracts;
-using UI.Application.Repositories;
+﻿using UI.Application.Repositories;
 
 namespace UI.Application.UnitOfWork
 {

@@ -1,10 +1,11 @@
 ﻿using MongoDB.Driver;
 using MongoDB.Driver.Linq;
 using Services.Shared.AppUtils;
-using Services.Shared.Common;
-using Services.Shared.Contracts;
 using System.Linq.Expressions;
 using UI.Application.Exceptions;
+using UI.Application.Repositories;
+using UI.Application.Tools;
+using UI.Domain.Common;
 using UI.Infrastructure.Persist;
 using UI.Infrastructure.Persist.DAOs;
 

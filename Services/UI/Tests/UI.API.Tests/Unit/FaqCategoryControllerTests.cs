@@ -5,7 +5,7 @@ using UI.API.Controllers;
 using UI.Application.DTOs;
 using UI.Application.Services;
 using UI.Domain.Entities;
-using static Services.Shared.Tests.TestUtilsExtension;
+using static UI.API.Tests.Utils.TestUtilsExtension;
 
 namespace UI.API.Tests.Unit
 {
@@ -37,7 +37,7 @@ namespace UI.API.Tests.Unit
 				Name = "no name",
 				IsActive = true
 			};
-			var result = _faqCategoryController.Create(faqCategory);
+			_faqCategoryController.Create(faqCategory);
 			Assert.IsNotNull(_faqCategoryService.GetById(faqCategory.Id));
 		}
 		[Test]
@@ -45,7 +45,7 @@ namespace UI.API.Tests.Unit
 		{
 			var faqCategory = CreateFaqCategory();
 			faqCategory.Name = "updatedTest";
-			var result = _faqCategoryController.Update(faqCategory);
+			_faqCategoryController.Update(faqCategory);
 
 			Assert.AreEqual(_faqCategoryService.GetById(faqCategory.Id).Name, faqCategory.Name);
 		}
