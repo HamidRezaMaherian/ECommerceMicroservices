@@ -7,9 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="AutoMapper" Version="11.0.1" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="6.0.3" />
-    <PackageReference Include="Moq" Version="4.17.1" />
     <PackageReference Include="PostSharp.Patterns.Diagnostics" Version="6.10.8" />
   </ItemGroup>
 

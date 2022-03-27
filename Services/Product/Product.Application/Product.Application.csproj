@@ -5,9 +5,12 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>warnings</Nullable>
   </PropertyGroup>
-
+	<ItemGroup>
+		<PackageReference Include="AutoMapper" Version="11.0.1" />
+	</ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Product.Domain\Product.Domain.csproj" />
+	  <ProjectReference Include="..\..\Services.Shared\Services.Shared.csproj" />
+	  <ProjectReference Include="..\Product.Domain\Product.Domain.csproj" />
   </ItemGroup>
 
 </Project>
