@@ -7,6 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="APIUtils\HttpRequestHelper.cs~RF1b8abc4.TMP" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="6.0.3" />
     <PackageReference Include="PostSharp.Patterns.Diagnostics" Version="6.10.8" />
   </ItemGroup>
