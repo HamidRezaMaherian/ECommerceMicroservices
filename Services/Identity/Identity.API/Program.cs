@@ -34,12 +34,11 @@ public class Program
 			options.Events.RaiseSuccessEvents = true;
 			options.EmitStaticAudienceClaim = true;
 		})
-		//	.AddApiAuthorization<IdentityUser, ApplicationDbContext>(opt =>
-		//opt.SigningCredential = new SigningCredentials(
-		//	new SymmetricSecurityKey(Encoding.ASCII.GetBytes("KLJIWSFJLSJOGUWIOJKUWIOEL")), "SHA256")
-		//)
+		.AddApiAuthorization<IdentityUser, ApplicationDbContext>(opt =>
+		opt.SigningCredential = new SigningCredentials(
+			new SymmetricSecurityKey(Encoding.ASCII.GetBytes("KLJIWSFJLSJOGUWIOJKUWIOEL")), SecurityAlgorithms.HmacSha256)
+		)
 		.AddInMemoryIdentityResources(Config.IdentityResources)
-		.AddTestUsers(Config.TestUsers.ToList())
 		.AddDeveloperSigningCredential()
 		.AddInMemoryApiScopes(Config.ApiScopes)
 		.AddInMemoryClients(Config.Clients);
