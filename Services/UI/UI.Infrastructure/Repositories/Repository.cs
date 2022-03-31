@@ -40,7 +40,11 @@ namespace UI.Infrastructure.Repositories
 		{
 			try
 			{
-				_dbCollection.DeleteOne(i => i.Id == id.ToString());
+				var result = _dbCollection.DeleteOne(i => i.Id == id.ToString());
+				if (result.DeletedCount == 0)
+				{
+					throw new DeleteOperationException("Id Not Exist");
+				}
 			}
 			catch (Exception e)
 			{
@@ -52,7 +56,11 @@ namespace UI.Infrastructure.Repositories
 		{
 			try
 			{
-				_dbCollection.DeleteOne(i => i.Id == entity.Id);
+				var result = _dbCollection.DeleteOne(i => i.Id == entity.Id.ToString());
+				if (result.DeletedCount == 0)
+				{
+					throw new DeleteOperationException("Id Not Exist");
+				}
 			}
 			catch (Exception e)
 			{
@@ -64,7 +72,6 @@ namespace UI.Infrastructure.Repositories
 		{
 			try
 			{
-
 				IMongoQueryable<TDAO> query = _dbCollection.AsQueryable();
 				return query.Any(
 					ExpressionHelper.Convert<T, TDAO>(predicate)
@@ -81,16 +88,12 @@ namespace UI.Infrastructure.Repositories
 			try
 			{
 				IMongoQueryable<TDAO> query = _dbCollection.AsQueryable();
-				query = query.Where(
-					ExpressionHelper.Convert<T, TDAO>(queryParams.Expression)
-					);
-
-				//foreach (var includeProperty in queryParams.IncludeProperties.Split
-				//			(',', StringSplitOptions.RemoveEmptyEntries))
-				//	query = query.Include(includeProperty);
-
-				//if (queryParams.OrderBy != null)
-				//	queryParams.OrderBy(query);
+				if (queryParams.Expression != null)
+				{
+					query = query.Where(
+						ExpressionHelper.Convert<T, TDAO>(queryParams.Expression)
+						);
+				}
 
 				query = queryParams.Skip != 0 ? query.Skip(queryParams.Skip) : query;
 				query = queryParams.Take != 0 ? query.Take(queryParams.Take) : query;
@@ -131,7 +134,11 @@ namespace UI.Infrastructure.Repositories
 			ArgumentNullException.ThrowIfNull(entity);
 			try
 			{
-				_dbCollection.ReplaceOne(i => i.Id == entity.Id, _mapper.Map<TDAO>(entity));
+				var result = _dbCollection.ReplaceOne(i => i.Id == entity.Id, _mapper.Map<TDAO>(entity));
+				if (result.UpsertedId == entity.Id)
+				{
+					throw new UpdateOperationException("Entity not Valid");
+				}
 			}
 			catch (Exception e)
 			{
