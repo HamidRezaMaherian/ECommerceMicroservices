@@ -1,6 +1,6 @@
 ﻿using System.Runtime.Serialization;
 
-namespace UI.Application.Exceptions;
+namespace Inventory.Application.Exceptions;
 
 public class UpdateOperationException : Exception
 {

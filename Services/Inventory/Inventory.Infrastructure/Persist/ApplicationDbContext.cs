@@ -7,9 +7,28 @@ namespace Inventory.Infrastructure.Persist
 {
 	public class ApplicationDbContext : IDisposable, IAsyncDisposable
 	{
-		public ApplicationDbContext(MongoClient client,string dbName)
+		private IMongoCollection<StockDAO> _stocks;
+		private IMongoCollection<StoreDAO> _stores;
+		public ApplicationDbContext(MongoClient client, string dbName)
 		{
 			DataBase = client.GetDatabase(dbName);
+		}
+
+		public IMongoCollection<StockDAO> Stocks
+		{
+			get
+			{
+				_stocks ??= DataBase.GetCollection<StockDAO>(nameof(Stock));
+				return _stocks;
+			}
+		}
+		public IMongoCollection<StoreDAO> Stores
+		{
+			get
+			{
+				_stores ??= DataBase.GetCollection<StoreDAO>(nameof(Store));
+				return _stores;
+			}
 		}
 
 		public IMongoDatabase DataBase { get; }

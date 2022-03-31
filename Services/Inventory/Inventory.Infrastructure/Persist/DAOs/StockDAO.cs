@@ -7,6 +7,7 @@ namespace Inventory.Infrastructure.Persist.DAOs
 	{
 		[BsonRequired]
 		public string ProductId { get; set; }
+		public string PropertyId { get; set; }
 		[BsonRequired]
 		public string StoreId { get; set; }
 		[BsonRequired]
