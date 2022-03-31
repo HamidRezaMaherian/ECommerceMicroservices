@@ -11,7 +11,7 @@ namespace Product.Application.Repositories
 		T Get(object id);
 
 		void Delete(object id);
-		void Delete(T entity);
+		void Delete<T>(T entity);
 
 		void Add(T entity);
 

@@ -14,6 +14,7 @@ namespace Product.Infrastructure.Persist.Mappings
 			CreateMap<ProductCategoryDAO, ProductCategory>().ReverseMap();
 			CreateMap<ProductImageDAO, ProductImage>().ReverseMap();
 			CreateMap<ProductPropertyDAO, ProductProperty>().ReverseMap();
+			CreateMap<ProductPricePropertyDAO, ProductPriceProperty>().ReverseMap();
 			CreateMap<PropertyDAO, Property>().ReverseMap();
 		}
 	}

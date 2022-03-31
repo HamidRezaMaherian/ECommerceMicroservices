@@ -64,7 +64,7 @@ namespace Product.Infrastructure.Repositories
 			}
 		}
 
-		public void Delete(T entity)
+		public void Delete<T>(T entity)
 		{
 			try
 			{

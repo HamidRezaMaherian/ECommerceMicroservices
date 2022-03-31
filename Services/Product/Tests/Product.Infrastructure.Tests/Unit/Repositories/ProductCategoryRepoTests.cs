@@ -8,6 +8,8 @@ using Product.Infrastructure.Persist.DAOs;
 using Product.Infrastructure.Persist.Mappings;
 using Product.Infrastructure.Repositories;
 using Product.Infrastructure.Tests.Utils;
+using Services.Shared.AppUtils;
+using System;
 using System.Linq;
 
 namespace Product.Infrastructure.Tests.Unit.Repositories
@@ -74,16 +76,83 @@ namespace Product.Infrastructure.Tests.Unit.Repositories
 				});
 			Assert.AreNotEqual(invalidProduct.Name, product.Name);
 		}
+		[Test]
+		public void Delete_PasValidId_DeleteEntity()
+		{
+			var productCategory = CreateMockObj();
+
+			_productCategoryRepo.Delete(productCategory.Id);
+			_db.SaveChanges();
+			Assert.IsFalse(_db.ProductCategories.AsQueryable().Any(i => i.Id == productCategory.Id));
+		}
+		[Test]
+		public void Delete_PasInvalidId_ThrowException()
+		{
+			Assert.Throws<DeleteOperationException>(() =>
+			{
+				_productCategoryRepo.Delete(Guid.NewGuid().ToString());
+			});
+		}
+		[Test]
+		public void Get_ReturnAllEntities()
+		{
+			foreach (var item in Enumerable.Range(1, 3))
+			{
+				CreateMockObj($"title{item}");
+			}
+
+			CollectionAssert.AreEquivalent(_db.ProductCategories.AsQueryable().Select(i => i.Id).ToList(),
+				_productCategoryRepo.Get().Select(i => i.Id));
+		}
+		[Test]
+		public void Get_PassValidQueryParam_ReturnFilteredEntities()
+		{
+			foreach (var item in Enumerable.Range(1, 10))
+			{
+				CreateMockObj($"title{item}");
+			}
+			QueryParams<ProductCategory> queryParams = new QueryParams<ProductCategory>
+			{
+				Expression = i => true,
+				Skip = 1,
+				Take = 5,
+			};
+			CollectionAssert.AreEquivalent(
+				_db.ProductCategories.AsQueryable().Skip(1).Take(5).Select(i => i.Id).ToList(),
+				_productCategoryRepo.Get(queryParams).Select(i => i.Id));
+		}
+		[Test]
+		public void Get_PassInvalidQueryParam_ThrowException()
+		{
+			Assert.Throws<ReadOperationException>(() =>
+			{
+				_productCategoryRepo.Get(null);
+			});
+		}
+
 		#region HelperMethods
 		private ProductCategoryDAO CreateMockObj()
 		{
-			var productCategory = new ProductCategoryDAO()
-			{
-				Name = "test",
-			};
+			var productCategory = MockObj("test");
 			var result = _db.ProductCategories.Add(productCategory);
 			productCategory.Id = result.Entity.Id;
 			_db.SaveChanges();
+			return productCategory;
+		}
+		private ProductCategoryDAO CreateMockObj(string name)
+		{
+			var productCategory = MockObj(name);
+			var result = _db.ProductCategories.Add(productCategory);
+			productCategory.Id = result.Entity.Id;
+			_db.SaveChanges();
+			return productCategory;
+		}
+		private ProductCategoryDAO MockObj(string name)
+		{
+			var productCategory = new ProductCategoryDAO()
+			{
+				Name = name,
+			};
 			return productCategory;
 		}
 		#endregion

@@ -13,12 +13,16 @@ namespace Product.Infrastructure.Persist
 		protected override void OnModelCreating(ModelBuilder builder)
 		{
 			SeedData(builder);
+
 			builder.ApplyGlobalFilters<IBaseDelete>(i => !i.IsDelete);
 
 			builder.ApplyConfigurationsFromAssembly(
 				Assembly.GetAssembly(typeof(ApplicationDbContext)) ??
 				Assembly.GetExecutingAssembly()
 				);
+
+			builder.Entity<ProductPricePropertyDAO>().HasBaseType<ProductBasePropertyDAO>();
+			builder.Entity<ProductPropertyDAO>().HasBaseType<ProductBasePropertyDAO>();
 
 			base.OnModelCreating(builder);
 		}
@@ -30,7 +34,7 @@ namespace Product.Infrastructure.Persist
 		public DbSet<ProductImageDAO> ProductImages { get; private set; }
 		public DbSet<PropertyDAO> Properties { get; private set; }
 		public DbSet<CategoryPropertyDAO> CategoryProperties { get; private set; }
-		public DbSet<ProductPropertyDAO> ProductProperties { get; private set; }
+		public DbSet<ProductBasePropertyDAO> ProductProperties { get; private set; }
 		#endregion
 
 

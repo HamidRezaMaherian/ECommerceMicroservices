@@ -7,6 +7,7 @@ using Product.Infrastructure.Persist.DAOs;
 using Product.Infrastructure.Persist.Mappings;
 using Product.Infrastructure.Repositories;
 using Product.Infrastructure.Tests.Utils;
+using Services.Shared.AppUtils;
 using System;
 using System.Linq;
 
@@ -21,10 +22,14 @@ namespace Product.Infrastructure.Tests.Unit.Repositories
 		[SetUp]
 		public void Setup()
 		{
-			_db?.Dispose();
 			_db = MockActions.MockDbContext("TestDb");
 			_mapper = TestUtilsExtension.CreateMapper(new PersistMapperProfile());
 			_productRepo = new ProductRepo(_db, _mapper);
+		}
+		[TearDown]
+		public void TearDown()
+		{
+			_db?.Dispose();
 		}
 		[Test]
 		public void Add_PasValidEntity_CreateEntity()
@@ -85,6 +90,60 @@ namespace Product.Infrastructure.Tests.Unit.Repositories
 				});
 			Assert.AreNotEqual(invalidProduct.Name, product.Name);
 		}
+		[Test]
+		public void Delete_PasValidId_DeleteEntity()
+		{
+			var product = CreateMockObj();
+
+			_productRepo.Delete(product.Id);
+			_db.SaveChanges();
+			Assert.IsFalse(_db.Brands.AsQueryable().Any(i => i.Id == product.Id));
+		}
+		[Test]
+		public void Delete_PasInvalidId_ThrowException()
+		{
+			Assert.Throws<DeleteOperationException>(() =>
+			{
+				_productRepo.Delete(Guid.NewGuid().ToString());
+			});
+		}
+		[Test]
+		public void Get_ReturnAllEntities()
+		{
+			foreach (var item in Enumerable.Range(1, 3))
+			{
+				CreateMockObj($"title{item}");
+			}
+
+			CollectionAssert.AreEquivalent(_db.Products.AsQueryable().Select(i => i.Id).ToList(),
+				_productRepo.Get().Select(i => i.Id));
+		}
+		[Test]
+		public void Get_PassValidQueryParam_ReturnFilteredEntities()
+		{
+			foreach (var item in Enumerable.Range(1, 10))
+			{
+				CreateMockObj($"title{item}");
+			}
+			QueryParams<Domain.Entities.Product> queryParams = new QueryParams<Domain.Entities.Product>
+			{
+				Expression = i => true,
+				Skip = 1,
+				Take = 5,
+			};
+			CollectionAssert.AreEquivalent(
+				_db.Products.AsQueryable().Skip(1).Take(5).Select(i => i.Id).ToList(),
+				_productRepo.Get(queryParams).Select(i => i.Id));
+		}
+		[Test]
+		public void Get_PassInvalidQueryParam_ThrowException()
+		{
+			Assert.Throws<ReadOperationException>(() =>
+			{
+				_productRepo.Get(null);
+			});
+		}
+
 		#region HelperMethods
 		private ProductCategoryDAO CreateMockCategoryObj()
 		{
@@ -100,9 +159,25 @@ namespace Product.Infrastructure.Tests.Unit.Repositories
 		}
 		private ProductDAO CreateMockObj()
 		{
+			var product = MockObj("test");
+			var result = _db.Products.Add(product);
+			product.Id = result.Entity.Id;
+			_db.SaveChanges();
+			return product;
+		}
+		private ProductDAO CreateMockObj(string name)
+		{
+			var product = MockObj(name);
+			var result = _db.Products.Add(product);
+			product.Id = result.Entity.Id;
+			_db.SaveChanges();
+			return product;
+		}
+		private ProductDAO MockObj(string name)
+		{
 			var product = new ProductDAO()
 			{
-				Name = "test",
+				Name = name,
 				CategoryId = CreateMockCategoryObj().Id,
 				CreatedDateTime = DateTime.Now,
 				Description = "no desc",
@@ -110,12 +185,8 @@ namespace Product.Infrastructure.Tests.Unit.Repositories
 				MainImagePath = "no path",
 				UnitPrice = 29348
 			};
-			var result = _db.Products.Add(product);
-			product.Id = result.Entity.Id;
-			_db.SaveChanges();
 			return product;
 		}
 		#endregion
-
 	}
 }

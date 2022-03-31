@@ -2,7 +2,7 @@
 
 namespace Product.Infrastructure.Persist.DAOs
 {
-	public class ProductPropertyDAO : EntityBaseDAO<string>
+	public class ProductBasePropertyDAO : EntityBaseDAO<string>
 	{
 		[Required]
 		[MaxLength(500)]
@@ -16,5 +16,14 @@ namespace Product.Infrastructure.Persist.DAOs
 		public virtual ProductDAO Product { get; set; }
 		public virtual PropertyDAO Property { get; set; }
 		#endregion
+	}
+
+	public class ProductPropertyDAO : ProductBasePropertyDAO
+	{
+	}
+	public class ProductPricePropertyDAO : ProductBasePropertyDAO
+	{
+		[Required]
+		public double Price { get; set; }
 	}
 }

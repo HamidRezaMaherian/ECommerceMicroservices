@@ -15,9 +15,9 @@ using System.Linq;
 namespace Product.Infrastructure.Tests.Unit.Repositories
 {
 	[TestFixture]
-	public class BrandRepoTests
+	public class PropertyRepoTests
 	{
-		private BrandRepo _brandRepo;
+		private PropertyRepo _propertyRepo;
 		private ICustomMapper _mapper;
 		private ApplicationDbContext _db;
 		[SetUp]
@@ -26,75 +26,73 @@ namespace Product.Infrastructure.Tests.Unit.Repositories
 			_db?.Dispose();
 			_db = MockActions.MockDbContext("TestDb");
 			_mapper = TestUtilsExtension.CreateMapper(new PersistMapperProfile());
-			_brandRepo = new BrandRepo(_db, _mapper);
+			_propertyRepo = new PropertyRepo(_db, _mapper);
 		}
 		[Test]
 		public void Add_PasValidEntity_CreateEntity()
 		{
-			var brand = new Brand()
+			var property = new Property()
 			{
 				Name = "Test",
-				ImagePath = "no image",
-				IsActive = true,
+				Type=Domain.Enums.PropertyType.String
 			};
-			_brandRepo.Add(brand);
+			_propertyRepo.Add(property);
 			_db.SaveChanges();
-			Assert.AreEqual(_db.Brands.Count(i => i.Id == brand.Id), 1);
+			Assert.AreEqual(_db.Properties.Count(i => i.Id == property.Id), 1);
 		}
 		[Test]
 		public void Add_PasInvalidEntity_ThrowException()
 		{
-			var brand = new Brand()
+			var property = new Property()
 			{
 			};
 			Assert.Throws<InsertOperationException>(() =>
 			{
-				_brandRepo.Add(brand);
+				_propertyRepo.Add(property);
 			});
 			Assert.AreEqual(_db.Products.Count(), 0);
 		}
 		[Test]
 		public void Update_PasValidEntity_UpdateEntity()
 		{
-			var brand = CreateMockObj();
-			_db.Entry(brand).State = EntityState.Detached;
-			brand.Name = "updatedTest";
-			_brandRepo.Update(_mapper.Map<Brand>(brand));
+			var property = CreateMockObj();
+			_db.Entry(property).State = EntityState.Detached;
+			property.Name = "updatedTest";
+			_propertyRepo.Update(_mapper.Map<Property>(property));
 
-			var updatedProduct = _db.Brands.Find(brand.Id);
-			Assert.AreEqual(updatedProduct?.Name, brand.Name);
+			var updatedProduct = _db.Properties.Find(property.Id);
+			Assert.AreEqual(updatedProduct?.Name, property.Name);
 		}
 		[Test]
 		public void Update_PasInvalidEntity_ThrowException()
 		{
-			var brand = CreateMockObj();
-			var invalidProduct = new Brand()
+			var property = CreateMockObj();
+			var invalidProduct = new Property()
 			{
-				Id = brand.Id,
+				Id = property.Id,
 				Name = "updatedTest"
 			};
 			Assert.Throws<UpdateOperationException>(() =>
 				{
-					_brandRepo.Update(invalidProduct);
+					_propertyRepo.Update(invalidProduct);
 				});
-			Assert.AreNotEqual(invalidProduct.Name, brand.Name);
+			Assert.AreNotEqual(invalidProduct.Name, property.Name);
 		}
-
 		[Test]
 		public void Delete_PasValidId_DeleteEntity()
 		{
-			var slider = CreateMockObj();
+			var property = CreateMockObj();
 
-			_brandRepo.Delete(slider.Id);
+			_propertyRepo.Delete(property.Id);
 			_db.SaveChanges();
-			Assert.IsFalse(_db.Brands.AsQueryable().Any(i => i.Id == slider.Id));
+			Assert.IsFalse(_db.Properties.AsQueryable().Any(i => i.Id == property.Id));
 		}
 		[Test]
 		public void Delete_PasInvalidId_ThrowException()
 		{
 			Assert.Throws<DeleteOperationException>(() =>
 			{
-				_brandRepo.Delete(Guid.NewGuid().ToString());
+				_propertyRepo.Delete(Guid.NewGuid().ToString());
 			});
 		}
 		[Test]
@@ -105,8 +103,8 @@ namespace Product.Infrastructure.Tests.Unit.Repositories
 				CreateMockObj($"title{item}");
 			}
 
-			CollectionAssert.AreEquivalent(_db.Brands.AsQueryable().Select(i => i.Id).ToList(),
-				_brandRepo.Get().Select(i => i.Id));
+			CollectionAssert.AreEquivalent(_db.Properties.AsQueryable().Select(i => i.Id).ToList(),
+				_propertyRepo.Get().Select(i => i.Id));
 		}
 		[Test]
 		public void Get_PassValidQueryParam_ReturnFilteredEntities()
@@ -115,50 +113,51 @@ namespace Product.Infrastructure.Tests.Unit.Repositories
 			{
 				CreateMockObj($"title{item}");
 			}
-			QueryParams<Brand> queryParams = new QueryParams<Brand>
+			QueryParams<Property> queryParams = new QueryParams<Property>
 			{
 				Expression = i => true,
 				Skip = 1,
 				Take = 5,
 			};
 			CollectionAssert.AreEquivalent(
-				_db.Brands.AsQueryable().Skip(1).Take(5).Select(i => i.Id).ToList(),
-				_brandRepo.Get(queryParams).Select(i => i.Id));
+				_db.Properties.AsQueryable().Skip(1).Take(5).Select(i => i.Id).ToList(),
+				_propertyRepo.Get(queryParams).Select(i => i.Id));
 		}
 		[Test]
 		public void Get_PassInvalidQueryParam_ThrowException()
 		{
 			Assert.Throws<ReadOperationException>(() =>
 			{
-				_brandRepo.Get(null);
+				_propertyRepo.Get(null);
 			});
 		}
 
 		#region HelperMethods
-		private BrandDAO CreateMockObj()
+		private PropertyDAO CreateMockObj()
 		{
-			var brand = MockObj("test");
-			var result = _db.Brands.Add(brand);
-			brand.Id = result.Entity.Id;
+			var property = MockObj("test");
+			var result = _db.Properties.Add(property);
+			property.Id = result.Entity.Id;
 			_db.SaveChanges();
-			return brand;
+			return property;
 		}
-		private BrandDAO CreateMockObj(string name)
+		private PropertyDAO CreateMockObj(string name)
 		{
-			var brand = MockObj(name);
-			var result = _db.Brands.Add(brand);
-			brand.Id = result.Entity.Id;
+			var property = MockObj(name);
+			var result = _db.Properties.Add(property);
+			property.Id = result.Entity.Id;
 			_db.SaveChanges();
-			return brand;
+			return property;
 		}
-		private BrandDAO MockObj(string name)
+		private PropertyDAO MockObj(string name)
 		{
-			var brand = new BrandDAO()
+			var property = new PropertyDAO()
 			{
 				Name = name,
+				Type=Domain.Enums.PropertyType.Number,
 				IsActive = true
 			};
-			return brand;
+			return property;
 		}
 		#endregion
 
