@@ -8,7 +8,6 @@ using MongoDB.Driver;
 using MongoDB.Driver.Linq;
 using Services.Shared.AppUtils;
 using System.Linq.Expressions;
-using UI.Application.Exceptions;
 
 namespace Inventory.Infrastructure.Repositories
 {
