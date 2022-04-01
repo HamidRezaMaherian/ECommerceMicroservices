@@ -20,4 +20,8 @@
 		<ProjectReference Include="..\..\Discount.Infrastructure\Discount.Infrastructure.csproj" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <Folder Include="Unit\Services\" />
+	</ItemGroup>
+
 </Project>
