@@ -24,13 +24,6 @@ namespace Order.Infrastructure.Persist
 		}
 
 		#region Product
-		public DbSet<BrandDAO> Brands { get; private set; }
-		public DbSet<ProductDAO> Products { get; private set; }
-		public DbSet<ProductCategoryDAO> ProductCategories { get; private set; }
-		public DbSet<ProductImageDAO> ProductImages { get; private set; }
-		public DbSet<PropertyDAO> Properties { get; private set; }
-		public DbSet<CategoryPropertyDAO> CategoryProperties { get; private set; }
-		public DbSet<ProductPropertyDAO> ProductProperties { get; private set; }
 		#endregion
 
 

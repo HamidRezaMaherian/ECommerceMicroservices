@@ -27,9 +27,6 @@ namespace Order.Infrastructure.IOC
 		}
 		private static void RegisterServices(this IServiceCollection services)
 		{
-			services.AddScoped<IProductService, ProductService>();
-			services.AddScoped<IProductCategoryService, ProductCategoryService>();
-			services.AddScoped<IBrandService, BrandService>();
 		}
 		private static void RegisterPersistant(this IServiceCollection services, IConfiguration configuration)
 		{

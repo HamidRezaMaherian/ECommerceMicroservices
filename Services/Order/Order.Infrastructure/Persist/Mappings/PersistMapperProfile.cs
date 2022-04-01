@@ -8,13 +8,6 @@ namespace Order.Infrastructure.Persist.Mappings
 	{
 		public PersistMapperProfile()
 		{
-			CreateMap<ProductDAO, Domain.Entities.Product>().ReverseMap();
-			CreateMap<BrandDAO, Brand>().ReverseMap();
-			CreateMap<CategoryPropertyDAO, CategoryProperty>().ReverseMap();
-			CreateMap<ProductCategoryDAO, ProductCategory>().ReverseMap();
-			CreateMap<ProductImageDAO, ProductImage>().ReverseMap();
-			CreateMap<ProductPropertyDAO, ProductProperty>().ReverseMap();
-			CreateMap<PropertyDAO, Property>().ReverseMap();
 		}
 	}
 }
