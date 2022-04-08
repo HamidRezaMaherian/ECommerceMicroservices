@@ -12,7 +12,7 @@ namespace Order.Domain.Entities
 				return ((uint)Items.Sum(x => x.Price)) + (Delivery?.DeliverPrice ?? 0);
 			}
 		}
-		public ICollection<OrderItem> Items { get; set; }
+		public IReadOnlyCollection<OrderItem> Items { get; set; }
 		// Payment
 		public Payment Payment { get; set; }
 		public Delivery Delivery { get; set; }

@@ -3,7 +3,7 @@ using Order.Domain.Enums;
 
 namespace Order.Domain.Entities
 {
-	public class Delivery : EntityPrimaryBase<string>
+	public class DeliveryDTO : EntityPrimaryBase<string>
 	{
 		public string FirstName { get; set; }
 		public string LastName { get; set; }

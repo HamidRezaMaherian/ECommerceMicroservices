@@ -1,9 +1,11 @@
-﻿using Order.Domain.Enums;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Order.Domain.Enums;
 using System.ComponentModel.DataAnnotations;
 
 namespace Order.Infrastructure.Persist.DAOs
 {
-	public class PaymentDAO : EntityPrimaryBaseDAO<string>
+	public class PaymentDAO : EntityPrimaryBaseDAO<string>, IEntityTypeConfiguration<PaymentDAO>
 	{
 		[Required]
 		public PaymentStatus Status { get; set; }
@@ -11,6 +13,15 @@ namespace Order.Infrastructure.Persist.DAOs
 		public PaymentMethod Method { get; set; }
 
 		public string TransactionId { get; set; }
-		//public Transaction Transaction { get; set; }
+
+		#region Relations
+		[Required]
+		public string OrderId { get; set; }
+		#endregion
+
+		public void Configure(EntityTypeBuilder<PaymentDAO> builder)
+		{
+			builder.HasOne<OrderDAO>().WithOne(i => i.Payment).HasForeignKey<PaymentDAO>(i => i.OrderId);
+		}
 	}
 }

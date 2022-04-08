@@ -8,6 +8,10 @@ namespace Order.Infrastructure.Persist.Mappings
 	{
 		public PersistMapperProfile()
 		{
+			CreateMap<Domain.Entities.Order,OrderDAO>().ReverseMap();
+			CreateMap<Payment,PaymentDAO>().ReverseMap();
+			CreateMap<Delivery, DeliveryDAO>().ReverseMap();
+			CreateMap<OrderItem, OrderItemDAO>().ReverseMap();
 		}
 	}
 }

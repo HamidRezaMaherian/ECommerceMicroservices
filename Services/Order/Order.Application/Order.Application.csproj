@@ -12,8 +12,5 @@
 	  <ProjectReference Include="..\..\Services.Shared\Services.Shared.csproj" />
 	  <ProjectReference Include="..\Order.Domain\Order.Domain.csproj" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="DTOs\" />
-  </ItemGroup>
 
 </Project>
