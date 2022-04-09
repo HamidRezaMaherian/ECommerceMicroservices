@@ -1,8 +1,9 @@
 ﻿using Order.Domain.Entities;
+using System.Linq.Expressions;
 
 namespace Order.Application.Repositories
 {
-	public interface IOrderItemRepo : IRepository<OrderItem>
+	public interface IOrderItemRepo : IQueryRepository<OrderItem>
 	{
 	}
 }

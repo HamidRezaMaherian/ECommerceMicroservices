@@ -23,7 +23,11 @@ namespace Order.Infrastructure.Persist
 			base.OnModelCreating(builder);
 		}
 
-		#region Product
+		#region Order
+		public DbSet<OrderDAO> Orders{ get; set; }
+		public DbSet<OrderItemDAO> OrderItems { get; set; }
+		public DbSet<PaymentDAO> Payments { get; set; }
+		public DbSet<DeliveryDAO> Deliveries { get; set; }
 		#endregion
 
 

@@ -10,6 +10,43 @@ namespace Order.Infrastructure.Persist
 		private readonly ApplicationDbContext _db;
 		private readonly ICustomMapper _mapper;
 
+		private IOrderRepo _orderRepo;
+		public IOrderRepo OrderRepo
+		{
+			get
+			{
+				_orderRepo ??= new OrderRepo(_db, _mapper);
+				return _orderRepo;
+			}
+		}
+		private IOrderItemRepo _orderItemRepo;
+		public IOrderItemRepo OrderItemRepo
+		{
+			get
+			{
+				_orderItemRepo ??= new OrderItemRepo(_db, _mapper);
+				return _orderItemRepo;
+			}
+		}
+		private IDeliveryRepo _deliveryRepo;
+		public IDeliveryRepo DeliveryRepo
+		{
+			get
+			{
+				_deliveryRepo ??= new DeliveryRepo(_db, _mapper);
+				return _deliveryRepo;
+			}
+		}
+		private IPaymentRepo _paymentRepo;
+		public IPaymentRepo PaymentRepo
+		{
+			get
+			{
+				_paymentRepo ??= new PaymentRepo(_db, _mapper);
+				return _paymentRepo;
+			}
+		}
+
 		public UnitOfWork(ApplicationDbContext db, ICustomMapper mapper)
 		{
 			_db = db;
