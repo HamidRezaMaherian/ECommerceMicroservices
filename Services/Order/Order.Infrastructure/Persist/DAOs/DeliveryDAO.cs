@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Order.Infrastructure.Persist.DAOs
 {
-	public class DeliveryDAO : EntityPrimaryBaseDAO<string>, IEntityTypeConfiguration<DeliveryDAO>
+	public class DeliveryDAO : IEntityTypeConfiguration<DeliveryDAO>
 	{
 		[Required]
 		public string FirstName { get; set; }
@@ -33,6 +33,7 @@ namespace Order.Infrastructure.Persist.DAOs
 
 		public void Configure(EntityTypeBuilder<DeliveryDAO> builder)
 		{
+			builder.HasKey(x => x.OrderId);
 			builder.HasOne<OrderDAO>().WithOne(i => i.Delivery).HasForeignKey<DeliveryDAO>(i => i.OrderId);
 		}
 	}

@@ -56,11 +56,11 @@ namespace Order.Infrastructure.Tests.Unit.Repositories
 		{
 			var order = CreateMockObj();
 			_db.Entry(order).State = EntityState.Detached;
-			order.Name = "updatedTest";
+			order.UserName= "updatedTest";
 			_orderRepo.Update(_mapper.Map<Domain.Entities.Order>(order));
 
 			var updatedOrder = _db.Orders.Find(order.Id);
-			Assert.AreEqual(updatedOrder?.Name, order.Name);
+			Assert.AreEqual(updatedOrder?.UserName, order.UserName);
 		}
 		[Test]
 		public void Update_PasInvalidEntity_ThrowException()

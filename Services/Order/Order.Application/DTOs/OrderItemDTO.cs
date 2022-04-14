@@ -1,6 +1,6 @@
 ﻿using Order.Domain.Common;
 
-namespace Order.Domain.Entities
+namespace Order.Application.DTOs
 {
 	public class OrderItemDTO : EntityBase<string>
 	{

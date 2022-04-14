@@ -7,8 +7,18 @@ namespace Order.Application.Repositories
 	{
 		bool ItemExists(string orderId, Expression<Func<OrderItem, bool>> exp);
 		bool ItemExists(string orderId);
-		bool AddItem(string orderId, OrderItem orderItem);
-		bool UpdateItem(OrderItem orderItem);
-		bool DeleteItem(string itemId);
+		bool DeliveryExists(string deliveryId, Expression<Func<Delivery, bool>> exp);
+		bool DeliveryExists(string deliveryId);
+		bool PaymentExists(string paymentId, Expression<Func<Payment, bool>> exp);
+		bool PaymentExists(string paymentId);
+		void AddItem(string orderId, OrderItem orderItem);
+		void UpdateItem(OrderItem orderItem);
+		void DeleteItem(string itemId);
+		void AddDelivery(string orderId, Delivery delivery);
+		void UpdateDelivery(Delivery delivery);
+		void DeleteDelivery(string deliveryId);
+		void AddPayment(string orderId, Payment payment);
+		void UpdatePayment(Payment payment);
+		void DeletePayment(string paymentId);
 	}
 }

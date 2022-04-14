@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Order.Infrastructure.Persist.DAOs
 {
-	public class PaymentDAO : EntityPrimaryBaseDAO<string>, IEntityTypeConfiguration<PaymentDAO>
+	public class PaymentDAO : IEntityTypeConfiguration<PaymentDAO>
 	{
 		[Required]
 		public PaymentStatus Status { get; set; }
@@ -21,6 +21,7 @@ namespace Order.Infrastructure.Persist.DAOs
 
 		public void Configure(EntityTypeBuilder<PaymentDAO> builder)
 		{
+			builder.HasKey(x => x.OrderId);
 			builder.HasOne<OrderDAO>().WithOne(i => i.Payment).HasForeignKey<PaymentDAO>(i => i.OrderId);
 		}
 	}

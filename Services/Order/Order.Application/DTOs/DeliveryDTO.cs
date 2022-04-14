@@ -1,7 +1,7 @@
 ﻿using Order.Domain.Common;
 using Order.Domain.Enums;
 
-namespace Order.Domain.Entities
+namespace Order.Application.DTOs
 {
 	public class DeliveryDTO : EntityPrimaryBase<string>
 	{

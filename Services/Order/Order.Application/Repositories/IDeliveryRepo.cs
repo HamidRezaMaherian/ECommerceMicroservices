@@ -2,7 +2,7 @@
 
 namespace Order.Application.Repositories
 {
-	public interface IDeliveryRepo : IRepository<Delivery>
+	public interface IDeliveryRepo : IQueryRepository<Delivery>
 	{
 	}
 }

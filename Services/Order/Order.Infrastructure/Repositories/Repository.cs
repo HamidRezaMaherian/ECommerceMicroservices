@@ -15,7 +15,7 @@ namespace Order.Infrastructure.Repositories
 	{
 		protected readonly ApplicationDbContext _db;
 		protected readonly DbSet<TDAO> _dbSet;
-		private readonly ICustomMapper _mapper;
+		protected readonly ICustomMapper _mapper;
 		public Repository(ApplicationDbContext db, ICustomMapper mapper)
 		{
 			_db = db;
@@ -148,7 +148,7 @@ namespace Order.Infrastructure.Repositories
 				DetachEntity(entityDAO);
 			}
 		}
-		private void DetachEntity(object entity)
+		protected void DetachEntity(object entity)
 		{
 			if (entity != null)
 				_db.Entry(entity).State = EntityState.Detached;
