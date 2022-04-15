@@ -8,10 +8,6 @@ EXPOSE 443
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
 COPY ["Services/UI/UI.API/UI.API.csproj", "Services/UI/UI.API/"]
-COPY ["Services/UI/UI.Infrastructure/UI.Infrastructure.csproj", "Services/UI/UI.Infrastructure/"]
-COPY ["Services/UI/UI.Application/UI.Application.csproj", "Services/UI/UI.Application/"]
-COPY ["Services/UI/UI.Domain/UI.Domain.csproj", "Services/UI/UI.Domain/"]
-COPY ["Services/Services.Shared/Services.Shared.csproj", "Services/Services.Shared/"]
 RUN dotnet restore "Services/UI/UI.API/UI.API.csproj"
 COPY . .
 WORKDIR "/src/Services/UI/UI.API"
