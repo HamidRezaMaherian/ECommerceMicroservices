@@ -99,15 +99,21 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Payment", "Payment", "{72F7
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Basket", "Basket", "{C2B307FE-8C95-4736-8FA6-022FFA8A000B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Payment.API", "Services\Payment\Payment.API\Payment.API.csproj", "{A0FDC5C0-CD52-441A-B459-985911BD5203}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Payment.API", "Services\Payment\Payment.API\Payment.API.csproj", "{A0FDC5C0-CD52-441A-B459-985911BD5203}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Basket.API", "Services\Basket\Basket.API\Basket.API.csproj", "{26365222-1F73-4674-AEB6-036E08E148EA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Basket.API", "Services\Basket\Basket.API\Basket.API.csproj", "{26365222-1F73-4674-AEB6-036E08E148EA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Basket.Application", "Services\Basket\Basket.Application\Basket.Application.csproj", "{27FD81DA-F067-454D-BAB7-34A542508AE0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Basket.Application", "Services\Basket\Basket.Application\Basket.Application.csproj", "{27FD81DA-F067-454D-BAB7-34A542508AE0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Basket.Domain", "Services\Basket\Basket.Domain\Basket.Domain.csproj", "{375901B1-9C84-458B-9430-550EA5FDF86A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Basket.Domain", "Services\Basket\Basket.Domain\Basket.Domain.csproj", "{375901B1-9C84-458B-9430-550EA5FDF86A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Basket.Infrastructure", "Services\Basket\Basket.Infrastructure\Basket.Infrastructure.csproj", "{C117A9D0-CFF2-4624-A7E3-B4A4A862F63D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Basket.Infrastructure", "Services\Basket\Basket.Infrastructure\Basket.Infrastructure.csproj", "{C117A9D0-CFF2-4624-A7E3-B4A4A862F63D}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Client", "Client", "{AEB5FA90-C63A-4712-BEC5-7849DBBC870B}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Gateways", "Gateways", "{94BA1EF8-CFCE-4D7C-84D5-2D74ECEADD42}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Aggregator.API", "Gateways\Aggregator.API\Aggregator.API.csproj", "{EBCFF9E9-B71B-4653-9909-2E7CBB8444B0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -267,6 +273,10 @@ Global
 		{C117A9D0-CFF2-4624-A7E3-B4A4A862F63D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C117A9D0-CFF2-4624-A7E3-B4A4A862F63D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C117A9D0-CFF2-4624-A7E3-B4A4A862F63D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EBCFF9E9-B71B-4653-9909-2E7CBB8444B0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EBCFF9E9-B71B-4653-9909-2E7CBB8444B0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EBCFF9E9-B71B-4653-9909-2E7CBB8444B0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EBCFF9E9-B71B-4653-9909-2E7CBB8444B0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -324,6 +334,7 @@ Global
 		{27FD81DA-F067-454D-BAB7-34A542508AE0} = {C2B307FE-8C95-4736-8FA6-022FFA8A000B}
 		{375901B1-9C84-458B-9430-550EA5FDF86A} = {C2B307FE-8C95-4736-8FA6-022FFA8A000B}
 		{C117A9D0-CFF2-4624-A7E3-B4A4A862F63D} = {C2B307FE-8C95-4736-8FA6-022FFA8A000B}
+		{EBCFF9E9-B71B-4653-9909-2E7CBB8444B0} = {94BA1EF8-CFCE-4D7C-84D5-2D74ECEADD42}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {023C9E36-AA4A-4EDB-9342-0D4EA0D67A66}
