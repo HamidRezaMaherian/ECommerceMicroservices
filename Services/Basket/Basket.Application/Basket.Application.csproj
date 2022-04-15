@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>warnings</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Services.Shared\Services.Shared.csproj" />
+    <ProjectReference Include="..\Basket.Domain\Basket.Domain.csproj" />
+  </ItemGroup>
+
+</Project>
