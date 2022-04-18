@@ -70,6 +70,12 @@ namespace UI.API.Tests.Integration
 				_unitOfWork.FaqCategoryRepo.Get().Select(i => i.Id));
 		}
 		[Test]
+		public void HealthCheck_IsOk()
+		{
+			var res = _httpClient.Get("/health");
+			res.EnsureSuccessStatusCode();
+		}
+		[Test]
 		public void Create_PassValidObject_AddObject()
 		{
 			var faqCategory = new FaqCategoryDTO()

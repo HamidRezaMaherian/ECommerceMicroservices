@@ -17,6 +17,7 @@ public class Program
 				cfg.RegisterValidatorsFromAssembly(Assembly.GetAssembly(typeof(Program)));
 			});
 		// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+		builder.Services.AddHealthChecks();
 		builder.Services.AddEndpointsApiExplorer();
 		builder.Services.AddSwaggerGen();
 		builder.Services.RegisterInfrastructure(builder.Configuration);
@@ -32,7 +33,7 @@ public class Program
 		app.UseHttpsRedirection();
 
 		app.UseAuthorization();
-
+		app.MapHealthChecks("/health");
 		app.MapControllers();
 		app.Run();
 

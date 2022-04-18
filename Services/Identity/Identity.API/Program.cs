@@ -25,7 +25,7 @@ public class Program
 					.AddEntityFrameworkStores<ApplicationDbContext>();
 		builder.Services.AddEndpointsApiExplorer();
 		builder.Services.AddSwaggerGen();
-
+		builder.Services.AddHealthChecks();
 		builder.Services.AddIdentityServer(options =>
 		{
 			options.Events.RaiseErrorEvents = true;
@@ -58,6 +58,7 @@ public class Program
 		app.UseIdentityServer();
 
 		app.MapControllers();
+		app.MapHealthChecks("/health");
 
 		app.Run();
 	}

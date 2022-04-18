@@ -33,6 +33,12 @@ namespace Identity.API.Tests.Integration
 			_appClient.Dispose();
 		}
 		[Test]
+		public void HealthCheck_IsOk()
+		{
+			var res = _httpClient.Get("/health");
+			res.EnsureSuccessStatusCode();
+		}
+		[Test]
 		public void DiscoveryEndpoint_ReturnOk()
 		{
 			var res = _appClient.GetDiscoveryDocumentAsync().Result;

@@ -64,6 +64,12 @@ namespace Discount.API.Tests.Integration
 			_unitOfWork.Dispose();
 		}
 		[Test]
+		public void HealthCheck_IsOk()
+		{
+			var res = _httpClient.Get("/health");
+			res.EnsureSuccessStatusCode();
+		}
+		[Test]
 		public void GetAll_ReturnAllDiscounts()
 		{
 			var productId = Guid.NewGuid().ToString();

@@ -15,7 +15,7 @@ public class Program
 		// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 		builder.Services.AddEndpointsApiExplorer();
 		builder.Services.AddSwaggerGen();
-
+		builder.Services.AddHealthChecks();
 		builder.Services.AddParbad()
 			.ConfigureGateways(gtw =>
 			{
@@ -30,7 +30,7 @@ public class Program
 					opt.ConfigureDbContext = db => db.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"), sql => sql.MigrationsAssembly(assemblyName));
 				});
 			})
-			.ConfigureHttpContext(opt=>opt.UseDefaultAspNetCore());
+			.ConfigureHttpContext(opt => opt.UseDefaultAspNetCore());
 
 		var app = builder.Build();
 
@@ -46,6 +46,7 @@ public class Program
 		app.UseAuthorization();
 
 		app.MapControllers();
+		app.MapHealthChecks("/health");
 		app.UseParbadVirtualGatewayWhenDeveloping();
 		app.Run();
 	}

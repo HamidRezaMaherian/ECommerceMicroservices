@@ -60,6 +60,12 @@ namespace Inventory.API.Tests.Integration
 			_unitOfWork.Dispose();
 		}
 		[Test]
+		public void HealthCheck_IsOk()
+		{
+			var res = _httpClient.Get("/health");
+			res.EnsureSuccessStatusCode();
+		}
+		[Test]
 		public void GetAllForProduct_ReturnAllStocksForProduct()
 		{
 			var stock = CreateStock();
