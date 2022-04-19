@@ -17,7 +17,7 @@
 	"GlobalConfiguration": {
 		"BaseUrl": "https://localhost:5009",
 		"ServiceDiscoveryProvider": {
-			"Scheme": "https",
+			"Scheme": "http",
 			"Host": "localhost",
 			"Port": 8500,
 			"Type": "Consul"

@@ -33,6 +33,7 @@ public class Program
 			.ConfigureHttpContext(opt => opt.UseDefaultAspNetCore());
 
 		var app = builder.Build();
+		app.UseHttpLogging();
 
 		// Configure the HTTP request pipeline.
 		if (app.Environment.IsDevelopment())
@@ -40,8 +41,6 @@ public class Program
 			app.UseSwagger();
 			app.UseSwaggerUI();
 		}
-
-		app.UseHttpsRedirection();
 
 		app.UseAuthorization();
 

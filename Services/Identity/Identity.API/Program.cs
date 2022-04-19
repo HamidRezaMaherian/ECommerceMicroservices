@@ -13,12 +13,11 @@ public class Program
 		var builder = WebApplication.CreateBuilder(args);
 
 		// Add services to the container.
-
 		builder.Services.AddControllers();
 		// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 		builder.Services.AddDbContext<ApplicationDbContext>(options =>
 		{
-			options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+				//options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 		});
 		builder.Services.AddIdentity<IdentityUser, IdentityRole>()
 					.AddDefaultTokenProviders()
@@ -44,6 +43,7 @@ public class Program
 		.AddInMemoryClients(Config.Clients);
 
 		var app = builder.Build();
+		app.UseHttpLogging();
 
 		// Configure the HTTP request pipeline.
 		if (app.Environment.IsDevelopment())
@@ -51,9 +51,6 @@ public class Program
 			app.UseSwagger();
 			app.UseSwaggerUI();
 		}
-
-		app.UseHttpsRedirection();
-
 		app.UseAuthorization();
 		app.UseIdentityServer();
 

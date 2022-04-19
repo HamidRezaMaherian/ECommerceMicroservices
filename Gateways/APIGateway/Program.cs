@@ -9,6 +9,7 @@ public class Program
 	{
 		var builder = WebApplication.CreateBuilder(args);
 		builder.Configuration.AddJsonFile($"ocelot.json");
+		builder.Services.ConfigureConsul();
 		builder.Services.AddOcelot().AddConsul().AddPolly();
 		var app = builder.Build();
 		app.UseOcelot().Wait();

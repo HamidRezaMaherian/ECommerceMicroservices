@@ -22,6 +22,7 @@ public class Program
 		builder.Services.AddSwaggerGen();
 		builder.Services.RegisterInfrastructure(builder.Configuration);
 		var app = builder.Build();
+		app.UseHttpLogging();
 
 		// Configure the HTTP request pipeline.
 		if (app.Environment.IsDevelopment())
@@ -29,8 +30,6 @@ public class Program
 			app.UseSwagger();
 			app.UseSwaggerUI();
 		}
-
-		app.UseHttpsRedirection();
 
 		app.UseAuthorization();
 		app.MapHealthChecks("/health");
