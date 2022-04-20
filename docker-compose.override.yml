@@ -1,23 +1,13 @@
 version: '3.4'
 
 services:
-  aggregator.api:
-    environment:
-      - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_URLS=https://+:443;http://+:80
-    ports:
-      - "80"
-      - "443"
-    volumes:
-      - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
-      - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
   apigateway:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_URLS=https://+:443;http://+:80
+      - ASPNETCORE_URLS=https://+:5017;http://+:5016
     ports:
-      - "80"
-      - "443"
+      - "5016"
+      - "5017"
     volumes:
       - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
       - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
@@ -25,10 +15,11 @@ services:
   basket.api:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_URLS=https://+:443;http://+:80
+      - ASPNETCORE_URLS=https://+:5001;http://+:5000
+      - ConnectionStrings:DefaultConnection=redisdb:6379
     ports:
-      - "80"
-      - "443"
+      - "5000"
+      - "5001"
     volumes:
       - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
       - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
@@ -36,10 +27,13 @@ services:
   discount.api:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_URLS=https://+:443;http://+:80
+      - ASPNETCORE_URLS=https://+:5003;http://+:5002
+      - ConnectionStrings:DefaultConnection:User=admin
+      - ConnectionStrings:DefaultConnection:Password=admin1234
+      - ConnectionStrings:DefaultConnection:Name=DiscountDb
     ports:
-      - "80"
-      - "443"
+      - "5002"
+      - "5003"
     volumes:
       - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
       - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
@@ -47,10 +41,11 @@ services:
   identity.api:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_URLS=https://+:443;http://+:80
+      - ASPNETCORE_URLS=https://+:5005;http://+:5004
+      - "ConnectionString:DefaultConnection=Server=mssqldb;Port=5432;Database=IdentityDb;User Id=sa;Password=Admin123@;"
     ports:
-      - "80"
-      - "443"
+      - "5004"
+      - "5005"
     volumes:
       - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
       - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
@@ -58,10 +53,11 @@ services:
   inventory.api:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_URLS=https://+:443;http://+:80
+      - ASPNETCORE_URLS=https://+:5007;http://+:5006
+      - ConnectionStrings:DefaultConnection=mongodb://inventoryDb:27017
     ports:
-      - "80"
-      - "443"
+      - "5006"
+      - "5007"
     volumes:
       - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
       - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
@@ -69,10 +65,10 @@ services:
   order.api:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_URLS=https://+:443;http://+:80
+      - ASPNETCORE_URLS=https://+:5009;http://+:5008
     ports:
-      - "80"
-      - "443"
+      - "5008"
+      - "5009"
     volumes:
       - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
       - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
@@ -80,10 +76,11 @@ services:
   payment.api:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_URLS=https://+:443;http://+:80
+      - ASPNETCORE_URLS=https://+:5011;http://+:5010
+      - "ConnectionString:DefaultConnection=Server=mssqldb;Port=5432;Database=PaymentDb;User Id=sa;Password=Admin123@;"
     ports:
-      - "80"
-      - "443"
+      - "5010"
+      - "5011"
     volumes:
       - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
       - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
@@ -91,10 +88,10 @@ services:
   product.api:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_URLS=https://+:443;http://+:80
+      - ASPNETCORE_URLS=https://+:5013;http://+:5012
     ports:
-      - "80"
-      - "443"
+      - "5012"
+      - "5013"
     volumes:
       - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
       - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
@@ -102,10 +99,52 @@ services:
   ui.api:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_URLS=https://+:443;http://+:80
+      - ASPNETCORE_URLS=https://+:5015;http://+:5014
+      - ConnectionStrings:DefaultConnection=mongodb://UiDb:27017
     ports:
-      - "80"
-      - "443"
+      - "5014"
+      - "5015"
     volumes:
       - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
       - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
+  
+  service.registry:
+    environment:
+      - CONSUL_BIND_INTERFACE=eth0
+    ports:
+      - 8500:8500
+  
+  redisdb:
+    restart: always    
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+  
+  postgresdb:
+    restart: always    
+    environment:
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=admin1234
+      - POSTGRES_DB=DiscountDb
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+
+  mssqldb:
+    restart: always    
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=Admin123@
+    ports:
+      - "1433:1433"
+
+  mysqldb:
+    restart: always    
+    environment:
+      - MYSQL_ROOT_PASSWORD=Admin123@
+    ports:
+      - "32769:32769"
+    volumes:
+      -  mysql_data:/var/lib/mysql
