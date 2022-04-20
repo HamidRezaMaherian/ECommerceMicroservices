@@ -1,16 +1,10 @@
 {
 	"Routes": [
 		{
-			"DownstreamPathTemplate": "/product/getall",
-			"DownstreamScheme": "https",
-			"DownstreamHostAndPorts": [
-				{
-					"Host": "jsonplaceholder.typicode.com",
-					"Port": 443
-				}
-			],
-			"ServiceName": "product",
-			"UpstreamPathTemplate": "/product",
+			"DownstreamPathTemplate": "/health",
+			"DownstreamScheme": "http",
+			"ServiceName": "identity",
+			"UpstreamPathTemplate": "/identity/health",
 			"UpstreamHttpMethod": [ "Get" ]
 		}
 	],
