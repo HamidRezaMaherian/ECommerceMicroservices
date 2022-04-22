@@ -35,7 +35,7 @@ namespace Identity.API.Tests.Integration
 		[Test]
 		public void HealthCheck_IsOk()
 		{
-			var res = _httpClient.Get("/health");
+			var res = _appClient.GetAsync("/health").Result;
 			res.EnsureSuccessStatusCode();
 		}
 		[Test]
