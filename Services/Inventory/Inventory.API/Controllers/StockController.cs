@@ -20,7 +20,7 @@ namespace Inventory.API.Controllers
 		[HttpGet("{productId}")]
 		public ActionResult<IEnumerable<Stock>> GetAllForProduct(string productId)
 		{
-			return _stockService.GetAll(i=>i.ProductId==productId).ToList();
+			return _stockService.GetAll(i => i.ProductId == productId).ToList();
 		}
 		[HttpGet("{storeId}")]
 		public ActionResult<IEnumerable<Stock>> GetAllForStore(string storeId)
@@ -28,10 +28,10 @@ namespace Inventory.API.Controllers
 			return _stockService.GetAll(i => i.StoreId == storeId).ToList();
 		}
 		[HttpPost]
-		public IActionResult Create([FromBody]StockDTO stockDTO)
+		public IActionResult Create([FromBody] StockDTO stockDTO)
 		{
 			_stockService.Add(stockDTO);
-			return Ok();
+			return Created("", stockDTO);
 		}
 		[HttpPut]
 		public IActionResult Update([FromBody] StockDTO stockDTO)

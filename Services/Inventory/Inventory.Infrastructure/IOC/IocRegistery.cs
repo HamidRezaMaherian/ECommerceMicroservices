@@ -36,7 +36,7 @@ namespace Inventory.Infrastructure.IOC
 			services.AddScoped<ApplicationDbContext>(provider =>
 			{
 				var mongoClient = provider.GetService<MongoClient>();
-				return new ApplicationDbContext(mongoClient, "inventory-db");
+				return new ApplicationDbContext(mongoClient, "inventoryDb");
 			});
 			services.AddScoped(provider =>
 			{

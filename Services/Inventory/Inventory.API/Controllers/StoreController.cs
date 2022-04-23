@@ -26,7 +26,7 @@ namespace Inventory.API.Controllers
 		public IActionResult Create([FromBody] StoreDTO storeDTO)
 		{
 			_storeService.Add(storeDTO);
-			return Ok();
+			return Created("",storeDTO);
 		}
 		[HttpPut]
 		public IActionResult Update([FromBody] StoreDTO storeDTO)

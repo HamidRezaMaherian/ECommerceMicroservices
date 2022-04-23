@@ -52,7 +52,7 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=https://+:5007;http://+:5006
-      - ConnectionStrings:DefaultConnection=mongodb://inventoryDb:27017
+      - ConnectionStrings:DefaultConnection=mongodb://localhost:27017
     ports:
       - "5006"
       - "5007"
@@ -98,7 +98,7 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=https://+:5015;http://+:5014
-      - ConnectionStrings:DefaultConnection=mongodb://UiDb:27017
+      - ConnectionStrings:DefaultConnection=mongodb://localhost:27017
     ports:
       - "5014"
       - "5015"
