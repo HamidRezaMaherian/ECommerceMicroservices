@@ -80,7 +80,7 @@ namespace UI.API.Tests.Integration
 			};
 			var res = _httpClient.Post("/slider/create", slider);
 
-			Assert.AreEqual(HttpStatusCode.OK, res.StatusCode);
+			Assert.AreEqual(HttpStatusCode.Created, res.StatusCode);
 
 			Assert.IsTrue(_unitOfWork.SliderRepo.Exists(i => i.Title == slider.Title));
 		}

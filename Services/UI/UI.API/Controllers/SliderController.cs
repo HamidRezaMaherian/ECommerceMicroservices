@@ -26,7 +26,7 @@ namespace UI.API.Controllers
 		public IActionResult Create([FromBody] SliderDTO slider)
 		{
 			_sliderService.Add(slider);
-			return Ok(string.Format(Messages.SUCCEDED, "CREATION"));
+			return Created("",slider);
 		}
 		[HttpPut]
 		public IActionResult Update([FromBody] SliderDTO slider)

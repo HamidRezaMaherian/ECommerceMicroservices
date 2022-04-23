@@ -12,9 +12,9 @@ namespace UI.API.Controllers
 	{
 		private readonly IFaqCategoryService _faqCategoryService;
 
-		public FaqCategoryController(IFaqCategoryService sliderService)
+		public FaqCategoryController(IFaqCategoryService faqCategoryService)
 		{
-			_faqCategoryService = sliderService;
+			_faqCategoryService = faqCategoryService;
 		}
 
 		[HttpGet]
@@ -23,15 +23,15 @@ namespace UI.API.Controllers
 			return _faqCategoryService.GetAll().ToList();
 		}
 		[HttpPost]
-		public IActionResult Create([FromBody] FaqCategoryDTO slider)
+		public IActionResult Create([FromBody] FaqCategoryDTO faqCategory)
 		{
-			_faqCategoryService.Add(slider);
-			return Ok(string.Format(Messages.SUCCEDED, "CREATION"));
+			_faqCategoryService.Add(faqCategory);
+			return Created("",faqCategory);
 		}
 		[HttpPut]
-		public IActionResult Update([FromBody] FaqCategoryDTO slider)
+		public IActionResult Update([FromBody] FaqCategoryDTO faqCategory)
 		{
-			_faqCategoryService.Update(slider);
+			_faqCategoryService.Update(faqCategory);
 			return Ok(string.Format(Messages.SUCCEDED, "UPDATE"));
 		}
 		[HttpDelete("{id}")]

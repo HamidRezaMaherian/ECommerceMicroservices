@@ -15,49 +15,49 @@ public static class Statics
 		{
 			ID="discount:e",
 			Name="discount",
-			Port=5001,
+			Port=5002,
 			Address="localhost"
 		},
 		new AgentServiceRegistration()
 		{
 			ID="identity:1",
 			Name="identity",
-			Port=5002,
+			Port=5004,
 			Address="localhost",
 		},
 		new AgentServiceRegistration()
 		{
 			ID="inventory:c",
 			Name="inventory",
-			Port=5003,
+			Port=5006,
 			Address="localhost"
 		},
 		new AgentServiceRegistration()
 		{
 			ID="order:3",
 			Name="order",
-			Port=5004,
+			Port=5008,
 			Address="localhost"
 		},
 		new AgentServiceRegistration()
 		{
 			ID="payment:2",
 			Name="payment",
-			Port=5005,
+			Port=5010,
 			Address="localhost"
 		},
 		new AgentServiceRegistration()
 		{
 			ID="product:3",
 			Name="product",
-			Port=5006,
+			Port=5012,
 			Address="localhost"
 		},
 		new AgentServiceRegistration()
 		{
 			ID="ui:5",
 			Name="ui",
-			Port=5007,
+			Port=5014,
 			Address="localhost"
 		},
 	};

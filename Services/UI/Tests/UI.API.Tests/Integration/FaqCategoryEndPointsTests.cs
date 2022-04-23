@@ -85,7 +85,7 @@ namespace UI.API.Tests.Integration
 			};
 			var res = _httpClient.Post("/faqCategory/create", faqCategory);
 
-			Assert.AreEqual(HttpStatusCode.OK, res.StatusCode);
+			Assert.AreEqual(HttpStatusCode.Created, res.StatusCode);
 
 			Assert.IsTrue(_unitOfWork.FaqCategoryRepo.Exists(i => i.Name == faqCategory.Name));
 		}

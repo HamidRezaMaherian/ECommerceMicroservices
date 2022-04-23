@@ -81,7 +81,7 @@ namespace UI.API.Tests.Integration
 			};
 			var res = _httpClient.Post("/faq/create", faq);
 
-			Assert.AreEqual(HttpStatusCode.OK, res.StatusCode);
+			Assert.AreEqual(HttpStatusCode.Created, res.StatusCode);
 
 			Assert.IsTrue(_unitOfWork.FaqRepo.Exists(i => i.Question == faq.Question));
 		}

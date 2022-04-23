@@ -6,6 +6,13 @@
 			"ServiceName": "identity",
 			"UpstreamPathTemplate": "/identity/health",
 			"UpstreamHttpMethod": [ "Get" ]
+		},
+		{
+			"DownstreamPathTemplate": "/{url}",
+			"DownstreamScheme": "http",
+			"ServiceName": "ui",
+			"UpstreamPathTemplate": "/{url}",
+			"UpstreamHttpMethod": [ "Get" ]
 		}
 	],
 	"GlobalConfiguration": {

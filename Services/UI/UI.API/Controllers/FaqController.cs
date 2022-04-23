@@ -26,7 +26,7 @@ namespace UI.API.Controllers
 		public IActionResult Create([FromBody] FaqDTO faq)
 		{
 			_faqService.Add(faq);
-			return Ok(string.Format(Messages.SUCCEDED, "CREATION"));
+			return Created("",faq);
 		}
 		[HttpPut]
 		public IActionResult Update([FromBody] FaqDTO faq)

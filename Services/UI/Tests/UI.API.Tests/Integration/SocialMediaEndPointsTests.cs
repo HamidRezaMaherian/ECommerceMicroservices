@@ -81,7 +81,7 @@ namespace UI.API.Tests.Integration
 			};
 			var res = _httpClient.Post("/socialMedia/create", socialMedia);
 
-			Assert.AreEqual(HttpStatusCode.OK, res.StatusCode);
+			Assert.AreEqual(HttpStatusCode.Created, res.StatusCode);
 
 			Assert.IsTrue(_unitOfWork.SocialMediaRepo.Exists(i => i.Name == socialMedia.Name));
 		}

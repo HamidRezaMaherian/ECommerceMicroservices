@@ -10,37 +10,37 @@ namespace UI.API.Controllers
 	[ApiController]
 	public class SocialMediaController : ControllerBase
 	{
-		private readonly ISocialMediaService _sliderService;
+		private readonly ISocialMediaService _socialMediaService;
 
-		public SocialMediaController(ISocialMediaService sliderService)
+		public SocialMediaController(ISocialMediaService socialMediaService)
 		{
-			_sliderService = sliderService;
+			_socialMediaService = socialMediaService;
 		}
 		[HttpGet]
 		public ActionResult<IEnumerable<SocialMedia>> GetAll()
 		{
-			return _sliderService.GetAll().ToList();
+			return _socialMediaService.GetAll().ToList();
 		}
 		[HttpPost]
-		public IActionResult Create([FromBody]SocialMediaDTO slider)
+		public IActionResult Create([FromBody]SocialMediaDTO socialMedia)
 		{
-			_sliderService.Add(slider);
-			return Ok(string.Format(Messages.SUCCEDED, "CREATION"));
+			_socialMediaService.Add(socialMedia);
+			return Created("",socialMedia);
 		}
 		[HttpPut]
-		public IActionResult Update([FromBody] SocialMediaDTO slider)
+		public IActionResult Update([FromBody] SocialMediaDTO socialMedia)
 		{
-			_sliderService.Update(slider);
+			_socialMediaService.Update(socialMedia);
 			return Ok(string.Format(Messages.SUCCEDED, "UPDATE"));
 		}
 		[HttpDelete("{id}")]
 		public IActionResult Delete(string id)
 		{
-			if (!_sliderService.Exists(i => i.Id == id))
+			if (!_socialMediaService.Exists(i => i.Id == id))
 				return NotFound(
 					string.Format(Messages.NOT_FOUND, nameof(FAQ)));
 
-			_sliderService.Delete(id);
+			_socialMediaService.Delete(id);
 			return Ok(string.Format(Messages.SUCCEDED, "Deletion"));
 		}
 	}
