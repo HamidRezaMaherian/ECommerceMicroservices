@@ -25,7 +25,7 @@ public class ProductCategoryController : ControllerBase
 	public IActionResult Create([FromBody] ProductCategoryDTO productCategoryDTO)
 	{
 		_productCategoryService.Add(productCategoryDTO);
-		return Ok();
+		return Created("",productCategoryDTO);
 	}
 	[HttpPut]
 	[ProducesResponseType(StatusCodes.Status200OK)]

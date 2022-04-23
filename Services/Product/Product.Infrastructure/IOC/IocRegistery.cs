@@ -35,9 +35,20 @@ namespace Product.Infrastructure.IOC
 		{
 			services.AddDbContextPool<ApplicationDbContext>(cfg =>
 			{
-				cfg.UseSqlServer(configuration.GetConnectionString("DefaultConnection"));
+				cfg.UseMySQL(configuration.GetConnectionString("DefaultConnection"));
 			});
 			services.AddScoped<IUnitOfWork, UnitOfWork>();
+			services.MigrateDatabase();
+		}
+		private static void MigrateDatabase(this IServiceCollection services)
+		{
+			ApplicationDbContext db;
+			using var serviceProvider = services.BuildServiceProvider();
+			db = serviceProvider.GetService<ApplicationDbContext>();
+			if (db.Database.GetPendingMigrations().Any())
+			{
+				db.Database.Migrate();
+			}
 		}
 	}
 }

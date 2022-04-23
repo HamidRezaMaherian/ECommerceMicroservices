@@ -14,7 +14,11 @@ namespace Order.Infrastructure.Repositories
 		public OrderRepo(ApplicationDbContext db, ICustomMapper mapper) : base(db, mapper)
 		{
 		}
-
+		public override void Add(Domain.Entities.Order entity)
+		{
+			entity.Id = null;
+			base.Add(entity);
+		}
 		public void AddDelivery(string orderId, Delivery delivery)
 		{
 			if (!Exists(i => i.Id == orderId))

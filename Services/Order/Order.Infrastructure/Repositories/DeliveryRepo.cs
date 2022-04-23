@@ -11,5 +11,10 @@ namespace Order.Infrastructure.Repositories
 		public DeliveryRepo(ApplicationDbContext db, ICustomMapper mapper) : base(db, mapper)
 		{
 		}
+		public override void Add(Delivery entity)
+		{
+			entity.Id = null;
+			base.Add(entity);
+		}
 	}
 }

@@ -28,7 +28,7 @@ namespace Product.API.Controllers
 		public IActionResult Create([FromBody] ProductDTO productDTO)
 		{
 			_productService.Add(productDTO);
-			return Ok();
+			return Created("",productDTO);
 		}
 		[HttpPut]
 		[ProducesResponseType(StatusCodes.Status200OK)]

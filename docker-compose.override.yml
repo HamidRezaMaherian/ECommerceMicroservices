@@ -64,6 +64,7 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=https://+:5009;http://+:5008
+      - ConnectionStrings:DefaultConnection="Server=localhost;Port=32769;Database=orderDb;Uid=root;Pwd=Admin123@;"
     ports:
       - "5008"
       - "5009"
@@ -75,7 +76,7 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=https://+:5011;http://+:5010
-      - "ConnectionString:DefaultConnection=Server=mssqldb;Port=5432;Database=PaymentDb;User Id=sa;Password=Admin123@;"
+      - "ConnectionString:DefaultConnection=Server=localhost;Port=5432;Database=PaymentDb;User Id=sa;Password=Admin123@;"
     ports:
       - "5010"
       - "5011"
@@ -87,7 +88,8 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=https://+:5013;http://+:5012
-    ports:
+     - ConnectionStrings:DefaultConnection="Server=localhost;Port=32769;Database=productDb;Uid=root;Pwd=Admin123@;"
+     ports:
       - "5012"
       - "5013"
     volumes:
