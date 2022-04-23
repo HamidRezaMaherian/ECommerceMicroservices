@@ -3,7 +3,7 @@ using Basket.Application.Services;
 using Basket.Infrastructure.Repositories;
 using Basket.Infrastructure.Tools;
 using Microsoft.Extensions.DependencyInjection;
-
+using AutoMapper;
 namespace Basket.Infrastructure.IOC
 {
 	public static class IocRegistery
@@ -19,7 +19,8 @@ namespace Basket.Infrastructure.IOC
 		}
 		private static void RegisterMapper(this IServiceCollection services)
 		{
-			services.AddScoped<ICustomMapper, CustomMapper>();
+			//services.AddAutoMapper(typeof(PersistMapperProfile));
+			//services.AddScoped<ICustomMapper, CustomMapper>();
 		}
 	}
 }

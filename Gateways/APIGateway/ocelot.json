@@ -11,8 +11,15 @@
 			"DownstreamPathTemplate": "/{url}",
 			"DownstreamScheme": "http",
 			"ServiceName": "ui",
-			"UpstreamPathTemplate": "/{url}",
+			"UpstreamPathTemplate": "/ui/{url}",
 			"UpstreamHttpMethod": [ "Get" ]
+		},
+		{
+			"DownstreamPathTemplate": "/{url}",
+			"DownstreamScheme": "http",
+			"ServiceName": "basket",
+			"UpstreamPathTemplate": "/basket/{url}",
+			"UpstreamHttpMethod": [ "Get", "Post", "Put", "Delete" ]
 		}
 	],
 	"GlobalConfiguration": {

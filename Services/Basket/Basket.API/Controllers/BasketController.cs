@@ -16,36 +16,37 @@ namespace Basket.API.Controllers
 			_shopCartRepo = shopCartRepo;
 		}
 
-		[HttpGet("Basket")]
+		[HttpGet("Get")]
 		public ActionResult<ShopCart> GetBasket(string userName)
 		{
 			return _shopCartRepo.Get(userName);
 		}
-		[HttpPost("Basket")]
-		public IActionResult CreateBasket([FromBody] ShopCart shopCart)
+		[HttpPost("Create")]
+		public IActionResult CreateBasket([FromBody] ShopCartDTO shopCart)
 		{
-			_shopCartRepo.Add(shopCart);
-			return Ok();
+			var entity = new ShopCart() { UserName = shopCart.UserName };
+			_shopCartRepo.Add(entity);
+			return Created("", entity);
 		}
-		[HttpPost("Basket/Item")]
+		[HttpPost("/AddItem")]
 		public IActionResult AddBasketItem([FromBody] ShopCartItemDTO shopCartItem)
 		{
 			_shopCartRepo.AddItem(shopCartItem.CartId, shopCartItem.Item);
-			return Ok();
+			return Created("", shopCartItem);
 		}
-		[HttpPut("Basket/Item")]
+		[HttpPut("/UpdateItem")]
 		public IActionResult UpdateBasketItem([FromBody] ShopCartItemDTO shopCartItem)
 		{
 			_shopCartRepo.UpdateItem(shopCartItem.CartId, shopCartItem.Item);
 			return Ok();
 		}
-		[HttpDelete("Basket/Item")]
+		[HttpDelete("/DeleteItem")]
 		public IActionResult DeleteBasketItem([FromBody] ShopCartItemDTO shopCartItem)
 		{
 			_shopCartRepo.DeleteItem(shopCartItem.CartId, shopCartItem.Item);
 			return Ok();
 		}
-		[HttpDelete("Basket/{userName}")]
+		[HttpDelete("{userName}")]
 		public IActionResult DeleteBasket(string userName)
 		{
 			_shopCartRepo.Delete(userName);

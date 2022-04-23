@@ -2,7 +2,7 @@
 
 namespace Basket.Domain.Entities
 {
-	public class ShopCart: EntityPrimaryBase<string>
+	public class ShopCart : EntityPrimaryBase<string>
 	{
 		public override string Id { get => UserName; set => base.Id = value; }
 		public string UserName { get; set; }
@@ -11,7 +11,7 @@ namespace Basket.Domain.Entities
 		{
 			get
 			{
-				return ((uint)Items.Sum(x => x.Price));
+				return (uint)(Items?.Sum(x => x.Price) ?? 0);
 			}
 		}
 	}
