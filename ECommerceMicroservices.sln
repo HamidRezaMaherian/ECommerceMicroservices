@@ -123,13 +123,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "APIGateway.Tests", "Gateway
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Orchestrator.API", "Gateways\Orchestrator.API\Orchestrator.API.csproj", "{D89DEAFC-0DC7-4075-9A55-04A86B1665B4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApp.Server", "Apps\Web\WebApp\Server\WebApp.Server.csproj", "{CC32FFCC-CC3A-4B4E-98E4-577DF904A0F5}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApp.Server", "Apps\Web\Server\WebApp.Server.csproj", "{CC32FFCC-CC3A-4B4E-98E4-577DF904A0F5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApp.Client", "Apps\Web\WebApp\Client\WebApp.Client.csproj", "{B6E99827-DE0E-42A4-95A5-12101C207014}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApp.Client", "Apps\Web\Client\WebApp.Client.csproj", "{B6E99827-DE0E-42A4-95A5-12101C207014}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApp.Shared", "Apps\Web\WebApp\Shared\WebApp.Shared.csproj", "{C1F4B793-B8E4-4642-8BE4-7347517B6D52}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApp.Shared", "Apps\Web\Shared\WebApp.Shared.csproj", "{C1F4B793-B8E4-4642-8BE4-7347517B6D52}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Web", "Web", "{F7CE3553-82A9-4328-BF2C-5E587D036F21}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "WebApp", "WebApp", "{F7CE3553-82A9-4328-BF2C-5E587D036F21}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
