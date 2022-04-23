@@ -62,6 +62,7 @@ namespace Discount.Application.Services
 		{
 			var entity = _mapper.Map<T>(entityDTO);
 			_repo.Add(entity);
+			_mapper.Map(entity, entityDTO);
 		}
 		public virtual void Update(Tdto entityDTO)
 		{

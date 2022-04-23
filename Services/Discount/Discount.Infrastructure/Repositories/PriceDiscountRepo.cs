@@ -11,5 +11,10 @@ namespace Discount.Infrastructure.Repositories
 		public PriceDiscountRepo(ApplicationDbContext db, ICustomMapper mapper) : base(db, mapper)
 		{
 		}
+		public override void Add(PriceDiscount entity)
+		{
+			entity.Id = null;
+			base.Add(entity);
+		}
 	}
 }

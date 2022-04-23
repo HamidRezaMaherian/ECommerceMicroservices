@@ -11,6 +11,11 @@ namespace Discount.Infrastructure.Repositories
 		public PercentDiscountRepo(ApplicationDbContext db, ICustomMapper mapper) : base(db, mapper)
 		{
 		}
+		public override void Add(PercentDiscount entity)
+		{
+			entity.Id = null;
+			base.Add(entity);
+		}
 	}
 }
 

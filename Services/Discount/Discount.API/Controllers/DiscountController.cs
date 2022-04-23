@@ -25,16 +25,16 @@ namespace Discount.API.Controllers
 			return _discountBaseService.GetAll(i => i.ProductId == productId).ToList();
 		}
 		[HttpPost("percent")]
-		public IActionResult AddPercentDiscount(PercentDiscountDTO discountDTO)
+		public IActionResult AddPercentDiscount([FromBody]PercentDiscountDTO discountDTO)
 		{
 			_percentDiscountService.Add(discountDTO);
-			return Ok();
+			return Created("",discountDTO);
 		}
 		[HttpPost("price")]
-		public IActionResult AddPriceDiscount(PriceDiscountDTO discountDTO)
+		public IActionResult AddPriceDiscount([FromBody] PriceDiscountDTO discountDTO)
 		{
 			_priceDiscountService.Add(discountDTO);
-			return Ok();
+			return Created("", discountDTO);
 		}
 	}
 }

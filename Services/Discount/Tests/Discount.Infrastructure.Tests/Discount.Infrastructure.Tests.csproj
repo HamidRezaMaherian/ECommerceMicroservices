@@ -8,6 +8,12 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+	  <Compile Remove="Unit\Services\**" />
+	  <EmbeddedResource Remove="Unit\Services\**" />
+	  <None Remove="Unit\Services\**" />
+	</ItemGroup>
+
+	<ItemGroup>
 		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.11.0" />
 		<PackageReference Include="microsoft.EntityFrameworkCore.InMemory" Version="6.0.2" />
 		<PackageReference Include="Moq" Version="4.17.1" />
@@ -18,10 +24,6 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\..\Discount.Infrastructure\Discount.Infrastructure.csproj" />
-	</ItemGroup>
-
-	<ItemGroup>
-	  <Folder Include="Unit\Services\" />
 	</ItemGroup>
 
 </Project>
