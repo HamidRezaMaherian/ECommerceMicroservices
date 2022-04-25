@@ -88,8 +88,8 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=https://+:5013;http://+:5012
-     - ConnectionStrings:DefaultConnection="Server=localhost;Port=32769;Database=productDb;Uid=root;Pwd=Admin123@;"
-     ports:
+      - ConnectionStrings:DefaultConnection="Server=localhost;Port=32769;Database=productDb;Uid=root;Pwd=Admin123@;"
+    ports:
       - "5012"
       - "5013"
     volumes:

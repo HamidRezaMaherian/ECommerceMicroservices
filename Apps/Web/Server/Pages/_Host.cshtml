@@ -1,3 +1,6 @@
+﻿@page
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -6,7 +9,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <title>WebApp</title>
     <base href="/" />
-    <link href="css/bootstrap/bootstrap.min.css" rel="stylesheet" />
+    <link href="css/bootstrap/bootstrap.min.css" rel="stylesheet" /> 
     <link href="css/app.css" rel="stylesheet" />
     <link href="WebApp.Client.styles.css" rel="stylesheet" />
     <link href="manifest.json" rel="manifest" />
@@ -15,7 +18,7 @@
 </head>
 
 <body>
-    <div id="app">Loading...</div>
+   <component type="typeof(WebApp.Client.App)" render-mode="WebAssembly" />
 
     <div id="blazor-error-ui">
         An unhandled error has occurred.
