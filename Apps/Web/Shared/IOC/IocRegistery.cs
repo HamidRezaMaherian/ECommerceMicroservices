@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using WebApp.Shared.APIUtils;
+using WebApp.Shared.Services.Contracts;
 
 namespace WebApp.Shared.Ioc
 {
@@ -25,6 +26,8 @@ namespace WebApp.Shared.Ioc
 					opt.Address = new Uri(configuration?["ServiceDiscovery:Address"] ?? "http://localhost:8500");
 				});
 			});
+		
+			serviceCollection.AddScoped<IUIService, UIService>();
 		}
 		public static async Task<string> GetRequestUriAsync(this IConsulClient serviceDiscoveryClient, string serviceName)
 		{
@@ -51,6 +54,5 @@ namespace WebApp.Shared.Ioc
 			AgentService servToUse = services[_random.Next(0, services.Count)];
 			return servToUse;
 		}
-
 	}
 }
