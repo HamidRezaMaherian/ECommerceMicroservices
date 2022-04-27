@@ -26,8 +26,9 @@ namespace WebApp.Shared.Ioc
 					opt.Address = new Uri(configuration?["ServiceDiscovery:Address"] ?? "http://localhost:8500");
 				});
 			});
-		
+
 			serviceCollection.AddScoped<IUIService, UIService>();
+			serviceCollection.AddScoped<IUnitOfWork, UnitOfWork>();
 		}
 		public static async Task<string> GetRequestUriAsync(this IConsulClient serviceDiscoveryClient, string serviceName)
 		{
