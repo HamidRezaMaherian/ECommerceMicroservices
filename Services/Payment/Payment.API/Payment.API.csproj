@@ -11,15 +11,18 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Controllers\**" />
+    <Content Remove="Controllers\**" />
+    <EmbeddedResource Remove="Controllers\**" />
+    <None Remove="Controllers\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.14.0" />
 	  <PackageReference Include="microsoft.entityframeworkcore.SqlServer" Version="6.0.3" />
 	  <PackageReference Include="Parbad.AspNetCore" Version="1.2.0" />
     <PackageReference Include="Parbad.Storage.EntityFrameworkCore" Version="1.3.1" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Controllers\" />
   </ItemGroup>
 
 </Project>
