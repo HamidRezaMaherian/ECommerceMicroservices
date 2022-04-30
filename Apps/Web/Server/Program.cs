@@ -13,6 +13,7 @@ public class Program
 		builder.Services.AddControllersWithViews();
 		builder.Services.AddRazorPages();
 		builder.Services.AddBff();
+		builder.Services.RegisterSharedServices();
 
 		var identityAddress = await GetIdentityAddress(builder.Services);
 
@@ -31,22 +32,21 @@ public class Program
 			 {
 
 				 options.Authority = identityAddress ?? "https://localhost:5005";
-				 options.ClientId = "interactive.confidential";
-				 options.ClientSecret = "secret";
+				 options.ClientId = "webapp";
+				 options.ClientSecret = "webapp-secret";
 				 options.ResponseType = "code";
 				 options.ResponseMode = "query";
 
 				 options.Scope.Clear();
 				 options.Scope.Add("openid");
 				 options.Scope.Add("profile");
-				 options.Scope.Add("api");
-				 options.Scope.Add("offline_access");
+				 //options.Scope.Add("api");
+				 //options.Scope.Add("offline_access");
 
 				 options.MapInboundClaims = false;
 				 options.GetClaimsFromUserInfoEndpoint = true;
 				 options.SaveTokens = true;
 			 });
-		builder.Services.RegisterSharedServices();
 		var app = builder.Build();
 
 		// Configure the HTTP request pipeline.

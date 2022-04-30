@@ -43,6 +43,7 @@ namespace WebApp.Shared.Ioc
 
 			var uriBuilder = new UriBuilder()
 			{
+				Scheme = "https",
 				Host = service.Address,
 				Port = service.Port
 			};

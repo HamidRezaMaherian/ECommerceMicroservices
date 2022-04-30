@@ -22,7 +22,7 @@ public static class Statics
 		{
 			ID="identity:1",
 			Name="identity",
-			Port=5004,
+			Port=5005,
 			Address="localhost",
 		},
 		new AgentServiceRegistration()
@@ -58,6 +58,13 @@ public static class Statics
 			ID="ui:5",
 			Name="ui",
 			Port=5014,
+			Address="localhost"
+		},
+		new AgentServiceRegistration()
+		{
+			ID="apigateway:3",
+			Name="apigateway",
+			Port=5016,
 			Address="localhost"
 		},
 	};

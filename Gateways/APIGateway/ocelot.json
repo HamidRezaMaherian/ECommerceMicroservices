@@ -1,13 +1,6 @@
 {
 	"Routes": [
 		{
-			"DownstreamPathTemplate": "/health",
-			"DownstreamScheme": "http",
-			"ServiceName": "identity",
-			"UpstreamPathTemplate": "/identity/health",
-			"UpstreamHttpMethod": [ "Get" ]
-		},
-		{
 			"DownstreamPathTemplate": "/{url}",
 			"DownstreamScheme": "http",
 			"ServiceName": "ui",

@@ -40,7 +40,7 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=https://+:5005;http://+:5004
-      - "ConnectionString:DefaultConnection=Server=mssqldb;Port=5432;Database=IdentityDb;User Id=sa;Password=Admin123@;"
+      - "ConnectionString:DefaultConnection=Server=mssqldb;Database=IdentityDb;User Id=sa;Password=Admin123@;"
     ports:
       - "5004"
       - "5005"
@@ -76,7 +76,7 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=https://+:5011;http://+:5010
-      - "ConnectionString:DefaultConnection=Server=localhost;Port=5432;Database=PaymentDb;User Id=sa;Password=Admin123@;"
+      - "ConnectionString:DefaultConnection=Server=mssqldb;Database=PaymentDb;User Id=sa;Password=Admin123@;"
     ports:
       - "5010"
       - "5011"
@@ -137,7 +137,7 @@ services:
       - ACCEPT_EULA=Y
       - SA_PASSWORD=Admin123@
     ports:
-      - "1433:1433"
+      - "1434:1433"
 
   mysqldb:
     restart: always    

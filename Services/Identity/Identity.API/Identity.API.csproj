@@ -18,10 +18,71 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Include="Pages\Account\AccessDenied.cshtml" />
+    <None Include="Pages\Account\Login\Index.cshtml" />
+    <None Include="Pages\Account\Logout\Index.cshtml" />
+    <None Include="Pages\Account\Logout\LoggedOut.cshtml" />
+    <None Include="Pages\Ciba\All.cshtml" />
+    <None Include="Pages\Ciba\Consent.cshtml" />
+    <None Include="Pages\Ciba\Index.cshtml" />
+    <None Include="Pages\Ciba\_ScopeListItem.cshtml" />
+    <None Include="Pages\Consent\Index.cshtml" />
+    <None Include="Pages\Consent\_ScopeListItem.cshtml" />
+    <None Include="Pages\Device\Index.cshtml" />
+    <None Include="Pages\Device\Success.cshtml" />
+    <None Include="Pages\Device\_ScopeListItem.cshtml" />
+    <None Include="Pages\Diagnostics\Index.cshtml" />
+    <None Include="Pages\ExternalLogin\Callback.cshtml" />
+    <None Include="Pages\ExternalLogin\Challenge.cshtml" />
+    <None Include="Pages\Grants\Index.cshtml" />
+    <None Include="Pages\Home\Error\Index.cshtml" />
+    <None Include="Pages\Index.cshtml" />
+    <None Include="Pages\Redirect\Index.cshtml" />
+    <None Include="Pages\Shared\_Layout.cshtml" />
+    <None Include="Pages\Shared\_Nav.cshtml" />
+    <None Include="Pages\Shared\_ValidationSummary.cshtml" />
+    <None Include="Pages\_ViewImports.cshtml" />
+    <None Include="Pages\_ViewStart.cshtml" />
+    <None Include="wwwroot\css\site.scss" />
+    <None Include="wwwroot\duende-logo.svg" />
+    <None Include="wwwroot\js\signin-redirect.js" />
+    <None Include="wwwroot\js\signout-redirect.js" />
+    <None Include="wwwroot\lib\bootstrap4-glyphicons\fonts\glyphicons\glyphicons-halflings-regular.svg" />
+    <None Include="wwwroot\lib\bootstrap4-glyphicons\fonts\glyphicons\glyphicons-halflings-regular.woff2" />
+    <None Include="wwwroot\lib\bootstrap4-glyphicons\LICENSE" />
+    <None Include="wwwroot\lib\bootstrap4-glyphicons\maps\glyphicons-fontawesome.less" />
+    <None Include="wwwroot\lib\bootstrap\dist\css\bootstrap-grid.css.map" />
+    <None Include="wwwroot\lib\bootstrap\dist\css\bootstrap-grid.min.css.map" />
+    <None Include="wwwroot\lib\bootstrap\dist\css\bootstrap-reboot.css.map" />
+    <None Include="wwwroot\lib\bootstrap\dist\css\bootstrap-reboot.min.css.map" />
+    <None Include="wwwroot\lib\bootstrap\dist\css\bootstrap.css.map" />
+    <None Include="wwwroot\lib\bootstrap\dist\css\bootstrap.min.css.map" />
+    <None Include="wwwroot\lib\bootstrap\dist\js\bootstrap.bundle.js" />
+    <None Include="wwwroot\lib\bootstrap\dist\js\bootstrap.bundle.js.map" />
+    <None Include="wwwroot\lib\bootstrap\dist\js\bootstrap.bundle.min.js" />
+    <None Include="wwwroot\lib\bootstrap\dist\js\bootstrap.bundle.min.js.map" />
+    <None Include="wwwroot\lib\bootstrap\dist\js\bootstrap.js" />
+    <None Include="wwwroot\lib\bootstrap\dist\js\bootstrap.js.map" />
+    <None Include="wwwroot\lib\bootstrap\dist\js\bootstrap.min.js" />
+    <None Include="wwwroot\lib\bootstrap\dist\js\bootstrap.min.js.map" />
+    <None Include="wwwroot\lib\bootstrap\LICENSE" />
+    <None Include="wwwroot\lib\bootstrap\README.md" />
+    <None Include="wwwroot\lib\jquery\dist\jquery.js" />
+    <None Include="wwwroot\lib\jquery\dist\jquery.min.js" />
+    <None Include="wwwroot\lib\jquery\dist\jquery.min.map" />
+    <None Include="wwwroot\lib\jquery\dist\jquery.slim.js" />
+    <None Include="wwwroot\lib\jquery\dist\jquery.slim.min.js" />
+    <None Include="wwwroot\lib\jquery\dist\jquery.slim.min.map" />
+    <None Include="wwwroot\lib\jquery\README.md" />
+  </ItemGroup>
+
+  <ItemGroup>
 	  <PackageReference Include="microsoft.entityframeworkcore.SqlServer" Version="6.0.3" />
 	  <PackageReference Include="Microsoft.AspNetCore.ApiAuthorization.IdentityServer" Version="6.0.3" />
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.14.0" />
-    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
+	  <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="6.0.3" />
+	  <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
+	  <PackageReference Include="Duende.IdentityServer" Version="6.0.0" />
   </ItemGroup>
 
 </Project>

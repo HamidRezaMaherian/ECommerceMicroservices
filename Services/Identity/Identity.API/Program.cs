@@ -14,14 +14,17 @@ public class Program
 
 		// Add services to the container.
 		builder.Services.AddControllers();
+		builder.Services.AddRazorPages();
 		// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 		builder.Services.AddDbContext<ApplicationDbContext>(options =>
 		{
 			options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 		});
+		MigrateDatabase(builder.Services);
 		builder.Services.AddIdentity<IdentityUser, IdentityRole>()
 					.AddDefaultTokenProviders()
 					.AddEntityFrameworkStores<ApplicationDbContext>();
+
 		builder.Services.AddEndpointsApiExplorer();
 		builder.Services.AddSwaggerGen();
 		builder.Services.AddHealthChecks();
@@ -37,6 +40,7 @@ public class Program
 		opt.SigningCredential = new SigningCredentials(
 			new SymmetricSecurityKey(Encoding.ASCII.GetBytes("KLJIWSFJLSJOGUWIOJKUWIOEL")), SecurityAlgorithms.HmacSha256)
 		)
+		//.AddTestUsers(Config.TestUsers.ToList())
 		.AddInMemoryIdentityResources(Config.IdentityResources)
 		.AddDeveloperSigningCredential()
 		.AddInMemoryApiScopes(Config.ApiScopes)
@@ -51,12 +55,25 @@ public class Program
 			app.UseSwagger();
 			app.UseSwaggerUI();
 		}
+		app.UseStaticFiles();
+
 		app.UseAuthorization();
 		app.UseIdentityServer();
 
 		app.MapControllers();
+		app.MapRazorPages();
 		app.MapHealthChecks("/health");
 
 		app.Run();
+	}
+	private static void MigrateDatabase(IServiceCollection services)
+	{
+		ApplicationDbContext db;
+		using var serviceProvider = services.BuildServiceProvider();
+		db = serviceProvider.GetService<ApplicationDbContext>();
+		if (db.Database.GetPendingMigrations().Any())
+		{
+			db.Database.Migrate();
+		}
 	}
 }
