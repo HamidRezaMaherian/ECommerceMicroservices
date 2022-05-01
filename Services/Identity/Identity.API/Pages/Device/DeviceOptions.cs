@@ -2,7 +2,7 @@
 // See LICENSE in the project root for license information.
 
 
-namespace IdentityServerHost.Pages.Device;
+namespace Identity.API.Pages.Device;
 
 public class DeviceOptions
 {

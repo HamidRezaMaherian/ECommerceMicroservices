@@ -25,8 +25,6 @@ public class Program
 					.AddDefaultTokenProviders()
 					.AddEntityFrameworkStores<ApplicationDbContext>();
 
-		builder.Services.AddEndpointsApiExplorer();
-		builder.Services.AddSwaggerGen();
 		builder.Services.AddHealthChecks();
 		builder.Services.AddIdentityServer(options =>
 		{
@@ -36,14 +34,9 @@ public class Program
 			options.Events.RaiseSuccessEvents = true;
 			options.EmitStaticAudienceClaim = true;
 		})
-		.AddApiAuthorization<IdentityUser, ApplicationDbContext>(opt =>
-		opt.SigningCredential = new SigningCredentials(
-			new SymmetricSecurityKey(Encoding.ASCII.GetBytes("KLJIWSFJLSJOGUWIOJKUWIOEL")), SecurityAlgorithms.HmacSha256)
-		)
-		//.AddTestUsers(Config.TestUsers.ToList())
+		.AddAspNetIdentity<IdentityUser>()
 		.AddInMemoryIdentityResources(Config.IdentityResources)
 		.AddDeveloperSigningCredential()
-		.AddInMemoryApiScopes(Config.ApiScopes)
 		.AddInMemoryClients(Config.Clients);
 
 		var app = builder.Build();
@@ -52,17 +45,15 @@ public class Program
 		// Configure the HTTP request pipeline.
 		if (app.Environment.IsDevelopment())
 		{
-			app.UseSwagger();
-			app.UseSwaggerUI();
+			app.UseExceptionHandler("/home/error");
 		}
 		app.UseStaticFiles();
 
-		app.UseAuthorization();
 		app.UseIdentityServer();
+		app.UseAuthorization();
 
-		app.MapControllers();
-		app.MapRazorPages();
 		app.MapHealthChecks("/health");
+		app.MapRazorPages();
 
 		app.Run();
 	}

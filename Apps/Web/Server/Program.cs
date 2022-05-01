@@ -9,7 +9,6 @@ public class Program
 		var builder = WebApplication.CreateBuilder(args);
 
 		// Add services to the container.
-
 		builder.Services.AddControllersWithViews();
 		builder.Services.AddRazorPages();
 		builder.Services.AddBff();
@@ -23,7 +22,7 @@ public class Program
 			options.DefaultChallengeScheme = "oidc";
 			options.DefaultSignOutScheme = "oidc";
 		})
-			.AddCookie("cookie", options =>
+			.AddCookie("cookie", options =>	
 			 {
 				 options.Cookie.Name = "__Host-blazor";
 				 options.Cookie.SameSite = SameSiteMode.Strict;
@@ -34,16 +33,13 @@ public class Program
 				 options.Authority = identityAddress ?? "https://localhost:5005";
 				 options.ClientId = "webapp";
 				 options.ClientSecret = "webapp-secret";
-				 options.ResponseType = "code";
-				 options.ResponseMode = "query";
-
 				 options.Scope.Clear();
 				 options.Scope.Add("openid");
 				 options.Scope.Add("profile");
-				 //options.Scope.Add("api");
-				 //options.Scope.Add("offline_access");
-
-				 options.MapInboundClaims = false;
+				 //options.Scope.Add("user-claims");
+				 options.Scope.Add("offline_access");
+				 options.ResponseType = "code";
+				 options.MapInboundClaims = true;
 				 options.GetClaimsFromUserInfoEndpoint = true;
 				 options.SaveTokens = true;
 			 });
@@ -69,6 +65,7 @@ public class Program
 		app.UseRouting();
 		app.UseAuthentication();
 		app.UseBff();
+		app.UseAuthorization();
 
 
 		app.MapBffManagementEndpoints();

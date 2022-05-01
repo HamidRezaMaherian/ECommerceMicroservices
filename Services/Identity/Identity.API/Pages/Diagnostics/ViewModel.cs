@@ -8,7 +8,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Text.Json;
 
-namespace IdentityServerHost.Pages.Diagnostics;
+namespace Identity.API.Pages.Diagnostics;
 
 public class ViewModel
 {

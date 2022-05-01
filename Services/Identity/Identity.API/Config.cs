@@ -12,22 +12,9 @@ namespace Identity.API
 			 {
 					 new IdentityResources.OpenId(),
 					 new IdentityResources.Profile(),
-			 };
-		public static IEnumerable<TestUser> TestUsers = new List<TestUser>
-		{
-			new TestUser()
-			{
-				SubjectId="lasjioasdf",
-				Username="hamid",
-				Password="hamidalireza",
-				IsActive=true,
-			}
-		};
-		public static IEnumerable<ApiScope> ApiScopes =>
-			 new List<ApiScope>
-			 {
-					 new ApiScope("api1", "My API"),
-					 new ApiScope("api2", "My API")
+					 new IdentityResource(
+						 "user-claims",
+						 typeof(ClaimTypes).GetFields().Select(i=>i.GetRawConstantValue()?.ToString()))
 			 };
 		public static IEnumerable<Client> Clients =>
 			 new List<Client>
@@ -36,7 +23,7 @@ namespace Identity.API
                 new Client
 					 {
 						  ClientId = "webapp",
-						  ClientSecrets = { new Secret("webapp-secret".Sha256()) },
+						  ClientSecrets = { new Secret("webapp-secret".Sha512()) },
 
 						  AllowedGrantTypes = GrantTypes.Code,
                     
@@ -45,11 +32,12 @@ namespace Identity.API
 
                     // where to redirect to after logout
                     PostLogoutRedirectUris = { "https://localhost:5019/signout-callback-oidc" },
-
+						  AllowOfflineAccess=true,
 						  AllowedScopes = new List<string>
 						  {
 								IdentityServerConstants.StandardScopes.OpenId,
 								IdentityServerConstants.StandardScopes.Profile,
+								//"user-claims"
 						  }
 					 }
 			 };

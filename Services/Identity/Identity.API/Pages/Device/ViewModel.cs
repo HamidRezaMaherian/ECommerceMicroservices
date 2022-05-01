@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace IdentityServerHost.Pages.Device;
+namespace Identity.API.Pages.Device;
 
 public class ViewModel
 {

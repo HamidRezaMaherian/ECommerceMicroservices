@@ -77,12 +77,12 @@
   </ItemGroup>
 
   <ItemGroup>
+	  <PackageReference Include="Duende.IdentityServer.AspNetIdentity" Version="6.0.4" />
+	  <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="6.0.4" />
 	  <PackageReference Include="microsoft.entityframeworkcore.SqlServer" Version="6.0.3" />
-	  <PackageReference Include="Microsoft.AspNetCore.ApiAuthorization.IdentityServer" Version="6.0.3" />
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.14.0" />
 	  <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="6.0.3" />
-	  <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
-	  <PackageReference Include="Duende.IdentityServer" Version="6.0.0" />
+	  <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.3" />
   </ItemGroup>
 
 </Project>
