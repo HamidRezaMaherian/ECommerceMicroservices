@@ -30,7 +30,7 @@ public class Program
 			app.UseSwagger();
 			app.UseSwaggerUI();
 		}
-
+		app.UseStaticFiles();
 
 		app.UseAuthorization();
 
