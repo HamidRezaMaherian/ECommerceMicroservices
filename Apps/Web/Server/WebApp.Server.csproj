@@ -22,9 +22,5 @@
     <ProjectReference Include="..\Shared\WebApp.Shared.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Controllers\" />
-  </ItemGroup>
-
 
 </Project>

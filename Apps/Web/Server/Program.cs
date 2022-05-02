@@ -1,4 +1,6 @@
 using Consul;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Mvc;
 using WebApp.Shared.APIUtils;
 using WebApp.Shared.Ioc;
 public class Program
@@ -22,7 +24,7 @@ public class Program
 			options.DefaultChallengeScheme = "oidc";
 			options.DefaultSignOutScheme = "oidc";
 		})
-			.AddCookie("cookie", options =>	
+			.AddCookie("cookie", options =>
 			 {
 				 options.Cookie.Name = "__Host-blazor";
 				 options.Cookie.SameSite = SameSiteMode.Strict;
@@ -36,12 +38,13 @@ public class Program
 				 options.Scope.Clear();
 				 options.Scope.Add("openid");
 				 options.Scope.Add("profile");
-				 //options.Scope.Add("user-claims");
+				 options.Scope.Add("user-claims");
 				 options.Scope.Add("offline_access");
 				 options.ResponseType = "code";
 				 options.MapInboundClaims = true;
 				 options.GetClaimsFromUserInfoEndpoint = true;
 				 options.SaveTokens = true;
+				 options.ClaimActions.MapAll();
 			 });
 		var app = builder.Build();
 
@@ -70,9 +73,15 @@ public class Program
 
 		app.MapBffManagementEndpoints();
 		app.MapRazorPages();
+
 		app.MapControllers()
 			 .RequireAuthorization()
 			 .AsBffApiEndpoint();
+
+		app.MapGet("/auth", async (context) =>
+		{
+			var token = await context.GetTokenAsync("id_token");
+		});
 		app.MapFallbackToPage("/_Host");
 
 		app.Run();

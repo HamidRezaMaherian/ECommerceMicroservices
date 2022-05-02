@@ -37,7 +37,7 @@ namespace Identity.API
 						  {
 								IdentityServerConstants.StandardScopes.OpenId,
 								IdentityServerConstants.StandardScopes.Profile,
-								//"user-claims"
+								"user-claims"
 						  }
 					 }
 			 };

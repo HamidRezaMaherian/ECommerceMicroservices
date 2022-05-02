@@ -38,6 +38,7 @@ public class Program
 		.AddInMemoryIdentityResources(Config.IdentityResources)
 		.AddDeveloperSigningCredential()
 		.AddInMemoryClients(Config.Clients);
+		//.AddProfileService<IdentityProfile>();
 
 		var app = builder.Build();
 		app.UseHttpLogging();
@@ -62,7 +63,7 @@ public class Program
 		ApplicationDbContext db;
 		using var serviceProvider = services.BuildServiceProvider();
 		db = serviceProvider.GetService<ApplicationDbContext>();
-		if (db.Database.GetPendingMigrations().Any())
+		if (db?.Database.GetPendingMigrations().Any() ?? false)
 		{
 			db.Database.Migrate();
 		}

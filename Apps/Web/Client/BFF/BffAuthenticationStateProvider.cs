@@ -62,9 +62,12 @@ public class BffAuthenticationStateProvider : AuthenticationStateProvider
 					 "name",
 					 "role");
 
-				foreach (var claim in claims)
+				if (claims != null)
 				{
-					identity.AddClaim(new Claim(claim.Type, claim.Value.ToString() ?? ""));
+					foreach (var claim in claims)
+					{
+						identity.AddClaim(new Claim(claim.Type, claim.Value.ToString() ?? ""));
+					}
 				}
 
 				return new ClaimsPrincipal(identity);
