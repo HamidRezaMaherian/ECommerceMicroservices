@@ -6,9 +6,9 @@ namespace FileActor
 	{
 		public string Path { get; set; }
 		public string TargetPropertyName { get; set; }
-		public FileActionAttribute(string propertyName, string path)
+		public FileActionAttribute(string targetProperty, string path)
 		{
-			TargetPropertyName = propertyName;
+			TargetPropertyName = targetProperty;
 			Path = path;
 		}
 	}

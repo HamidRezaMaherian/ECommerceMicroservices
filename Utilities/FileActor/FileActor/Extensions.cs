@@ -106,7 +106,7 @@ namespace FileActor
 		}
 		public static FileStreamInfo SetPath(this FileStreamInfo info, string path)
 		{
-			info.RelativePath= path;
+			info.RelativePath = path;
 			return info;
 		}
 	}

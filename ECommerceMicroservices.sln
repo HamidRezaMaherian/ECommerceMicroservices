@@ -141,6 +141,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "FileActor", "FileActor", "{
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{F2222B88-967A-485B-A760-B35ED50EF6B6}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FileActor.Tests", "Utilities\FileActor\Tests\FileActor.Tests\FileActor.Tests.csproj", "{605D665C-7B42-4807-BD1B-11EA9B5449E6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -335,6 +337,10 @@ Global
 		{24E85E48-067C-44A7-9A71-EB55E17172F7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{24E85E48-067C-44A7-9A71-EB55E17172F7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{24E85E48-067C-44A7-9A71-EB55E17172F7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{605D665C-7B42-4807-BD1B-11EA9B5449E6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{605D665C-7B42-4807-BD1B-11EA9B5449E6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{605D665C-7B42-4807-BD1B-11EA9B5449E6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{605D665C-7B42-4807-BD1B-11EA9B5449E6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -404,6 +410,7 @@ Global
 		{24E85E48-067C-44A7-9A71-EB55E17172F7} = {3D434A82-4BE4-46EA-9EDB-E0E585BBE440}
 		{3D434A82-4BE4-46EA-9EDB-E0E585BBE440} = {3997F694-BC78-429E-AD3B-CBAD4974613A}
 		{F2222B88-967A-485B-A760-B35ED50EF6B6} = {3D434A82-4BE4-46EA-9EDB-E0E585BBE440}
+		{605D665C-7B42-4807-BD1B-11EA9B5449E6} = {F2222B88-967A-485B-A760-B35ED50EF6B6}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {023C9E36-AA4A-4EDB-9342-0D4EA0D67A66}

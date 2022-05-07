@@ -1,4 +1,5 @@
 ﻿using FileActor.Abstract;
+using FileActor.Exceptions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,7 +11,7 @@ namespace FileActor.Internal
 	{
 		public IEnumerable<FileStreamInfo> GetAllInfo<T>()
 		{
-			return typeof(T).GetType().GetProperties()
+			return typeof(T).GetProperties()
 						 .Where(i => IsPropertyValid(i))
 						 .Select(i =>
 						 {
@@ -25,13 +26,21 @@ namespace FileActor.Internal
 
 		public FileStreamInfo GetInfo<T, TProperty>(Expression<Func<T, TProperty>> exp)
 		{
-			var member = exp.GetMember();
-			var attr = typeof(T).GetProperty(member.Name)?.GetCustomAttribute<FileActionAttribute>();
-			return new FileStreamInfo(member.Name)
+			try
 			{
-				RelativePath = attr?.Path,
-				TargetProperty = attr?.TargetPropertyName
-			};
+
+				var member = exp.GetMember();
+				var attr = typeof(T).GetProperty(member.Name)?.GetCustomAttribute<FileActionAttribute>();
+				return new FileStreamInfo(member.Name)
+				{
+					RelativePath = attr.Path,
+					TargetProperty = attr.TargetPropertyName
+				};
+			}
+			catch (Exception e)
+			{
+				throw new NotFoundException(e.Message, e.InnerException);
+			}
 		}
 
 		private bool IsPropertyValid(PropertyInfo info)
@@ -55,8 +64,15 @@ namespace FileActor.Internal
 
 		public FileStreamInfo GetInfo<T, TProperty>(Expression<Func<T, TProperty>> exp)
 		{
-			var configurableObj = (FileActorConfigurable<T>)_serviceProvider.GetService(typeof(FileActorConfigurable<T>));
-			return configurableObj.GetInfo(exp);
+			try
+			{
+				var configurableObj = (FileActorConfigurable<T>)_serviceProvider.GetService(typeof(FileActorConfigurable<T>));
+				return configurableObj.GetInfo(exp);
+				}
+			catch (Exception e)
+			{
+				throw new NotFoundException(e.Message);
+			}
 		}
 	}
 }
