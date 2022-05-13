@@ -1,9 +1,10 @@
 ﻿using FileActor.Abstract;
+using FileActor.AspNetCore.Abstract;
 using System;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 
-namespace FileActor.Internal
+namespace FileActor.AspNetCore.Internal
 {
 	public class FileServiceProvider : IFileServiceProvider
 	{
@@ -40,6 +41,25 @@ namespace FileActor.Internal
 			});
 		}
 
+		public async Task DeleteAllAsync<T>(T obj)
+		{
+			var allInfo = _configurationManager.GetAllInfo<T>();
+			await Parallel.ForEachAsync(allInfo, async (info, _) =>
+			 {
+				 var propertyValue = obj.GetType().GetProperty(info.PropertyName)?.GetValue(obj);
+				 await Parallel.ForEachAsync(_factory.GetAll(), async (streamer, _) =>
+				 {
+					 await streamer.DeleteAsync(info.RelativePath);
+				 });
+				 obj.GetType().GetProperty(info.TargetProperty)?.SetValue(obj, info.RelativePath);
+			 });
+		}
+
+		public Task DeleteAsync<T, TProperty>(Expression<Func<T, TProperty>> exp, T obj)
+		{
+			throw new NotImplementedException();
+		}
+
 		public void Save<T, TProperty>(Expression<Func<T, TProperty>> exp, T obj)
 		{
 			var info = _configurationManager.GetInfo(exp);
@@ -63,6 +83,25 @@ namespace FileActor.Internal
 				};
 				obj.GetType().GetProperty(info.TargetProperty)?.SetValue(obj, info.RelativePath);
 			});
+		}
+
+		public async Task SaveAllAsync<T>(T obj)
+		{
+			var allInfo = _configurationManager.GetAllInfo<T>();
+			await Parallel.ForEachAsync(allInfo, async(info,_) =>
+			{
+				var propertyValue = obj.GetType().GetProperty(info.PropertyName)?.GetValue(obj);
+				await Parallel.ForEachAsync(_factory.GetAll(),async (streamer,_)=>
+				{
+					await streamer.UploadAsync(propertyValue, info.RelativePath);
+				});
+				obj.GetType().GetProperty(info.TargetProperty)?.SetValue(obj, info.RelativePath);
+			});
+		}
+
+		public Task SaveAsync<T, TProperty>(Expression<Func<T, TProperty>> exp, T obj)
+		{
+			throw new NotImplementedException();
 		}
 	}
 }

@@ -1,7 +1,7 @@
 ﻿using FileActor.Abstract;
+using FileActor.FileServices;
 using Microsoft.Extensions.DependencyInjection;
 using System;
-using UI.Application.FileServices;
 
 namespace FileActor.AspNetCore
 {
