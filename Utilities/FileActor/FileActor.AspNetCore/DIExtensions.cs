@@ -1,4 +1,6 @@
 ﻿using FileActor.Abstract;
+using FileActor.AspNetCore.Abstract;
+using FileActor.AspNetCore.Internal;
 using FileActor.Internal;
 using Microsoft.Extensions.DependencyInjection;
 using System.IO;
@@ -16,6 +18,7 @@ namespace FileActor.AspNetCore
 			services.AddSingleton<IFileStreamerContainer, FileStreamerContainer>();
 			services.AddSingleton<FileStreamerFactory>();
 			services.AddFileStream<string, Base64FileStream>();
+			services.AddAsyncFileStream<string, Base64FileStream>();
 			services.AddLocalActor("default", Path.Combine(Directory.GetCurrentDirectory(), "wwwroot"));
 			return services;
 		}
@@ -37,14 +40,20 @@ namespace FileActor.AspNetCore
 			var definedTypes = assembly.DefinedTypes.Where(i => i.BaseType == typeof(FileActorConfigurable<>));
 			Parallel.ForEach(definedTypes, i =>
 			{
-				services.AddSingleton(typeof(FileActorConfigurable<>).MakeGenericType(i.BaseType?.GenericTypeArguments),i);
+				services.AddSingleton(typeof(FileActorConfigurable<>).MakeGenericType(i.BaseType?.GenericTypeArguments), i);
 			});
 			return services;
 		}
-		public static IServiceCollection AddFileStream<T,TStream>(this IServiceCollection services)
-			where TStream:class,IFileStream<T>
+		public static IServiceCollection AddFileStream<T, TStream>(this IServiceCollection services)
+			where TStream : class, IFileStream<T>
 		{
 			services.AddSingleton<IFileStream<T>, TStream>();
+			return services;
+		}
+		public static IServiceCollection AddAsyncFileStream<T, TStream>(this IServiceCollection services)
+			where TStream : class, IAsyncFileStream<T>
+		{
+			services.AddSingleton<IAsyncFileStream<T>, TStream>();
 			return services;
 		}
 		private static T DiscoverService<T>(this IServiceCollection services)
