@@ -17,14 +17,17 @@ internal class IdentityProfile : IProfileService
 	{
 		if (context?.Subject?.Claims.Any() ?? false)
 		{
-			context.IssuedClaims.AddRange(context?.Subject?.Claims);
+			if (context?.Subject?.Claims!=null)
+			{
+			context.IssuedClaims.AddRange(context.Subject.Claims);
+			}
 		}
 		else
 		{
 			var user = await _userManager.FindByNameAsync(context?.Subject?.Identity?.Name ?? "");
 			if (user != null)
 			{
-				context.IssuedClaims.AddRange(
+				context?.IssuedClaims.AddRange(
 					Enumerable.Concat(
 						await _userManager.GetClaimsAsync(user),
 						(await _userManager.GetRolesAsync(user)).Select(i => new Claim(JwtClaimTypes.Role, i))

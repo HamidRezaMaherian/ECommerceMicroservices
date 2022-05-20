@@ -112,14 +112,14 @@ public class Index : PageModel
             {
                 // The client is native, so this change in how to
                 // return the response is for better UX for the end user.
-                return this.LoadingPage(Input.ReturnUrl);
+                return this.LoadingPage(Input?.ReturnUrl);
             }
 
-            return Redirect(Input.ReturnUrl);
+            return Redirect(Input?.ReturnUrl??"/");
         }
 
         // we need to redisplay the consent UI
-        View = await BuildViewModelAsync(Input.ReturnUrl, Input);
+        View = await BuildViewModelAsync(Input?.ReturnUrl, Input);
         return Page();
     }
 

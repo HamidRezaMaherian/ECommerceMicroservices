@@ -22,8 +22,8 @@ namespace Order.Infrastructure.Tests.Unit.Repositories
 		public void Setup()
 		{
 			_mapper = TestUtilsExtension.CreateMapper<Domain.Entities.Order, OrderDAO>();
-			var unitOfWork = new UnitOfWork(MockActions.MockDbContext("TestDb"), _mapper);
-			_orderService = new OrderService(unitOfWork, _mapper);
+			_unitOfWork = new UnitOfWork(MockActions.MockDbContext("TestDb"), _mapper);
+			_orderService = new OrderService(_unitOfWork, _mapper);
 		}
 		[TearDown]
 		public void TearDown()

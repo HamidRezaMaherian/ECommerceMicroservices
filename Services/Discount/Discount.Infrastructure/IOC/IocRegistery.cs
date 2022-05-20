@@ -49,7 +49,7 @@ namespace Discount.Infrastructure.IOC
 			ApplicationDbContext db;
 			using var serviceProvider = services.BuildServiceProvider();
 			db = serviceProvider.GetService<ApplicationDbContext>();
-			if (db.Database.GetPendingMigrations().Any())
+			if (db?.Database.GetPendingMigrations().Any()??false)
 			{
 				db.Database.Migrate();
 			}

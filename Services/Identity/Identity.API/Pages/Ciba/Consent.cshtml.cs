@@ -113,7 +113,7 @@ public class Consent : PageModel
         }
 
         // we need to redisplay the consent UI
-        View = await BuildViewModelAsync(Input.Id, Input);
+        View = await BuildViewModelAsync(Input?.Id, Input);
         return Page();
     }
 

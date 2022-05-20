@@ -40,7 +40,7 @@ namespace Product.API.Tests.Utils
 					var res = list.FirstOrDefault(i => i.Id.Equals(c));
 					list.Remove(res);
 				});
-				store.Setup(i => i.Get(It.IsAny<object>())).Returns<object>(o => list.FirstOrDefault(i => i.Id.Equals(o)));
+				store.Setup(i => i.Get(It.IsAny<object>())).Returns<object>(o => list.First(i => i.Id.Equals(o)));
 				return store.Object;
 			}
 
@@ -69,7 +69,7 @@ namespace Product.API.Tests.Utils
 					});
 
 				store.Setup(i => i.GetById(It.IsAny<object>()))
-					.Returns<object>(o => list.FirstOrDefault(i => i.Id == o.ToString()));
+					.Returns<object>(o => list.First(i => i.Id == o.ToString()));
 
 				store.Setup(i => i.Update(It.IsAny<Tdto>()))
 					.Callback<Tdto>(c => repository.Update(mapper.Map<T>(c)));

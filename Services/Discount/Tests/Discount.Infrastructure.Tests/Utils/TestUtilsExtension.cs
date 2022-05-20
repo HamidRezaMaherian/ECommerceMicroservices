@@ -30,13 +30,13 @@ namespace Discount.Infrastructure.Tests.Utils
 				});
 				store.Setup(i => i.Update(It.IsAny<T>())).Callback<T>(c =>
 				{
-					var res = list.FirstOrDefault(i => i.Id.Equals(c.Id));
+					var res = list.First(i => i.Id.Equals(c.Id));
 					list.Remove(res);
 					list.Add(c);
 				});
 				store.Setup(i => i.Delete(It.IsAny<object>())).Callback<object>(c =>
 				{
-					var res = list.FirstOrDefault(i => i.Id.Equals(c));
+					var res = list.First(i => i.Id.Equals(c));
 					list.Remove(res);
 				});
 				store.Setup(i => i.Get(It.IsAny<object>())).Returns<object>(o => list.First(i => i.Id.Equals(o)));
