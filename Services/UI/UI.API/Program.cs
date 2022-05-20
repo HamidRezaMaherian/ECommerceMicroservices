@@ -1,5 +1,6 @@
 using FluentValidation.AspNetCore;
 using System.Reflection;
+using FileActor.AspNetCore;
 using UI.Infrastructure.IOC;
 public class Program
 {
@@ -20,6 +21,11 @@ public class Program
 		builder.Services.RegisterInfrastructure();
 		builder.Services.AddEndpointsApiExplorer();
 		builder.Services.AddSwaggerGen();
+
+		builder.Services.AddFileActor()
+			.AddInMemoryContainer()
+			.AddAttributeConfiguration()
+			.AddLocalActor("lc", builder.Environment.WebRootPath);
 
 		var app = builder.Build();
 		app.UseHttpLogging();

@@ -1,20 +1,24 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.DependencyInjection;
 using Mongo2Go;
 using MongoDB.Driver;
 using NUnit.Framework;
 using Services.Shared.APIUtils;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net;
+using System.Text;
+using UI.API.Configurations.DTOs;
 using UI.API.Tests.Utils;
 using UI.Application.Configurations;
-using UI.Application.DTOs;
 using UI.Application.Tools;
 using UI.Application.UnitOfWork;
 using UI.Domain.Entities;
 using UI.Infrastructure.Persist;
 using UI.Infrastructure.Persist.Mappings;
+
 namespace UI.API.Tests.Integration
 {
 	[TestFixture]
@@ -75,7 +79,7 @@ namespace UI.API.Tests.Integration
 			var slider = new SliderDTO()
 			{
 				Title = Guid.NewGuid().ToString(),
-				ImagePath = "no image",
+				Image = MockFormFile(),
 				IsActive = true,
 			};
 			var res = _httpClient.Post("/slider/create", slider);
@@ -84,6 +88,7 @@ namespace UI.API.Tests.Integration
 
 			Assert.IsTrue(_unitOfWork.SliderRepo.Exists(i => i.Title == slider.Title));
 		}
+
 		[Test]
 		public void Create_PassInvalidObject_ReturnBadRequest()
 		{
@@ -135,6 +140,17 @@ namespace UI.API.Tests.Integration
 			Assert.AreEqual(HttpStatusCode.NotFound, res.StatusCode);
 		}
 		#region HelperMethods
+		private string MockFormFile()
+		{
+			var content = "Hello World from a Fake File";
+			var fileName = "test.png";
+			using var stream = new MemoryStream(Encoding.UTF8.GetBytes(content));
+			//create FormFile with desired data
+			IFormFile file = new FormFile(stream, 0, stream.Length, "id_from_form", fileName);
+			using var formStream = new MemoryStream();
+			file.CopyTo(formStream);
+			return Convert.ToBase64String(formStream.ToArray());
+		}
 		private SliderDTO CreateSlider()
 		{
 			var slider = new Slider()

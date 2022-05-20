@@ -2,10 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using UI.API.Controllers;
-using UI.Application.DTOs;
+using UI.API.Configurations.DTOs;
 using UI.Application.Services;
 using UI.Domain.Entities;
 using static UI.API.Tests.Utils.TestUtilsExtension;
+using Microsoft.AspNetCore.Http;
+using System.Text;
+using System.IO;
 
 namespace UI.API.Tests.Unit
 {
@@ -18,7 +21,7 @@ namespace UI.API.Tests.Unit
 		public void OneTimeSetUp()
 		{
 			var _sliders = new List<Slider>();
-			_sliderervice = MockAction<Slider, SliderDTO>
+			_sliderervice = MockAction<Slider, Application.DTOs.SliderDTO>
 				.MockServie<ISliderService>(_sliders).Object;
 			_sliderController = new SliderController(_sliderervice);
 		}
@@ -34,7 +37,6 @@ namespace UI.API.Tests.Unit
 		{
 			var slider = new SliderDTO()
 			{
-				ImagePath = "no image",
 				IsActive = true,
 				Title = "no title"
 			};
@@ -59,6 +61,15 @@ namespace UI.API.Tests.Unit
 			Assert.IsFalse(_sliderervice.Exists(i => i.Id == slider.Id));
 		}
 		#region HelperMethods
+		private IFormFile MockFormFile()
+		{
+			var content = Encoding.UTF8.GetBytes("sdfsdf");
+			var file = new FormFile(new MemoryStream(content), 0, content.Length, "data", "fake.jpg");
+			file.Headers = new HeaderDictionary();
+			file.ContentType = "image/jpg";
+			return file;
+		}
+
 		private SliderDTO CreateSlider()
 		{
 			var slider = new SliderDTO()

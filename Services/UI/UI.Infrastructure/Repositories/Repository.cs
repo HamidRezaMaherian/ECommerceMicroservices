@@ -121,7 +121,7 @@ namespace UI.Infrastructure.Repositories
 			ArgumentNullException.ThrowIfNull(id);
 			try
 			{
-				return _mapper.Map<T>(_dbCollection.AsQueryable().FirstOrDefault(i => i.Id == id));
+				return _mapper.Map<T>(_dbCollection.AsQueryable().FirstOrDefault(i => i.Id == id.ToString()));
 			}
 			catch (Exception e)
 			{

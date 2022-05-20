@@ -18,6 +18,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<ProjectReference Include="..\..\..\Utilities\FileActor\FileActor.AspNetCore\FileActor.AspNetCore.csproj" />
 		<ProjectReference Include="..\UI.Infrastructure\UI.Infrastructure.csproj" />
 	</ItemGroup>
 

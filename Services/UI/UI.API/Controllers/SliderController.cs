@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Services.Shared.Resources;
-using UI.Application.DTOs;
+using UI.API.Configurations.DTOs;
 using UI.Application.Services;
 using UI.Domain.Entities;
 
@@ -26,7 +26,7 @@ namespace UI.API.Controllers
 		public IActionResult Create([FromBody] SliderDTO slider)
 		{
 			_sliderService.Add(slider);
-			return Created("",slider);
+			return Created("", slider);
 		}
 		[HttpPut]
 		public IActionResult Update([FromBody] SliderDTO slider)
