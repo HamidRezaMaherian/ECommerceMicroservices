@@ -8,9 +8,9 @@ using System.Threading.Tasks;
 
 namespace FileActor.AspNetCore.Internal
 {
-	public class FormFileStream : IFileStream<IFormFile>, IAsyncFileStream<IFormFile>
+	public class FormFileStream : FileStream<IFormFile>
 	{
-		public void Upload(IFormFile file, string path)
+		public override void Upload(IFormFile file, string path)
 		{
 			if (!Directory.Exists(path))
 				Directory.CreateDirectory(path);
@@ -22,7 +22,7 @@ namespace FileActor.AspNetCore.Internal
 			}
 		}
 
-		public async Task UploadAsync(IFormFile file, string path)
+		public override async Task UploadAsync(IFormFile file, string path)
 		{
 			if (!Directory.Exists(path))
 				Directory.CreateDirectory(path);

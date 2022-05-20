@@ -5,9 +5,9 @@ using System.Threading.Tasks;
 
 namespace FileActor.Internal
 {
-	public class Base64FileStream : IFileStream<string>, IAsyncFileStream<string>
+	public class Base64FileStream : FileStream<string>
    {
-		public void Upload(string file, string path)
+		public override void Upload(string file, string path)
 		{
          var splitedBase64 = file.Split(",");
          var extension = "." + splitedBase64[0].Split('/', ';')[1];
@@ -27,7 +27,7 @@ namespace FileActor.Internal
          File.WriteAllBytes(fullPath, bytes);
       }
 
-		public async Task UploadAsync(string file, string path)
+		public override async Task UploadAsync(string file, string path)
 		{
          var splitedBase64 = file.Split(",");
          var extension = "." + splitedBase64[0].Split('/', ';')[1];

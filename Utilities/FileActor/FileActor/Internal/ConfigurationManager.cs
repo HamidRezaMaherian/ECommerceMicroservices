@@ -24,6 +24,22 @@ namespace FileActor.Internal
 						 });
 		}
 
+		public IEnumerable<FileStreamInfo> GetAllInfo(Type type)
+		{
+			return type.GetProperties()
+			 .Where(i => IsPropertyValid(i))
+			 .Select(i =>
+			 {
+				 var attr = i.GetCustomAttribute<FileActionAttribute>();
+				 return new FileStreamInfo(i.Name)
+				 {
+					 RelativePath = attr?.Path,
+					 TargetProperty = attr?.TargetPropertyName
+				 };
+			 });
+
+		}
+
 		public FileStreamInfo GetInfo<T, TProperty>(Expression<Func<T, TProperty>> exp)
 		{
 			try
@@ -33,14 +49,33 @@ namespace FileActor.Internal
 				var attr = typeof(T).GetProperty(member.Name)?.GetCustomAttribute<FileActionAttribute>();
 				return new FileStreamInfo(member.Name)
 				{
-					RelativePath = attr.Path,
-					TargetProperty = attr.TargetPropertyName
+					RelativePath = attr?.Path,
+					TargetProperty = attr?.TargetPropertyName
 				};
 			}
 			catch (Exception e)
 			{
 				throw new NotFoundException(e.Message, e.InnerException);
 			}
+		}
+
+		public FileStreamInfo GetInfo(Type type, string propertyName)
+		{
+			try
+			{
+
+				var attr = type.GetProperty(propertyName)?.GetCustomAttribute<FileActionAttribute>();
+				return new FileStreamInfo(propertyName)
+				{
+					RelativePath = attr?.Path,
+					TargetProperty = attr?.TargetPropertyName
+				};
+			}
+			catch (Exception e)
+			{
+				throw new NotFoundException(e.Message, e.InnerException);
+			}
+
 		}
 
 		private bool IsPropertyValid(PropertyInfo info)
@@ -62,6 +97,11 @@ namespace FileActor.Internal
 			return configurableObj.GetInfo();
 		}
 
+		public IEnumerable<FileStreamInfo> GetAllInfo(Type type)
+		{
+			throw new NotImplementedException();
+		}
+
 		public FileStreamInfo GetInfo<T, TProperty>(Expression<Func<T, TProperty>> exp)
 		{
 			try
@@ -73,6 +113,11 @@ namespace FileActor.Internal
 			{
 				throw new NotFoundException(e.Message);
 			}
+		}
+
+		public FileStreamInfo GetInfo(Type type, string propertyName)
+		{
+			throw new NotImplementedException();
 		}
 	}
 }

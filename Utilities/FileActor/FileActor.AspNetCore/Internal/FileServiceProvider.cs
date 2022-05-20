@@ -19,7 +19,7 @@ namespace FileActor.AspNetCore.Internal
 
 		public void Delete<T, TProperty>(Expression<Func<T, TProperty>> exp, T obj)
 		{
-			var info = _configurationManager.GetInfo(exp);
+			var info = _configurationManager.GetInfo(obj?.GetType(),exp.GetMember().Name);
 			Parallel.ForEach(_factory.GetAll(), (streamer) =>
 			{
 				streamer.Delete(info.RelativePath);
@@ -29,29 +29,29 @@ namespace FileActor.AspNetCore.Internal
 
 		public void DeleteAll<T>(T obj)
 		{
-			var allInfo = _configurationManager.GetAllInfo<T>();
+			var allInfo = _configurationManager.GetAllInfo(obj?.GetType());
 			Parallel.ForEach(allInfo, (info) =>
 			{
-				var propertyValue = obj.GetType().GetProperty(info.PropertyName)?.GetValue(obj);
+				var propertyValue = obj?.GetType().GetProperty(info.PropertyName)?.GetValue(obj);
 				foreach (var streamer in _factory.GetAll())
 				{
 					streamer.Delete(info.RelativePath);
 				};
-				obj.GetType().GetProperty(info.TargetProperty)?.SetValue(obj, info.RelativePath);
+				obj?.GetType().GetProperty(info.TargetProperty)?.SetValue(obj, info.RelativePath);
 			});
 		}
 
 		public async Task DeleteAllAsync<T>(T obj)
 		{
-			var allInfo = _configurationManager.GetAllInfo<T>();
+			var allInfo = _configurationManager.GetAllInfo(obj?.GetType());
 			await Parallel.ForEachAsync(allInfo, async (info, _) =>
 			 {
-				 var propertyValue = obj.GetType().GetProperty(info.PropertyName)?.GetValue(obj);
+				 var propertyValue = obj?.GetType().GetProperty(info.PropertyName)?.GetValue(obj);
 				 await Parallel.ForEachAsync(_factory.GetAll(), async (streamer, _) =>
 				 {
 					 await streamer.DeleteAsync(info.RelativePath);
 				 });
-				 obj.GetType().GetProperty(info.TargetProperty)?.SetValue(obj, info.RelativePath);
+				 obj?.GetType().GetProperty(info.TargetProperty)?.SetValue(obj, info.RelativePath);
 			 });
 		}
 
@@ -62,40 +62,40 @@ namespace FileActor.AspNetCore.Internal
 
 		public void Save<T, TProperty>(Expression<Func<T, TProperty>> exp, T obj)
 		{
-			var info = _configurationManager.GetInfo(exp);
-			var propertyValue = obj.GetType().GetProperty(info.PropertyName)?.GetValue(obj);
+			var info = _configurationManager.GetInfo(obj?.GetType(),exp.GetMember().Name);
+			var propertyValue = obj?.GetType().GetProperty(info.PropertyName)?.GetValue(obj);
 			Parallel.ForEach(_factory.GetAll(), (streamer) =>
 			{
 				streamer.Upload(propertyValue, info.RelativePath);
 			});
-			obj.GetType().GetProperty(info.TargetProperty)?.SetValue(obj, info.RelativePath);
+			obj?.GetType().GetProperty(info.TargetProperty)?.SetValue(obj, info.RelativePath);
 		}
 
 		public void SaveAll<T>(T obj)
 		{
-			var allInfo = _configurationManager.GetAllInfo<T>();
+			var allInfo = _configurationManager.GetAllInfo(obj?.GetType());
 			Parallel.ForEach(allInfo, (info) =>
 			{
-				var propertyValue = obj.GetType().GetProperty(info.PropertyName)?.GetValue(obj);
+				var propertyValue = obj?.GetType().GetProperty(info.PropertyName)?.GetValue(obj);
 				foreach (var streamer in _factory.GetAll())
 				{
 					streamer.Upload(propertyValue, info.RelativePath);
 				};
-				obj.GetType().GetProperty(info.TargetProperty)?.SetValue(obj, info.RelativePath);
+				obj?.GetType().GetProperty(info.TargetProperty)?.SetValue(obj, info.RelativePath);
 			});
 		}
 
 		public async Task SaveAllAsync<T>(T obj)
 		{
-			var allInfo = _configurationManager.GetAllInfo<T>();
+			var allInfo = _configurationManager.GetAllInfo(obj?.GetType());
 			await Parallel.ForEachAsync(allInfo, async(info,_) =>
 			{
-				var propertyValue = obj.GetType().GetProperty(info.PropertyName)?.GetValue(obj);
+				var propertyValue = obj?.GetType().GetProperty(info.PropertyName)?.GetValue(obj);
 				await Parallel.ForEachAsync(_factory.GetAll(),async (streamer,_)=>
 				{
 					await streamer.UploadAsync(propertyValue, info.RelativePath);
 				});
-				obj.GetType().GetProperty(info.TargetProperty)?.SetValue(obj, info.RelativePath);
+				obj?.GetType().GetProperty(info.TargetProperty)?.SetValue(obj, info.RelativePath);
 			});
 		}
 

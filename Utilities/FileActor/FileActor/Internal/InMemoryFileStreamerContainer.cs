@@ -3,10 +3,10 @@ using System.Collections.Generic;
 
 namespace FileActor.Internal
 {
-	public class FileStreamerContainer : IFileStreamerContainer
+	public class InMemoryFileStreamerContainer : IFileStreamerContainer
 	{
 		private readonly IDictionary<string, IFileStreamer> _fileStreams;
-		public FileStreamerContainer()
+		public InMemoryFileStreamerContainer()
 		{
 			_fileStreams = new Dictionary<string, IFileStreamer>();
 		}

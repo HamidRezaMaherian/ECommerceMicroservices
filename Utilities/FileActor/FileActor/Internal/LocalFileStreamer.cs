@@ -34,13 +34,13 @@ namespace FileActor.FileServices
 
 		public void Upload(object file, string path)
 		{
-			IFileStream<object> fileStream = (IFileStream<object>)_serviceProvider.GetService(typeof(IFileStream<>).MakeGenericType(file.GetType()));
-			fileStream?.Upload(file, Path.Combine(_rootPath, path));
+			IFileStream fileStream =(IFileStream) _serviceProvider.GetService(typeof(FileStream<>).MakeGenericType(file.GetType()));
+			fileStream?.Upload(file.ToString(), Path.Combine(_rootPath, path));
 		}
 
 		public async Task UploadAsync(object file, string path)
 		{
-			IAsyncFileStream<object> fileStream = (IAsyncFileStream<object>)_serviceProvider.GetService(typeof(IFileStream<>).MakeGenericType(file.GetType()));
+			IFileStream fileStream = (IFileStream)_serviceProvider.GetService(typeof(FileStream<>).MakeGenericType(file.GetType()));
 			if (fileStream != null)
 				await fileStream.UploadAsync(file, Path.Combine(_rootPath, path));
 		}
