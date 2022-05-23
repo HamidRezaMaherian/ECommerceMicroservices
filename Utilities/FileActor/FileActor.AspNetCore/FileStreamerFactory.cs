@@ -1,4 +1,5 @@
 ﻿using FileActor.Abstract;
+using FileActor.Abstract.Factory;
 using FileActor.FileServices;
 using System;
 
@@ -6,15 +7,15 @@ namespace FileActor.AspNetCore
 {
 	public class FileStreamerFactory
 	{
-		private readonly IServiceProvider _serviceProvider;
+		private readonly IFileStreamFactory _streamFactory;
 
-		public FileStreamerFactory(IServiceProvider serviceProvider)
+		public FileStreamerFactory(IFileStreamFactory streamFactory)
 		{
-			_serviceProvider = serviceProvider;
+			_streamFactory = streamFactory;
 		}
 		public IFileStreamer CreateLocalFileStream(string rootPath)
 		{
-			return new LocalFileStreamer(rootPath, _serviceProvider);
+			return new LocalFileStreamer(rootPath, _streamFactory);
 		}
 	}
 }

@@ -1,4 +1,4 @@
-﻿namespace FileActor.Abstract
+﻿namespace FileActor.Internal
 {
 	public class FileStreamInfo
 	{

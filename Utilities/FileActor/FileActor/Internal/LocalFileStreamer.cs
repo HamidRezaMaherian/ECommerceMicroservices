@@ -1,4 +1,5 @@
 ﻿using FileActor.Abstract;
+using FileActor.Abstract.Factory;
 using System;
 using System.IO;
 using System.Threading.Tasks;
@@ -8,12 +9,12 @@ namespace FileActor.FileServices
 	public class LocalFileStreamer : IFileStreamer
 	{
 		private readonly string _rootPath;
-		private readonly IServiceProvider _serviceProvider;
+		private readonly IFileStreamFactory _streamFactory;
 
-		public LocalFileStreamer(string rootPath, IServiceProvider serviceProvider)
+		public LocalFileStreamer(string rootPath, IFileStreamFactory streamFactory)
 		{
 			_rootPath = rootPath;
-			_serviceProvider = serviceProvider;
+			_streamFactory = streamFactory;
 		}
 		public void Delete(string path)
 		{
@@ -32,17 +33,21 @@ namespace FileActor.FileServices
 			});
 		}
 
-		public void Upload(object file, string path)
+		public void Upload(object file, string path, string fileName)
 		{
-			IFileStream fileStream =(IFileStream) _serviceProvider.GetService(typeof(FileStream<>).MakeGenericType(file.GetType()));
-			fileStream?.Upload(file.ToString(), Path.Combine(_rootPath, path));
+			IFileStream fileStream = _streamFactory.CreateFileStream(file.GetType());
+			if (!Directory.Exists(path))
+				Directory.CreateDirectory(path);
+			fileStream?.Upload(file.ToString(), Path.Combine(_rootPath, path,fileName));
 		}
 
-		public async Task UploadAsync(object file, string path)
+		public async Task UploadAsync(object file, string path, string fileName)
 		{
-			IFileStream fileStream = (IFileStream)_serviceProvider.GetService(typeof(FileStream<>).MakeGenericType(file.GetType()));
+			IFileStream fileStream = _streamFactory.CreateFileStream(file.GetType());
+			if (!Directory.Exists(path))
+				Directory.CreateDirectory(path);
 			if (fileStream != null)
-				await fileStream.UploadAsync(file, Path.Combine(_rootPath, path));
+				await fileStream.UploadAsync(file, Path.Combine(_rootPath, path,fileName));
 		}
 	}
 }

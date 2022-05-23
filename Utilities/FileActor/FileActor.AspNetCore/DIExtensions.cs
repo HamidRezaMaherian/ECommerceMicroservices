@@ -1,11 +1,13 @@
 ﻿using FileActor.Abstract;
+using FileActor.Abstract.Factory;
 using FileActor.AspNetCore.Abstract;
 using FileActor.AspNetCore.Internal;
 using FileActor.Internal;
-using Microsoft.AspNetCore.Http;
+using FileActor.Internal.Factory;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Reflection;
 using System.Threading.Tasks;
 
@@ -15,10 +17,8 @@ namespace FileActor.AspNetCore
 	{
 		public static IServiceCollection AddFileActor(this IServiceCollection services)
 		{
-			services.AddFileStream<string, Base64FileStream>();
-			services.AddFileStream<IFormFile, FormFileStream>();
 			services.AddScoped<IFileServiceProvider, FileServiceProvider>();
-			services.AddSingleton(new FileStreamerFactory(services.BuildServiceProvider()));
+			services.AddSingleton<FileStreamerFactory>();
 			return services;
 		}
 		public static IServiceCollection AddInMemoryContainer(this IServiceCollection services)
@@ -48,11 +48,26 @@ namespace FileActor.AspNetCore
 			});
 			return services;
 		}
-		public static IServiceCollection AddFileStream<T, TStream>(this IServiceCollection services)
-			where T:class
-			where TStream : FileStream<T>
+		public static IServiceCollection AddFileStream(this IServiceCollection services)
 		{
-			services.AddScoped<FileStream<T>, TStream>();
+			services.AddScoped<IFileStreamFactory>((services) =>
+			{
+				var streamFactory = new FileStreamFactory();
+				streamFactory.Add(typeof(string), () => new Base64FileStream());
+				streamFactory.Add(typeof(IFileStream), () => new FormFileStream());
+				return streamFactory;
+			});
+			return services;
+		}
+		public static IServiceCollection AddFileExtension(this IServiceCollection services)
+		{
+			services.AddScoped<IFileExtensionFactory>((services) =>
+			{
+				var streamFactory = new FileExtensionFactory();
+				streamFactory.Add(typeof(string), () => new Base64FileExtension());
+				streamFactory.Add(typeof(IFileExtension), () => new FormFileExtension());
+				return streamFactory;
+			});
 			return services;
 		}
 		private static T DiscoverService<T>(this IServiceCollection services)
