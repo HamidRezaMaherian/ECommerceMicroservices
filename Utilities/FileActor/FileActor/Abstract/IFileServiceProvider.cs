@@ -2,7 +2,7 @@
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 
-namespace FileActor.AspNetCore.Abstract
+namespace FileActor.Abstract
 {
 	public interface IFileServiceProvider<T> where T : class
 	{
