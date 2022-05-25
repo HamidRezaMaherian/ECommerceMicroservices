@@ -18,7 +18,7 @@ namespace FileActor.FileServices
 		}
 		public void Delete(string path)
 		{
-			string filePath = Path.Combine(_rootPath, path);
+			string filePath = $"{_rootPath}/{path}";
 			if (File.Exists(filePath))
 				File.Delete(filePath);
 		}
@@ -27,7 +27,7 @@ namespace FileActor.FileServices
 		{
 			return Task.Run(() =>
 			{
-				string filePath = Path.Combine(_rootPath, path);
+				string filePath = Path.Combine($"{_rootPath}/{path}");
 				if (File.Exists(filePath))
 					File.Delete(filePath);
 			});
@@ -36,18 +36,20 @@ namespace FileActor.FileServices
 		public void Upload(object file, string path, string fileName)
 		{
 			IFileStream fileStream = _streamFactory.CreateFileStream(file.GetType());
-			if (!Directory.Exists(path))
-				Directory.CreateDirectory(path);
-			fileStream?.Upload(file.ToString(), Path.Combine(_rootPath, path,fileName));
+			var fullPath = $"{_rootPath}/{ path}";
+			if (!Directory.Exists(fullPath))
+				Directory.CreateDirectory(fullPath);
+			fileStream?.Upload(file.ToString(), $"{fullPath}/{fileName}");
 		}
 
 		public async Task UploadAsync(object file, string path, string fileName)
 		{
 			IFileStream fileStream = _streamFactory.CreateFileStream(file.GetType());
-			if (!Directory.Exists(path))
-				Directory.CreateDirectory(path);
+			var fullPath = $"{_rootPath}/{ path}";
+			if (!Directory.Exists(fullPath))
+				Directory.CreateDirectory(fullPath);
 			if (fileStream != null)
-				await fileStream.UploadAsync(file, Path.Combine(_rootPath, path,fileName));
+				await fileStream.UploadAsync(file, $"{fullPath}/{fileName}");
 		}
 	}
 }

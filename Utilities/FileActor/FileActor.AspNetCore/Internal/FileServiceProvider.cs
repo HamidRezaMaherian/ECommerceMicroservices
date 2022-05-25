@@ -25,7 +25,8 @@ namespace FileActor.AspNetCore.Internal
 		public void Delete<T, TProperty>(Expression<Func<T, TProperty>> exp, T obj)
 		{
 			var info = _configurationManager.GetInfo(obj?.GetType(), exp.GetMember().Name);
-			Parallel.ForEach(_factory.GetAll(), (streamer) =>
+			var streamers = _factory.GetAll();
+			Parallel.ForEach(streamers, (streamer) =>
 			{
 				streamer.Delete(info.RelativePath);
 			});
@@ -35,10 +36,11 @@ namespace FileActor.AspNetCore.Internal
 		public void DeleteAll<T>(T obj)
 		{
 			var allInfo = _configurationManager.GetAllInfo(obj?.GetType());
+			var streamers = _factory.GetAll();
 			Parallel.ForEach(allInfo, (info) =>
 			{
 				var propertyValue = obj?.GetType().GetProperty(info.PropertyName)?.GetValue(obj);
-				foreach (var streamer in _factory.GetAll())
+				foreach (var streamer in streamers)
 				{
 					streamer.Delete(info.RelativePath);
 				};
@@ -49,10 +51,11 @@ namespace FileActor.AspNetCore.Internal
 		public async Task DeleteAllAsync<T>(T obj)
 		{
 			var allInfo = _configurationManager.GetAllInfo(obj?.GetType());
+			var streamers = _factory.GetAll();
 			await Parallel.ForEachAsync(allInfo, async (info, _) =>
 			 {
 				 var propertyValue = obj?.GetType().GetProperty(info.PropertyName)?.GetValue(obj);
-				 await Parallel.ForEachAsync(_factory.GetAll(), async (streamer, _) =>
+				 await Parallel.ForEachAsync(streamers, async (streamer, _) =>
 				 {
 					 await streamer.DeleteAsync(info.RelativePath);
 				 });
@@ -63,7 +66,8 @@ namespace FileActor.AspNetCore.Internal
 		public async Task DeleteAsync<T, TProperty>(Expression<Func<T, TProperty>> exp, T obj)
 		{
 			var info = _configurationManager.GetInfo(obj?.GetType(), exp.GetMember().Name);
-			await Parallel.ForEachAsync(_factory.GetAll(), async (streamer, _) =>
+			var streamers = _factory.GetAll();
+			await Parallel.ForEachAsync(streamers, async (streamer, _) =>
 			 {
 				 await streamer.DeleteAsync(info.RelativePath);
 			 });
@@ -73,10 +77,11 @@ namespace FileActor.AspNetCore.Internal
 		public void Save<T, TProperty>(Expression<Func<T, TProperty>> exp, T obj)
 		{
 			var info = _configurationManager.GetInfo(obj?.GetType(), exp.GetMember().Name);
+			var streamers = _factory.GetAll();
 			var propertyValue = obj?.GetType().GetProperty(info.PropertyName)?.GetValue(obj);
-			Parallel.ForEach(_factory.GetAll(), (streamer) =>
+			Parallel.ForEach(streamers, (streamer) =>
 			{
-				var extension = _fileExtensionFactory.CreateFileExtension(propertyValue?.GetType()).GetExtension(obj);
+				var extension = _fileExtensionFactory.CreateFileExtension(propertyValue?.GetType()).GetExtension(propertyValue);
 				var fileName = Guid.NewGuid().ToString() + extension;
 				streamer.Upload(propertyValue, info.RelativePath, fileName);
 			});
@@ -86,12 +91,13 @@ namespace FileActor.AspNetCore.Internal
 		public void SaveAll<T>(T obj)
 		{
 			var allInfo = _configurationManager.GetAllInfo(obj?.GetType());
+			var streamers = _factory.GetAll();
 			Parallel.ForEach(allInfo, (info) =>
 			{
 				var propertyValue = obj?.GetType().GetProperty(info.PropertyName)?.GetValue(obj);
-				var extension = _fileExtensionFactory.CreateFileExtension(propertyValue?.GetType()).GetExtension(obj);
+				var extension = _fileExtensionFactory.CreateFileExtension(propertyValue?.GetType()).GetExtension(propertyValue);
 				var fileName = Guid.NewGuid().ToString() + extension;
-				foreach (var streamer in _factory.GetAll())
+				foreach (var streamer in streamers)
 				{
 					streamer.Upload(propertyValue, info.RelativePath, fileName);
 				};
@@ -102,12 +108,13 @@ namespace FileActor.AspNetCore.Internal
 		public async Task SaveAllAsync<T>(T obj)
 		{
 			var allInfo = _configurationManager.GetAllInfo(obj?.GetType());
+			var streamers = _factory.GetAll();
 			await Parallel.ForEachAsync(allInfo, async (info, _) =>
 			{
 				var propertyValue = obj?.GetType().GetProperty(info.PropertyName)?.GetValue(obj);
-				var extension = _fileExtensionFactory.CreateFileExtension(propertyValue?.GetType()).GetExtension(obj);
+				var extension = _fileExtensionFactory.CreateFileExtension(propertyValue?.GetType()).GetExtension(propertyValue);
 				var fileName = Guid.NewGuid().ToString() + extension;
-				await Parallel.ForEachAsync(_factory.GetAll(), async (streamer, _) =>
+				await Parallel.ForEachAsync(streamers, async (streamer, _) =>
 				 {
 					 await streamer.UploadAsync(propertyValue, info.RelativePath, fileName);
 				 });
@@ -118,10 +125,11 @@ namespace FileActor.AspNetCore.Internal
 		public async Task SaveAsync<T, TProperty>(Expression<Func<T, TProperty>> exp, T obj)
 		{
 			var info = _configurationManager.GetInfo(obj?.GetType(), exp.GetMember().Name);
+			var streamers = _factory.GetAll();
 			var propertyValue = obj?.GetType().GetProperty(info.PropertyName)?.GetValue(obj);
-			await Parallel.ForEachAsync(_factory.GetAll(), async (streamer,_) =>
+			await Parallel.ForEachAsync(streamers, async (streamer,_) =>
 			{
-				var extension = _fileExtensionFactory.CreateFileExtension(propertyValue?.GetType()).GetExtension(obj);
+				var extension = _fileExtensionFactory.CreateFileExtension(propertyValue?.GetType()).GetExtension(propertyValue);
 				var fileName = Guid.NewGuid().ToString() + extension;
 				await streamer.UploadAsync(propertyValue, info.RelativePath, fileName);
 			});

@@ -2,12 +2,12 @@
 using FileActor.Abstract.Factory;
 using FileActor.AspNetCore.Abstract;
 using FileActor.AspNetCore.Internal;
+using FileActor.FileServices;
 using FileActor.Internal;
 using FileActor.Internal.Factory;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Linq;
-using System.Linq.Expressions;
 using System.Reflection;
 using System.Threading.Tasks;
 
@@ -17,8 +17,9 @@ namespace FileActor.AspNetCore
 	{
 		public static IServiceCollection AddFileActor(this IServiceCollection services)
 		{
+			services.AddFileStream();
+			services.AddFileExtension();
 			services.AddScoped<IFileServiceProvider, FileServiceProvider>();
-			services.AddSingleton<FileStreamerFactory>();
 			return services;
 		}
 		public static IServiceCollection AddInMemoryContainer(this IServiceCollection services)
@@ -29,8 +30,8 @@ namespace FileActor.AspNetCore
 		public static IServiceCollection AddLocalActor(this IServiceCollection services, string name, string rootPath)
 		{
 			var fileStreamerContainer = services.DiscoverService<IFileStreamerContainer>();
-			var fileStreamerFactory = services.DiscoverService<FileStreamerFactory>();
-			fileStreamerContainer.Insert(name, fileStreamerFactory.CreateLocalFileStream(rootPath));
+			var fileStreamerFactory = services.DiscoverService<IFileStreamFactory>();
+			fileStreamerContainer.Insert(name, new LocalFileStreamer(rootPath, fileStreamerFactory));
 			return services;
 		}
 		public static IServiceCollection AddAttributeConfiguration(this IServiceCollection services)
@@ -59,7 +60,7 @@ namespace FileActor.AspNetCore
 			});
 			return services;
 		}
-		public static IServiceCollection AddFileExtension(this IServiceCollection services)
+		private static IServiceCollection AddFileExtension(this IServiceCollection services)
 		{
 			services.AddScoped<IFileExtensionFactory>((services) =>
 			{

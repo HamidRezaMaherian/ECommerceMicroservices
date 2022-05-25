@@ -142,14 +142,8 @@ namespace UI.API.Tests.Integration
 		#region HelperMethods
 		private string MockFormFile()
 		{
-			var content = "Hello World from a Fake File";
-			var fileName = "test.png";
-			using var stream = new MemoryStream(Encoding.UTF8.GetBytes(content));
-			//create FormFile with desired data
-			IFormFile file = new FormFile(stream, 0, stream.Length, "id_from_form", fileName);
-			using var formStream = new MemoryStream();
-			file.CopyTo(formStream);
-			return Convert.ToBase64String(formStream.ToArray());
+			var file = File.ReadAllBytes(@"H:\Downloads\Picture\Slider\wallhaven-9m7zx1.jpg");
+			return Convert.ToBase64String(file);
 		}
 		private SliderDTO CreateSlider()
 		{

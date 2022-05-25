@@ -1,7 +1,5 @@
 using Consul;
 using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Mvc;
-using WebApp.Shared.APIUtils;
 using WebApp.Shared.Ioc;
 public class Program
 {

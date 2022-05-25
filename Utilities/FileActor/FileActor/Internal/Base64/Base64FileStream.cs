@@ -9,12 +9,8 @@ namespace FileActor.Internal
    {
 		public override void Upload(string file, string path)
 		{
-         var splitedBase64 = file.Split(",");
-         var imageBase64 = splitedBase64[1];
-
          File.Create(path).Close();
-         byte[] bytes = Convert.FromBase64String(imageBase64);
-
+         byte[] bytes = Convert.FromBase64String(file);
          File.WriteAllBytes(path, bytes);
       }
 
