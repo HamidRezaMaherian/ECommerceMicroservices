@@ -1,5 +1,5 @@
 ﻿using System.Net.Http.Json;
-namespace WebApp.Shared.APIUtils
+namespace Admin.Infrastructure.APIUtils
 {
 	public class HttpClientHelper<TClient> : IDisposable where TClient : HttpClient
 	{

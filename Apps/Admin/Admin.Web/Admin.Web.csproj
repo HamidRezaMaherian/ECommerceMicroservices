@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
-    <Nullable>enable</Nullable>
+    <Nullable>warnings</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <UserSecretsId>759c5071-c905-4532-a4a2-ee4cec38f464</UserSecretsId>
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
@@ -16,6 +16,10 @@
   <ItemGroup>
     <Folder Include="Controllers\" />
     <Folder Include="Models\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Admin.Infrastructure\Admin.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>
