@@ -9,9 +9,9 @@ namespace FileActor.FileServices
 	public class LocalFileStreamer : IFileStreamer
 	{
 		private readonly string _rootPath;
-		private readonly IFileStreamFactory _streamFactory;
+		private readonly IFileTypeHelperFactory _streamFactory;
 
-		public LocalFileStreamer(string rootPath, IFileStreamFactory streamFactory)
+		public LocalFileStreamer(string rootPath, IFileTypeHelperFactory streamFactory)
 		{
 			_rootPath = rootPath;
 			_streamFactory = streamFactory;
@@ -35,21 +35,21 @@ namespace FileActor.FileServices
 
 		public void Upload(object file, string path, string fileName)
 		{
-			IFileStream fileStream = _streamFactory.CreateFileStream(file.GetType());
+			IFileTypeHelper fileHelper = _streamFactory.CreateFileHelper(file.GetType());
 			var fullPath = $"{_rootPath}/{ path}";
 			if (!Directory.Exists(fullPath))
 				Directory.CreateDirectory(fullPath);
-			fileStream?.Upload(file.ToString(), $"{fullPath}/{fileName}");
+			fileHelper?.Upload(file.ToString(), $"{fullPath}/{fileName}{fileHelper.GetExtension(file)}");
 		}
 
 		public async Task UploadAsync(object file, string path, string fileName)
 		{
-			IFileStream fileStream = _streamFactory.CreateFileStream(file.GetType());
+			IFileTypeHelper fileHelper = _streamFactory.CreateFileHelper(file.GetType());
 			var fullPath = $"{_rootPath}/{ path}";
 			if (!Directory.Exists(fullPath))
 				Directory.CreateDirectory(fullPath);
-			if (fileStream != null)
-				await fileStream.UploadAsync(file, $"{fullPath}/{fileName}");
+			if (fileHelper != null)
+				await fileHelper.UploadAsync(file, $"{fullPath}/{fileName}{fileHelper.GetExtension(file)}");
 		}
 	}
 }

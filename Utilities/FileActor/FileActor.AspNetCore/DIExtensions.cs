@@ -16,8 +16,7 @@ namespace FileActor.AspNetCore
 	{
 		public static IServiceCollection AddFileActor(this IServiceCollection services)
 		{
-			services.AddFileStream();
-			services.AddFileExtension();
+			services.AddFileTypeHelper();
 			services.AddScoped<IFileServiceProvider, FileServiceProvider>();
 			return services;
 		}
@@ -29,7 +28,7 @@ namespace FileActor.AspNetCore
 		public static IServiceCollection AddLocalActor(this IServiceCollection services, string name, string rootPath)
 		{
 			var fileStreamerContainer = services.DiscoverService<IFileStreamerContainer>();
-			var fileStreamerFactory = services.DiscoverService<IFileStreamFactory>();
+			var fileStreamerFactory = services.DiscoverService<IFileTypeHelperFactory>();
 			fileStreamerContainer.Insert(name, new LocalFileStreamer(rootPath, fileStreamerFactory));
 			return services;
 		}
@@ -48,24 +47,13 @@ namespace FileActor.AspNetCore
 			});
 			return services;
 		}
-		public static IServiceCollection AddFileStream(this IServiceCollection services)
+		public static IServiceCollection AddFileTypeHelper(this IServiceCollection services)
 		{
-			services.AddScoped<IFileStreamFactory>((services) =>
+			services.AddScoped<IFileTypeHelperFactory>((services) =>
 			{
 				var streamFactory = new FileStreamFactory();
-				streamFactory.Add(typeof(string), () => new Base64FileStream());
-				streamFactory.Add(typeof(IFileStream), () => new FormFileStream());
-				return streamFactory;
-			});
-			return services;
-		}
-		private static IServiceCollection AddFileExtension(this IServiceCollection services)
-		{
-			services.AddScoped<IFileExtensionFactory>((services) =>
-			{
-				var streamFactory = new FileExtensionFactory();
-				streamFactory.Add(typeof(string), () => new Base64FileExtension());
-				streamFactory.Add(typeof(IFileExtension), () => new FormFileExtension());
+				streamFactory.Add(typeof(string), () => new Base64FileHelper());
+				streamFactory.Add(typeof(IFileTypeHelper), () => new FormFileStream());
 				return streamFactory;
 			});
 			return services;

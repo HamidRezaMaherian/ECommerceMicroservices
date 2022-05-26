@@ -1,14 +1,12 @@
 ﻿using FileActor.Abstract;
-using FileActor.AspNetCore.Abstract;
 using Microsoft.AspNetCore.Http;
 using System;
 using System.IO;
-using System.Linq.Expressions;
 using System.Threading.Tasks;
 
 namespace FileActor.AspNetCore.Internal
 {
-	public class FormFileStream : FileStream<IFormFile>
+	public class FormFileStream : FileTypeHelper<IFormFile>
 	{
 		public override void Upload(IFormFile file, string path)
 		{
@@ -33,5 +31,10 @@ namespace FileActor.AspNetCore.Internal
 				await file.CopyToAsync(fs);
 			}
 		}
+		public override string GetExtension(IFormFile file)
+		{
+			return Path.GetExtension(file.FileName);
+		}
+
 	}
 }

@@ -8,19 +8,18 @@ using System.Linq.Expressions;
 
 namespace FileActor.Internal.Factory
 {
-	public class FileExtensionFactory : IFileExtensionFactory
+	public class FileStreamFactory : IFileTypeHelperFactory
 	{
-		private readonly IDictionary<string, Expression<Func<IFileExtension>>> _fileStreams;
-		public FileExtensionFactory()
+		private readonly IDictionary<string, Expression<Func<IFileTypeHelper>>> _fileStreams;
+		public FileStreamFactory()
 		{
-			_fileStreams = new ConcurrentDictionary<string, Expression<Func<IFileExtension>>>();
+			_fileStreams = new ConcurrentDictionary<string, Expression<Func<IFileTypeHelper>>>();
 		}
-		public void Add(Type type, Expression<Func<IFileExtension>> factor)
+		public void Add(Type type, Expression<Func<IFileTypeHelper>> factor)
 		{
 			_fileStreams.Add(type.Name, factor);
 		}
-
-		public IFileExtension CreateFileExtension(Type streamType)
+		public IFileTypeHelper CreateFileHelper(Type streamType)
 		{
 			if (_fileStreams.TryGetValue(streamType.Name, out var stream))
 			{
