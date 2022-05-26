@@ -2,6 +2,9 @@
 
 namespace FileActor.Abstract
 {
+	/// <summary>
+	/// Abstraction of actions for a specific type
+	/// </summary>
 	public abstract class FileTypeHelper<Type>:IFileTypeHelper where Type : class
 	{
 		public abstract void Upload(Type file, string path);
@@ -20,6 +23,10 @@ namespace FileActor.Abstract
 			return GetExtension((Type)file);
 		}
 	}
+
+	/// <summary>
+	/// Abstraction of actions for a specific type
+	/// </summary>
 	public interface IFileTypeHelper
 	{
 		public void Upload(object file, string path);
