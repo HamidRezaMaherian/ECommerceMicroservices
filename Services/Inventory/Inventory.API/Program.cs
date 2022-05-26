@@ -1,3 +1,4 @@
+using FileActor.AspNetCore;
 using FluentValidation.AspNetCore;
 using Inventory.Infrastructure.IOC;
 using System.Reflection;
@@ -17,13 +18,17 @@ public class Program
 				cfg.DisableDataAnnotationsValidation = true;
 				cfg.RegisterValidatorsFromAssembly(Assembly.GetAssembly(typeof(Program)));
 			});
+		builder.Services.AddFileActor()
+		.AddInMemoryContainer()
+		.AddAttributeConfiguration()
+		.AddLocalActor("lc", builder.Environment.WebRootPath);
+
 		// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 		builder.Services.AddEndpointsApiExplorer();
 		builder.Services.AddSwaggerGen();
 		builder.Services.RegisterInfrastructure();
 		var app = builder.Build();
 		app.UseHttpLogging();
-
 		// Configure the HTTP request pipeline.
 		if (app.Environment.IsDevelopment())
 		{

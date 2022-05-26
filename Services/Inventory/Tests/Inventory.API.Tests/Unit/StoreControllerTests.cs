@@ -1,5 +1,5 @@
-﻿using Inventory.API.Controllers;
-using Inventory.Application.DTOs;
+﻿using Inventory.API.Configurations.DTOs;
+using Inventory.API.Controllers;
 using Inventory.Application.Services;
 using Inventory.Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
@@ -19,7 +19,7 @@ namespace Inventory.API.Tests.Unit
 		public void OneTimeSetUp()
 		{
 			var _stores = new List<Store>();
-			_storeService = MockAction<Store, StoreDTO>
+			_storeService = MockAction<Store, Application.DTOs.StoreDTO>
 				.MockServie<IStoreService>(_stores).Object;
 			_storeController = new StoreController(_storeService);
 		}

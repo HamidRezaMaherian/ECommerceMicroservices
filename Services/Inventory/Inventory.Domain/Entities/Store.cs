@@ -7,7 +7,7 @@ namespace Inventory.Domain.Entities
 		public string Name { get; set; }
 		public string ShortDesc { get; set; }
 		public string Description { get; set; }
-
+		public string LogoPath { get; set; }
 		#region NavigationProps
 		public virtual IEnumerable<Stock> Stocks { get; set; }
 		#endregion

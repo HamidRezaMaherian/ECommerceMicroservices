@@ -1,4 +1,4 @@
-using Inventory.Application.DTOs;
+using Inventory.API.Configurations.DTOs;
 using Inventory.Application.Services;
 using Inventory.Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
