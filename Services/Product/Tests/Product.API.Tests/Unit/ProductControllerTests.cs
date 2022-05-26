@@ -1,6 +1,6 @@
 ﻿using NUnit.Framework;
 using Product.API.Controllers;
-using Product.Application.DTOs;
+using Product.API.Configurations.DTOs;
 using Product.Application.Services;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,7 +18,7 @@ namespace Product.API.Tests.Unit
 		public void OneTimeSetUp()
 		{
 			_products ??= new List<Domain.Entities.Product>();
-			_productService = MockAction<Domain.Entities.Product, ProductDTO>
+			_productService = MockAction<Domain.Entities.Product, Application.DTOs.ProductDTO>
 				.MockServie<IProductService>(_products).Object;
 			_productController = new ProductController(_productService);
 		}

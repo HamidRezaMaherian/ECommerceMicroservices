@@ -1,7 +1,7 @@
+using FileActor.AspNetCore;
 using FluentValidation.AspNetCore;
-using System.Reflection;
 using Product.Infrastructure.IOC;
-using Product.API.Configurations.Validations;
+using System.Reflection;
 
 public class Program
 {
@@ -16,7 +16,11 @@ public class Program
 				cfg.DisableDataAnnotationsValidation = true;
 				cfg.RegisterValidatorsFromAssembly(Assembly.GetAssembly(typeof(Program)));
 			});
-		// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+		builder.Services.AddFileActor()
+			.AddInMemoryContainer()
+			.AddAttributeConfiguration()
+			.AddLocalActor("lc", builder.Environment.WebRootPath);
+
 		builder.Services.AddHealthChecks();
 		builder.Services.AddEndpointsApiExplorer();
 		builder.Services.AddSwaggerGen();

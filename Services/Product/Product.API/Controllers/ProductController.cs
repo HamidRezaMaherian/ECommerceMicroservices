@@ -1,7 +1,7 @@
 
 using Microsoft.AspNetCore.Mvc;
 using Product.API.Configurations.Validations;
-using Product.Application.DTOs;
+using Product.API.Configurations.DTOs;
 using Product.Application.Services;
 using Services.Shared.APIUtils;
 using Services.Shared.Resources;

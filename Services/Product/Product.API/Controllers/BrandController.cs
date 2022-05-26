@@ -1,6 +1,6 @@
 
 using Microsoft.AspNetCore.Mvc;
-using Product.Application.DTOs;
+using Product.API.Configurations.DTOs;
 using Product.Application.Services;
 using Product.Domain.Entities;
 using Services.Shared.Resources;

@@ -1,6 +1,6 @@
 ﻿using NUnit.Framework;
 using Product.API.Controllers;
-using Product.Application.DTOs;
+using Product.API.Configurations.DTOs;
 using Product.Application.Services;
 using Product.Domain.Entities;
 using System;
@@ -19,7 +19,7 @@ namespace Product.API.Tests.Unit
 		public void OneTimeSetUp()
 		{
 			var _brands = new List<Brand>();
-			_brandService = MockAction<Brand, BrandDTO>
+			_brandService = MockAction<Brand, Application.DTOs.BrandDTO>
 				.MockServie<IBrandService>(_brands).Object;
 			_brandController = new BrandController(_brandService);
 		}

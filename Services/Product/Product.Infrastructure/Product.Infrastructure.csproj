@@ -18,6 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\..\Utilities\FileActor\FileActor\FileActor.csproj" />
     <ProjectReference Include="..\Product.Application\Product.Application.csproj" />
   </ItemGroup>
 
