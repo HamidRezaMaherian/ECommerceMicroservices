@@ -1,7 +1,4 @@
-﻿using Admin.Application.Services;
-using Admin.Application.UnitOfWork;
-using Admin.Infrastructure.APIUtils;
-using Admin.Infrastructure.Services;
+﻿using Admin.Infrastructure.APIUtils;
 using Consul;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -29,8 +26,8 @@ namespace Admin.Infrastructure.Ioc
 				});
 			});
 
-			serviceCollection.AddScoped<IUIService, UIService>();
-			serviceCollection.AddScoped<IUnitOfWork, UnitOfWork.UnitOfWork>();
+			//serviceCollection.AddScoped<IUIService, UIService>();
+			//serviceCollection.AddScoped<IUnitOfWork, UnitOfWork.UnitOfWork>();
 		}
 		public static async Task<string> GetRequestUriAsync(this IConsulClient serviceDiscoveryClient, string serviceName)
 		{

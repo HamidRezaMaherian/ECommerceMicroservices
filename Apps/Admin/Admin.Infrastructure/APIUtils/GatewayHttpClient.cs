@@ -1,6 +1,4 @@
-﻿using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using System.Linq;
+﻿using Consul;
 
 namespace Admin.Infrastructure.APIUtils
 {
