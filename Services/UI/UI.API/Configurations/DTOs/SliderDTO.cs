@@ -1,4 +1,5 @@
 ﻿using FileActor;
+using System.Text.Json.Serialization;
 
 namespace UI.API.Configurations.DTOs
 {
@@ -6,5 +7,7 @@ namespace UI.API.Configurations.DTOs
 	{
 		[FileAction(nameof(ImagePath), "/images")]
 		public string Image { get; set; }
+		[JsonIgnore]
+		public override string ImagePath { get => base.ImagePath; set => base.ImagePath = value; }
 	}
 }

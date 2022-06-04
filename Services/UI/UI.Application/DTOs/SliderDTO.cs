@@ -1,8 +1,8 @@
 ﻿namespace UI.Application.DTOs;
-public class SliderDTO
+public abstract class SliderDTO
 {
-	public string Id { get; set; }
-	public string Title { get; set; }
-	public string ImagePath { get; set; }
-	public bool IsActive { get; set; }
+	public virtual string Id { get; set; }
+	public virtual string Title { get; set; }
+	public virtual string ImagePath { get; set; }
+	public virtual bool IsActive { get; set; }
 }
