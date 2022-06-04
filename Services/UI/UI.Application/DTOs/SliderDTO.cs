@@ -1,5 +1,5 @@
 ﻿namespace UI.Application.DTOs;
-public abstract class SliderDTO
+public class SliderDTO
 {
 	public virtual string Id { get; set; }
 	public virtual string Title { get; set; }

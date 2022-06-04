@@ -1,5 +1,5 @@
 ﻿namespace UI.Application.DTOs;
-public abstract class SocialMediaDTO
+public class SocialMediaDTO
 {
 	public virtual string Id { get; set; }
 	public virtual string Name { get; set; }
