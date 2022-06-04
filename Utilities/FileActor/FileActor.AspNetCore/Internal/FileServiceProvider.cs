@@ -126,57 +126,5 @@ namespace FileActor.AspNetCore.Internal
 			});
 			obj?.GetType().GetProperty(info.TargetProperty)?.SetValue(obj, info.RelativePath);
 		}
-
-		public bool TryDeleteAll<T>(T obj)
-		{
-			try
-			{
-				DeleteAll(obj);
-				return true;
-			}
-			catch (Exception)
-			{
-				return false;
-			}
-		}
-
-		public async Task<bool> TryDeleteAllAsync<T>(T obj)
-		{
-			try
-			{
-				await DeleteAllAsync(obj);
-				return true;
-			}
-			catch (Exception)
-			{
-				return false;
-			}
-		}
-
-		public bool TrySaveAll<T>(T obj)
-		{
-			try
-			{
-				SaveAll(obj);
-				return true;
-			}
-			catch (Exception)
-			{
-				return false;
-			}
-		}
-
-		public async Task<bool> TrySaveAllAsync<T>(T obj)
-		{
-			try
-			{
-				await SaveAllAsync(obj);
-				return true;
-			}
-			catch (Exception)
-			{
-				return false;	
-			}
-		}
 	}
 }

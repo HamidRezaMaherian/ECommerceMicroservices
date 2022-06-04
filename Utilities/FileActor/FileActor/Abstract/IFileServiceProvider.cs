@@ -58,11 +58,6 @@ namespace FileActor.Abstract
 		/// <param name="exp">property expression</param>
 		/// <param name="obj">given object</param>
 		Task DeleteAsync<TProperty>(Expression<Func<T, TProperty>> exp, T obj);
-
-		Task<bool> TryDeleteAllAsync(T obj);
-		bool TryDeleteAll(T obj);
-		Task<bool> TrySaveAllAsync(T obj);
-		bool TrySaveAll(T obj);
 	}
 	/// <summary>
 	/// abstraction of fileServiceProvider for file actions on types with fileActor configurations
@@ -82,7 +77,7 @@ namespace FileActor.Abstract
 		/// <typeparam name="TProperty">property of T</typeparam>
 		/// <param name="exp">property expression</param>
 		/// <param name="obj">given object</param>
-		void Save<T, TProperty>(Expression<Func<T, TProperty>> exp, T obj);
+		void Save<T,TProperty>(Expression<Func<T, TProperty>> exp, T obj);
 		/// <summary>
 		/// Deletes all files of an object which has fileActor configuration for its type from all configured back stores
 		/// </summary>
@@ -96,7 +91,7 @@ namespace FileActor.Abstract
 		/// <typeparam name="TProperty">property of T</typeparam>
 		/// <param name="exp">property expression</param>
 		/// <param name="obj">given object</param>
-		void Delete<T, TProperty>(Expression<Func<T, TProperty>> exp, T obj);
+		void Delete<T,TProperty>(Expression<Func<T, TProperty>> exp, T obj);
 		/// <summary>
 		/// Saves all file values of an object which has fileActor configuration for its type from all configured back stores asynchronously
 		/// </summary>
@@ -125,10 +120,5 @@ namespace FileActor.Abstract
 		/// <param name="exp">property expression</param>
 		/// <param name="obj">given object</param>
 		Task DeleteAsync<T, TProperty>(Expression<Func<T, TProperty>> exp, T obj);
-
-		Task<bool> TryDeleteAllAsync<T>(T obj);
-		bool TryDeleteAll<T>(T obj);
-		Task<bool> TrySaveAllAsync<T>(T obj);
-		bool TrySaveAll<T>(T obj);
 	}
 }
