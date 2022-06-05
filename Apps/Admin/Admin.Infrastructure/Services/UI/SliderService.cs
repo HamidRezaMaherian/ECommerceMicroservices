@@ -1,64 +1,72 @@
 ﻿using Admin.Application.Models.UI;
-using Admin.Application.Services;
+using Admin.Application.Services.UI;
+using Admin.Infrastructure.APIUtils;
 using System.Linq.Expressions;
 
 namespace Admin.Infrastructure.Services.UI
 {
-	public class SliderService : IQueryBaseService<Slider>, ICommandBaseService<Slider, Slider>
+	public class SliderService : ISliderService
 	{
+		private readonly HttpClientHelper<GatewayHttpClient> _httpClientHelper;
+
+		public SliderService(HttpClientHelper<GatewayHttpClient> httpClientHelper)
+		{
+			_httpClientHelper = httpClientHelper;
+		}
+
 		public Task AddAsync(Slider entityDTO)
 		{
-			throw new NotImplementedException();
+			return _httpClientHelper.PostAsync("/slider/create", entityDTO);
 		}
 
 		public Task DeleteAsync(object id)
 		{
-			throw new NotImplementedException();
+			return _httpClientHelper.DeleteAsync($"/slider/delete/{id}");
 		}
 
-		public Task<Slider> FirstOrDefaultAsync()
+		public async Task<Slider> FirstOrDefaultAsync()
 		{
-			throw new NotImplementedException();
+			return (await _httpClientHelper.GetAsync<IEnumerable<Slider>>("/slider/getall")).FirstOrDefault();
 		}
 
-		public Task<TypeDTO> FirstOrDefaultAsync<TypeDTO>() where TypeDTO : class
+		public async Task<TypeDTO> FirstOrDefaultAsync<TypeDTO>() where TypeDTO : class
 		{
-			throw new NotImplementedException();
+			return (await _httpClientHelper.GetAsync<IEnumerable<TypeDTO>>("/slider/getall")).FirstOrDefault();
 		}
 
-		public Task<IEnumerable<Slider>> GetAllAsync()
+		public async Task<IEnumerable<Slider>> GetAllAsync()
 		{
-			throw new NotImplementedException();
+			return await _httpClientHelper.GetAsync<IEnumerable<Slider>>("ui/slider/getall");
 		}
 
 		public Task<IEnumerable<TypeDTO>> GetAllAsync<TypeDTO>() where TypeDTO : class
 		{
-			throw new NotImplementedException();
+			return _httpClientHelper.GetAsync<IEnumerable<TypeDTO>>("/slider/getall");
 		}
 
-		public Task<IEnumerable<Slider>> GetAllAsync(Expression<Func<Slider, bool>> condition)
+		public async Task<IEnumerable<Slider>> GetAllAsync(Expression<Func<Slider, bool>> condition)
 		{
-			throw new NotImplementedException();
+			return (await _httpClientHelper.GetAsync<IEnumerable<Slider>>("/slider/getall")).AsQueryable().Where(condition);
 		}
 
-		public Task<IEnumerable<TypeDTO>> GetAllAsync<TypeDTO>(Expression<Func<Slider, bool>> condition) where TypeDTO : class
+		public async Task<IEnumerable<TypeDTO>> GetAllAsync<TypeDTO>(Expression<Func<TypeDTO, bool>> condition) where TypeDTO : class
 		{
-			throw new NotImplementedException();
+			return (await _httpClientHelper.GetAsync<IEnumerable<TypeDTO>>("/slider/getall")).AsQueryable().Where(condition);
 		}
 
 		public Task<Slider> GetByIdAsync(object id)
 		{
-			throw new NotImplementedException();
+			return _httpClientHelper.GetAsync<Slider>($"/slider/get/{id}");
 		}
 
 		public Task<TypeDTO> GetByIdAsync<TypeDTO>(object id) where TypeDTO : class
 		{
-			throw new NotImplementedException();
+			return _httpClientHelper.GetAsync<TypeDTO>($"/slider/get/{id}");
 		}
 
 		public Task UpdateAsync(Slider entityDTO)
 		{
-			throw new NotImplementedException();
+			return _httpClientHelper.PostAsync($"/slider/update",entityDTO);
 		}
 	}
 }

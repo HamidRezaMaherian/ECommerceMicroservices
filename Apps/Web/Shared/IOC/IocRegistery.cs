@@ -12,11 +12,11 @@ namespace WebApp.Shared.Ioc
 		{
 			using var serviceProvider = serviceCollection.BuildServiceProvider();
 			var configuration = serviceProvider.GetService<IConfiguration>();
-			serviceCollection.AddHttpClient<GatewayHttpClient>(async opt =>
+			serviceCollection.AddHttpClient<GatewayHttpClient>(async (service,opt) =>
 			{
-				var serviceDiscoveryClient = serviceProvider.GetService<IConsulClient>();
+				var serviceDiscoveryClient = service.GetService<IConsulClient>();
 
-				opt.BaseAddress = new Uri(await serviceDiscoveryClient.GetRequestUriAsync("gateway"));
+				opt.BaseAddress = new Uri(await serviceDiscoveryClient.GetRequestUriAsync("apigateway"));
 			});
 			serviceCollection.AddSingleton<HttpClientHelper<GatewayHttpClient>>();
 			serviceCollection.AddSingleton<IConsulClient>((cfg) =>

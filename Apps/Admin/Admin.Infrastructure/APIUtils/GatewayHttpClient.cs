@@ -1,6 +1,4 @@
-﻿using Consul;
-
-namespace Admin.Infrastructure.APIUtils
+﻿namespace Admin.Infrastructure.APIUtils
 {
 	public class GatewayHttpClient : HttpClient
 	{

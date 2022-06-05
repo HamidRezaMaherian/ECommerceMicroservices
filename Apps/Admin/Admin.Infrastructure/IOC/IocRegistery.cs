@@ -1,4 +1,8 @@
-﻿using Admin.Infrastructure.APIUtils;
+﻿using Admin.Application.Services.UI;
+using Admin.Application.UnitOfWork.UI;
+using Admin.Infrastructure.APIUtils;
+using Admin.Infrastructure.Services.UI;
+using Admin.Infrastructure.UnitOfWork;
 using Consul;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -11,23 +15,21 @@ namespace Admin.Infrastructure.Ioc
 		{
 			using var serviceProvider = serviceCollection.BuildServiceProvider();
 			var configuration = serviceProvider.GetService<IConfiguration>();
-			serviceCollection.AddHttpClient<GatewayHttpClient>(async opt =>
+			var serviceDiscoveryClient = new ConsulClient(opt =>
 			{
-				var serviceDiscoveryClient = serviceProvider.GetService<IConsulClient>();
-
-				opt.BaseAddress = new Uri(await serviceDiscoveryClient.GetRequestUriAsync("gateway"));
+				opt.Address = new Uri(configuration?["ServiceDiscovery:Address"] ?? "http://localhost:8500");
 			});
-			serviceCollection.AddSingleton<HttpClientHelper<GatewayHttpClient>>();
-			serviceCollection.AddSingleton<IConsulClient>((cfg) =>
+			var gateWayUri = new Uri(serviceDiscoveryClient.GetRequestUriAsync("apigateway").Result);
+			serviceCollection.AddHttpClient(nameof(GatewayHttpClient), (service, opt) =>
+			 {
+				 opt.BaseAddress = gateWayUri;
+			 });
+			serviceCollection.AddScoped<HttpClientHelper<GatewayHttpClient>>();
+			serviceCollection.AddScoped<ISliderService, SliderService>();
+			serviceCollection.AddScoped<IUIUnitOfWork>(builder =>
 			{
-				return new ConsulClient(opt =>
-				{
-					opt.Address = new Uri(configuration?["ServiceDiscovery:Address"] ?? "http://localhost:8500");
-				});
+				return new UIUnitOfWork(serviceCollection.BuildServiceProvider());
 			});
-
-			//serviceCollection.AddScoped<IUIService, UIService>();
-			//serviceCollection.AddScoped<IUnitOfWork, UnitOfWork.UnitOfWork>();
 		}
 		public static async Task<string> GetRequestUriAsync(this IConsulClient serviceDiscoveryClient, string serviceName)
 		{
@@ -42,7 +44,7 @@ namespace Admin.Infrastructure.Ioc
 
 			var uriBuilder = new UriBuilder()
 			{
-				Scheme = "https",
+				Scheme = "http",
 				Host = service.Address,
 				Port = service.Port
 			};

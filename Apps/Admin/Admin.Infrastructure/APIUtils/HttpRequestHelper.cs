@@ -9,7 +9,7 @@ namespace Admin.Infrastructure.APIUtils
 
 		public HttpClientHelper(IHttpClientFactory clientFactory)
 		{
-			_httpClient = clientFactory.CreateClient(nameof(TClient));
+			_httpClient = clientFactory.CreateClient(typeof(TClient).Name);
 		}
 
 		#region Non Async
@@ -24,13 +24,13 @@ namespace Admin.Infrastructure.APIUtils
 		/// <returns></returns>
 		public TResponse Get<TResponse>(string partialUrl, List<KeyValuePair<string, IEnumerable<string>>> headers = null, bool gZip = false)
 		{
-			_httpClient.DefaultRequestHeaders.Accept.Clear();
-			if (gZip)
-			{
-				_httpClient.DefaultRequestHeaders.AcceptEncoding.Add(new System.Net.Http.Headers.StringWithQualityHeaderValue("gzip"));
-			}
+			//_httpClient.DefaultRequestHeaders.Accept.Clear();
+			//if (gZip)
+			//{
+			//	_httpClient.DefaultRequestHeaders.AcceptEncoding.Add(new System.Net.Http.Headers.StringWithQualityHeaderValue("gzip"));
+			//}
 
-			SetHeaders(headers, _httpClient);
+			//SetHeaders(headers, _httpClient);
 
 			var httpResponseMessage = _httpClient.GetFromJsonAsync<TResponse>(partialUrl).Result;
 
@@ -46,13 +46,13 @@ namespace Admin.Infrastructure.APIUtils
 		/// <returns></returns>
 		public HttpResponseMessage Get(string partialUrl, List<KeyValuePair<string, IEnumerable<string>>> headers = null, bool gZip = false)
 		{
-			_httpClient.DefaultRequestHeaders.Accept.Clear();
-			if (gZip)
-			{
-				_httpClient.DefaultRequestHeaders.AcceptEncoding.Add(new System.Net.Http.Headers.StringWithQualityHeaderValue("gzip"));
-			}
+			//_httpClient.DefaultRequestHeaders.Accept.Clear();
+			//if (gZip)
+			//{
+			//	_httpClient.DefaultRequestHeaders.AcceptEncoding.Add(new System.Net.Http.Headers.StringWithQualityHeaderValue("gzip"));
+			//}
 
-			SetHeaders(headers, _httpClient);
+			//SetHeaders(headers, _httpClient);
 
 			var httpResponseMessage = _httpClient.GetAsync(partialUrl).Result;
 			return httpResponseMessage;
@@ -68,13 +68,13 @@ namespace Admin.Infrastructure.APIUtils
 		/// <returns></returns>
 		public HttpResponseMessage Post(string partialUrl, object request, List<KeyValuePair<string, IEnumerable<string>>> headers = null, bool gZip = false)
 		{
-			_httpClient.DefaultRequestHeaders.Accept.Clear();
-			if (gZip)
-			{
-				_httpClient.DefaultRequestHeaders.AcceptEncoding.Add(new System.Net.Http.Headers.StringWithQualityHeaderValue("gzip"));
-			}
+			//_httpClient.DefaultRequestHeaders.Accept.Clear();
+			//if (gZip)
+			//{
+			//	_httpClient.DefaultRequestHeaders.AcceptEncoding.Add(new System.Net.Http.Headers.StringWithQualityHeaderValue("gzip"));
+			//}
 
-			SetHeaders(headers, _httpClient);
+			//SetHeaders(headers, _httpClient);
 
 			var httpResponseMessage = _httpClient.PostAsJsonAsync(partialUrl, request).Result;
 			return httpResponseMessage;
@@ -90,13 +90,13 @@ namespace Admin.Infrastructure.APIUtils
 		/// <returns></returns>
 		public HttpResponseMessage Put(string partialUrl, object request, List<KeyValuePair<string, IEnumerable<string>>> headers = null, bool gZip = false)
 		{
-			_httpClient.DefaultRequestHeaders.Accept.Clear();
-			if (gZip)
-			{
-				_httpClient.DefaultRequestHeaders.AcceptEncoding.Add(new System.Net.Http.Headers.StringWithQualityHeaderValue("gzip"));
-			}
+			//_httpClient.DefaultRequestHeaders.Accept.Clear();
+			//if (gZip)
+			//{
+			//	_httpClient.DefaultRequestHeaders.AcceptEncoding.Add(new System.Net.Http.Headers.StringWithQualityHeaderValue("gzip"));
+			//}
 
-			SetHeaders(headers, _httpClient);
+			//SetHeaders(headers, _httpClient);
 
 			var httpResponseMessage = _httpClient.PutAsJsonAsync(partialUrl, request).Result;
 			return httpResponseMessage;
@@ -111,15 +111,128 @@ namespace Admin.Infrastructure.APIUtils
 		/// <returns></returns>
 		public HttpResponseMessage Delete(string partialUrl, List<KeyValuePair<string, IEnumerable<string>>> headers = null, bool gZip = false)
 		{
-			_httpClient.DefaultRequestHeaders.Accept.Clear();
-			if (gZip)
-			{
-				_httpClient.DefaultRequestHeaders.AcceptEncoding.Add(new System.Net.Http.Headers.StringWithQualityHeaderValue("gzip"));
-			}
+			//_httpClient.DefaultRequestHeaders.Accept.Clear();
+			//if (gZip)
+			//{
+			//	_httpClient.DefaultRequestHeaders.AcceptEncoding.Add(new System.Net.Http.Headers.StringWithQualityHeaderValue("gzip"));
+			//}
 
-			SetHeaders(headers, _httpClient);
+			//SetHeaders(headers, _httpClient);
 
 			var httpResponseMessage = _httpClient.DeleteAsync(partialUrl).Result;
+			return httpResponseMessage;
+		}
+
+		#endregion
+
+		#region Async
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <typeparam name="TResponse">نوع مدل بازگشتی</typeparam>
+		/// <param name="partialUrl">ادامه آدرس درخواستی بعد از نام هاست</param>
+		/// <param name="headers"></param>
+		/// <param name="gZip">فلگ فعال سازی دیتا برای فشرده سازی</param>
+		/// <returns></returns>
+		public async Task<TResponse> GetAsync<TResponse>(string partialUrl, List<KeyValuePair<string, IEnumerable<string>>> headers = null, bool gZip = false)
+		{
+			//_httpClient.DefaultRequestHeaders.Accept.Clear();
+			//if (gZip)
+			//{
+			//	_httpClient.DefaultRequestHeaders.AcceptEncoding.Add(new System.Net.Http.Headers.StringWithQualityHeaderValue("gzip"));
+			//}
+			//
+			//SetHeaders(headers, _httpClient);
+
+			var httpResponseMessage = await _httpClient.GetFromJsonAsync<TResponse>(partialUrl);
+
+			return httpResponseMessage;
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="partialUrl">ادامه آدرس درخواستی بعد از نام هاست</param>
+		/// <param name="headers"></param>
+		/// <param name="gZip">فلگ فعال سازی دیتا برای فشرده سازی</param>
+		/// <returns></returns>
+		public async Task<HttpResponseMessage> GetAsync(string partialUrl, List<KeyValuePair<string, IEnumerable<string>>> headers = null, bool gZip = false)
+		{
+			//_httpClient.DefaultRequestHeaders.Accept.Clear();
+			//if (gZip)
+			//{
+			//	_httpClient.DefaultRequestHeaders.AcceptEncoding.Add(new System.Net.Http.Headers.StringWithQualityHeaderValue("gzip"));
+			//}
+
+			//SetHeaders(headers, _httpClient);
+
+			var httpResponseMessage = await _httpClient.GetAsync(partialUrl);
+			return httpResponseMessage;
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="partialUrl">ادامه آدرس درخواستی بعد از نام هاست</param>
+		/// <param name="request">شئ حاوی پارامتر های نوع مدل ارسالی</param>
+		/// <param name="headers"></param>
+		/// <param name="gZip">فلگ فعال سازی دیتا برای فشرده سازی</param>
+		/// <returns></returns>
+		public async Task<HttpResponseMessage> PostAsync(string partialUrl, object request, List<KeyValuePair<string, IEnumerable<string>>> headers = null, bool gZip = false)
+		{
+			//_httpClient.DefaultRequestHeaders.Accept.Clear();
+			//if (gZip)
+			//{
+			//	_httpClient.DefaultRequestHeaders.AcceptEncoding.Add(new System.Net.Http.Headers.StringWithQualityHeaderValue("gzip"));
+			//}
+
+			//SetHeaders(headers, _httpClient);
+
+			var httpResponseMessage = await _httpClient.PostAsJsonAsync(partialUrl, request);
+			return httpResponseMessage;
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="partialUrl">ادامه آدرس درخواستی بعد از نام هاست</param>
+		/// <param name="request">شئ حاوی پارامتر های نوع مدل ارسالی</param>
+		/// <param name="headers"></param>
+		/// <param name="gZip">فلگ فعال سازی دیتا برای فشرده سازی</param>
+		/// <returns></returns>
+		public async Task<HttpResponseMessage> PutAsync(string partialUrl, object request, List<KeyValuePair<string, IEnumerable<string>>> headers = null, bool gZip = false)
+		{
+			//_httpClient.DefaultRequestHeaders.Accept.Clear();
+			//if (gZip)
+			//{
+			//	_httpClient.DefaultRequestHeaders.AcceptEncoding.Add(new System.Net.Http.Headers.StringWithQualityHeaderValue("gzip"));
+			//}
+
+			//SetHeaders(headers, _httpClient);
+
+			var httpResponseMessage = await _httpClient.PutAsJsonAsync(partialUrl, request);
+			return httpResponseMessage;
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="partialUrl">ادامه آدرس درخواستی بعد از نام هاست</param>
+		/// <param name="headers"></param>
+		/// <param name="gZip">فلگ فعال سازی دیتا برای فشرده سازی</param>
+		/// <returns></returns>
+		public async Task<HttpResponseMessage> DeleteAsync(string partialUrl, List<KeyValuePair<string, IEnumerable<string>>> headers = null, bool gZip = false)
+		{
+			//_httpClient.DefaultRequestHeaders.Accept.Clear();
+			//if (gZip)
+			//{
+			//	_httpClient.DefaultRequestHeaders.AcceptEncoding.Add(new System.Net.Http.Headers.StringWithQualityHeaderValue("gzip"));
+			//}
+
+			//SetHeaders(headers, _httpClient);
+
+			var httpResponseMessage = await _httpClient.DeleteAsync(partialUrl);
 			return httpResponseMessage;
 		}
 
