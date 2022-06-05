@@ -1,6 +1,5 @@
 ﻿using FileActor.Abstract;
 using FileActor.Abstract.Factory;
-using System;
 using System.IO;
 using System.Threading.Tasks;
 
@@ -9,12 +8,12 @@ namespace FileActor.FileServices
 	public class LocalFileStreamer : IFileStreamer
 	{
 		private readonly string _rootPath;
-		private readonly IFileTypeHelperFactory _streamFactory;
+		private readonly IFileTypeHelperFactory _fileTypeFactory;
 
 		public LocalFileStreamer(string rootPath, IFileTypeHelperFactory streamFactory)
 		{
 			_rootPath = rootPath;
-			_streamFactory = streamFactory;
+			_fileTypeFactory = streamFactory;
 		}
 		public void Delete(string path)
 		{
@@ -35,7 +34,7 @@ namespace FileActor.FileServices
 
 		public void Upload(object file, string path, string fileName)
 		{
-			IFileTypeHelper fileHelper = _streamFactory.CreateFileHelper(file.GetType());
+			IFileTypeHelper fileHelper = _fileTypeFactory.CreateFileHelper(file.GetType());
 			var fullPath = $"{_rootPath}/{ path}";
 			if (!Directory.Exists(fullPath))
 				Directory.CreateDirectory(fullPath);
@@ -44,7 +43,7 @@ namespace FileActor.FileServices
 
 		public async Task UploadAsync(object file, string path, string fileName)
 		{
-			IFileTypeHelper fileHelper = _streamFactory.CreateFileHelper(file.GetType());
+			IFileTypeHelper fileHelper = _fileTypeFactory.CreateFileHelper(file.GetType());
 			var fullPath = $"{_rootPath}/{ path}";
 			if (!Directory.Exists(fullPath))
 				Directory.CreateDirectory(fullPath);

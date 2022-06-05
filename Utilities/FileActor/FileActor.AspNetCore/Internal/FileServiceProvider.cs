@@ -1,4 +1,5 @@
 ﻿using FileActor.Abstract;
+using FileActor.Abstract.Factory;
 using System;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
@@ -9,12 +10,13 @@ namespace FileActor.AspNetCore.Internal
 	{
 		readonly IConfigurationManager _configurationManager;
 		readonly IFileStreamerContainer _factory;
-
+		readonly IFileTypeHelperFactory _fileTypeHelperFactory;
 		public FileServiceProvider(IConfigurationManager configurationManager,
-			IFileStreamerContainer factory)
+			IFileStreamerContainer factory, IFileTypeHelperFactory fileTypeHelperFactory)
 		{
 			_configurationManager = configurationManager;
 			_factory = factory;
+			_fileTypeHelperFactory = fileTypeHelperFactory;
 		}
 
 		public void Delete<T, TProperty>(Expression<Func<T, TProperty>> exp, T obj)
@@ -23,9 +25,9 @@ namespace FileActor.AspNetCore.Internal
 			var streamers = _factory.GetAll();
 			Parallel.ForEach(streamers, (streamer) =>
 			{
-				streamer.Delete(info.RelativePath);
+				streamer.Delete(obj?.GetType().GetProperty(info.PropertyName)?.GetValue(obj)?.ToString());
 			});
-			obj?.GetType().GetProperty(info.TargetProperty)?.SetValue(obj, info.RelativePath);
+			obj?.GetType().GetProperty(info.TargetProperty)?.SetValue(obj, "");
 		}
 
 		public void DeleteAll<T>(T obj)
@@ -35,11 +37,14 @@ namespace FileActor.AspNetCore.Internal
 			Parallel.ForEach(allInfo, (info) =>
 			{
 				var propertyValue = obj?.GetType().GetProperty(info.PropertyName)?.GetValue(obj);
-				foreach (var streamer in streamers)
+				if (propertyValue != null)
 				{
-					streamer.Delete(info.RelativePath);
-				};
-				obj?.GetType().GetProperty(info.TargetProperty)?.SetValue(obj, info.RelativePath);
+					foreach (var streamer in streamers)
+					{
+						streamer.Delete(propertyValue.ToString());
+					};
+				}
+				obj?.GetType().GetProperty(info.TargetProperty)?.SetValue(obj, "");
 			});
 		}
 
@@ -50,11 +55,14 @@ namespace FileActor.AspNetCore.Internal
 			await Parallel.ForEachAsync(allInfo, async (info, _) =>
 			 {
 				 var propertyValue = obj?.GetType().GetProperty(info.PropertyName)?.GetValue(obj);
-				 await Parallel.ForEachAsync(streamers, async (streamer, _) =>
+				 if (propertyValue != null)
 				 {
-					 await streamer.DeleteAsync(info.RelativePath);
-				 });
-				 obj?.GetType().GetProperty(info.TargetProperty)?.SetValue(obj, info.RelativePath);
+					 await Parallel.ForEachAsync(streamers, async (streamer, _) =>
+					 {
+						 await streamer.DeleteAsync(propertyValue.ToString());
+					 });
+				 }
+				 obj?.GetType().GetProperty(info.TargetProperty)?.SetValue(obj, "");
 			 });
 		}
 
@@ -64,9 +72,9 @@ namespace FileActor.AspNetCore.Internal
 			var streamers = _factory.GetAll();
 			await Parallel.ForEachAsync(streamers, async (streamer, _) =>
 			 {
-				 await streamer.DeleteAsync(info.RelativePath);
+				 await streamer.DeleteAsync(obj?.GetType().GetProperty(info.PropertyName)?.GetValue(obj)?.ToString());
 			 });
-			obj?.GetType().GetProperty(info.TargetProperty)?.SetValue(obj, info.RelativePath);
+			obj?.GetType().GetProperty(info.TargetProperty)?.SetValue(obj, "");
 		}
 
 		public void Save<T, TProperty>(Expression<Func<T, TProperty>> exp, T obj)
@@ -74,12 +82,15 @@ namespace FileActor.AspNetCore.Internal
 			var info = _configurationManager.GetInfo(obj?.GetType(), exp.GetMember().Name);
 			var streamers = _factory.GetAll();
 			var propertyValue = obj?.GetType().GetProperty(info.PropertyName)?.GetValue(obj);
-			var fileName = Guid.NewGuid().ToString();
-			Parallel.ForEach(streamers, (streamer) =>
+			if (propertyValue != null)
 			{
-				streamer.Upload(propertyValue, info.RelativePath, fileName);
-			});
-			obj?.GetType().GetProperty(info.TargetProperty)?.SetValue(obj, info.RelativePath);
+				var fileName = Guid.NewGuid().ToString();
+				Parallel.ForEach(streamers, (streamer) =>
+				{
+					streamer.Upload(propertyValue, info.RelativePath, fileName);
+				});
+				obj?.GetType().GetProperty(info.TargetProperty)?.SetValue(obj, info.RelativePath);
+			}
 		}
 
 		public void SaveAll<T>(T obj)
@@ -89,12 +100,16 @@ namespace FileActor.AspNetCore.Internal
 			Parallel.ForEach(allInfo, (info) =>
 			{
 				var propertyValue = obj?.GetType().GetProperty(info.PropertyName)?.GetValue(obj);
-				var fileName = Guid.NewGuid().ToString();
-				foreach (var streamer in streamers)
+				if (propertyValue != null)
 				{
-					streamer.Upload(propertyValue, info.RelativePath, fileName);
-				};
-				obj?.GetType().GetProperty(info.TargetProperty)?.SetValue(obj, info.RelativePath);
+					var fileName = Guid.NewGuid().ToString();
+					foreach (var streamer in streamers)
+					{
+						streamer.Upload(propertyValue, info.RelativePath, fileName);
+					};
+					var typeHelper = _fileTypeHelperFactory.CreateFileHelper(propertyValue.GetType());
+					obj?.GetType().GetProperty(info.TargetProperty)?.SetValue(obj, $"{info.RelativePath}/{fileName}{typeHelper.GetExtension(propertyValue)}");
+				}
 			});
 		}
 
@@ -105,12 +120,16 @@ namespace FileActor.AspNetCore.Internal
 			await Parallel.ForEachAsync(allInfo, async (info, _) =>
 			{
 				var propertyValue = obj?.GetType().GetProperty(info.PropertyName)?.GetValue(obj);
-				var fileName = Guid.NewGuid().ToString();
-				await Parallel.ForEachAsync(streamers, async (streamer, _) =>
-				 {
-					 await streamer.UploadAsync(propertyValue, info.RelativePath, fileName);
-				 });
-				obj?.GetType().GetProperty(info.TargetProperty)?.SetValue(obj, info.RelativePath);
+				if (propertyValue != null)
+				{
+					var fileName = Guid.NewGuid().ToString();
+					await Parallel.ForEachAsync(streamers, async (streamer, _) =>
+					 {
+						 await streamer.UploadAsync(propertyValue, info.RelativePath, fileName);
+					 });
+					var typeHelper = _fileTypeHelperFactory.CreateFileHelper(propertyValue.GetType());
+					obj?.GetType().GetProperty(info.TargetProperty)?.SetValue(obj, $"{info.RelativePath}/{fileName}{typeHelper.GetExtension(propertyValue)}");
+				}
 			});
 		}
 
@@ -119,12 +138,16 @@ namespace FileActor.AspNetCore.Internal
 			var info = _configurationManager.GetInfo(obj?.GetType(), exp.GetMember().Name);
 			var streamers = _factory.GetAll();
 			var propertyValue = obj?.GetType().GetProperty(info.PropertyName)?.GetValue(obj);
-			await Parallel.ForEachAsync(streamers, async (streamer, _) =>
+			if (propertyValue != null)
 			{
-				var fileName = Guid.NewGuid().ToString();
-				await streamer.UploadAsync(propertyValue, info.RelativePath, fileName);
-			});
-			obj?.GetType().GetProperty(info.TargetProperty)?.SetValue(obj, info.RelativePath);
+				await Parallel.ForEachAsync(streamers, async (streamer, _) =>
+				{
+					var fileName = Guid.NewGuid().ToString();
+					await streamer.UploadAsync(propertyValue, info.RelativePath, fileName);
+					var typeHelper = _fileTypeHelperFactory.CreateFileHelper(propertyValue.GetType());
+					obj?.GetType().GetProperty(info.TargetProperty)?.SetValue(obj, $"{info.RelativePath}/{fileName}{typeHelper.GetExtension(propertyValue)}");
+				});
+			}
 		}
 	}
 }
