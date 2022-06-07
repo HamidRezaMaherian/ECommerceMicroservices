@@ -22,6 +22,14 @@ namespace UI.API.Controllers
 		{
 			return _sliderService.GetAll().ToList();
 		}
+		[HttpGet("{id}")]
+		public ActionResult<Slider> Get(string id)
+		{
+			var entity = _sliderService.GetById(id);
+			if (entity != null)
+				return entity;
+			return NotFound(string.Format(Messages.NOT_FOUND,"Slider"));
+		}
 		[HttpPost]
 		public IActionResult Create([FromBody] SliderDTO slider)
 		{

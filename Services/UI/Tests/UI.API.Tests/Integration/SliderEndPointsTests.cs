@@ -139,13 +139,30 @@ namespace UI.API.Tests.Integration
 			var res = _httpClient.Delete($"/slider/delete/{fakeId}");
 			Assert.AreEqual(HttpStatusCode.NotFound, res.StatusCode);
 		}
+		[Test]
+		public void Get_PassValidId_ReturnEntityJson()
+		{
+			var slider = CreateSlider();
+			var res = _httpClient.Get<Slider>($"/slider/get/{slider.Id}");
+
+			Assert.IsNotNull(res);
+			Assert.AreEqual(res.Id, slider.Id);
+		}
+		[Test]
+		public void Get_PassInvalidId_ReturnNotFound()
+		{
+			var fakeId = Guid.NewGuid().ToString();
+			var res = _httpClient.Get($"/slider/get/{fakeId}");
+
+			Assert.AreEqual(HttpStatusCode.NotFound,res.StatusCode);
+		}
 		#region HelperMethods
 		private string MockFormFile()
 		{
 			var file = File.ReadAllBytes(@"H:\Downloads\Picture\Slider\wallhaven-9m7zx1.jpg");
 			return Convert.ToBase64String(file);
 		}
-		private SliderDTO CreateSlider()
+		private Application.DTOs.SliderDTO CreateSlider()
 		{
 			var slider = new Slider()
 			{
@@ -154,7 +171,7 @@ namespace UI.API.Tests.Integration
 				IsActive = true
 			};
 			_unitOfWork.SliderRepo.Add(slider);
-			return _mapper.Map<SliderDTO>(slider);
+			return _mapper.Map<Application.DTOs.SliderDTO>(slider);
 		}
 		#endregion
 	}

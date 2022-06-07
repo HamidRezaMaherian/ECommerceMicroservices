@@ -60,6 +60,16 @@ namespace UI.API.Tests.Unit
 
 			Assert.IsFalse(_sliderervice.Exists(i => i.Id == slider.Id));
 		}
+
+		[Test]
+		public void Get_PassValidId_ReturnEntity()
+		{
+			var slider = CreateSlider();
+			var result = _sliderController.Get(slider.Id);
+
+			Assert.IsNotNull(result);
+			Assert.AreEqual(result.Value?.Id,slider.Id);
+		}
 		#region HelperMethods
 		private IFormFile MockFormFile()
 		{
