@@ -1,10 +1,11 @@
 ﻿using Admin.Application.Models.UI;
 using Admin.Application.Services;
+using Admin.Application.Services.UI;
 using System.Linq.Expressions;
 
 namespace Admin.Infrastructure.Services.UI
 {
-	public class FaqService : IQueryBaseService<Faq>, ICommandBaseService<Faq, Faq>
+	public class FaqService : IFaqService
 	{
 		public Task AddAsync(Faq entityDTO)
 		{
@@ -41,7 +42,7 @@ namespace Admin.Infrastructure.Services.UI
 			throw new NotImplementedException();
 		}
 
-		public Task<IEnumerable<TypeDTO>> GetAllAsync<TypeDTO>(Expression<Func<Faq, bool>> condition) where TypeDTO : class
+		public Task<IEnumerable<TypeDTO>> GetAllAsync<TypeDTO>(Expression<Func<TypeDTO, bool>> condition) where TypeDTO : class
 		{
 			throw new NotImplementedException();
 		}

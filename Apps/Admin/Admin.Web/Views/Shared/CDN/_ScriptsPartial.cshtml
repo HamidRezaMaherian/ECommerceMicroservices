@@ -7,15 +7,7 @@
 <script src="~/plugins/custom/datatables/datatables.bundle.js"></script>
 <script src="~/plugins/custom/vis-timeline/vis-timeline.bundle.js"></script>
 <!--end::Page Vendors Javascript-->
-<script>
-		var getData = async function (endpoint, parse = false) {
-		var data;
-				await $.ajax({
-					url: endpoint,
-					success: function (result) {
-						data = result;
-			}
-			})
-		return parse === false ? data : JSON.parse(data);
-	}
-</script>
+<script src="~/js/custom.js"></script>
+<script src="~/formhelper/formhelper.bundle.min.js"></script>
+<script src="~/plugins/global/plugins.bundle.js"></script>
+

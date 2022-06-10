@@ -1,0 +1,108 @@
+﻿@model SliderVM
+@{
+	ViewData["Title"] = $"{(Model.Id != null ? "Update" : "Create")} Slider";
+}
+<div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+	<!--begin::Toolbar-->
+	<div class="toolbar" id="kt_toolbar">
+		<!--begin::Container-->
+		<div id="kt_toolbar_container" class="container-fluid d-flex flex-stack">
+			<!--begin::Page title-->
+			<div data-kt-swapper="true" data-kt-swapper-mode="prepend" data-kt-swapper-parent="{default: '#kt_content_container', 'lg': '#kt_toolbar_container'}" class="page-title d-flex align-items-center flex-wrap me-3 mb-5 mb-lg-0">
+				<!--begin::Title-->
+				<h1 class="d-flex align-items-center text-dark fw-bolder fs-3 my-1">eCommerce Dashboard</h1>
+				<!--end::Title-->
+			</div>
+			<!--end::Page title-->
+		</div>
+		<!--end::Container-->
+	</div>
+	<!--end::Toolbar-->
+	<!--begin::Post-->
+	<div class="post d-flex flex-column-fluid" id="kt_post">
+		<!--begin::Container-->
+		<div id="kt_content_container" class="container-xxl">
+			<!--begin::Row-->
+			<div class="row g-5 g-xl-10 mb-xl-10">
+				<!--begin::Col-->
+				<div class="col-lg-12 col-xl-12 col-xxl-6 mb-5 mb-xl-0">
+					<!--begin::Chart widget 3-->
+					<div class="card card-flush overflow-hidden h-md-100">
+						<form asp-formhelper="true" asp-antiforgery="true" asp-action=@(Model.Id!=null ?"Update":"Create") id="form" class="form" method="post">
+							<div asp-validation-summary="ModelOnly"></div>
+							<!--begin::Header-->
+							<div class="card-header py-5">
+								<!--begin::Title-->
+								<h3 class="card-title align-items-start flex-column">
+									<span class="card-label fw-bolder text-dark">@ViewData["Title"]</span>
+									<span class="text-gray-400 mt-1 fw-bold fs-6">Fields</span>
+								</h3>
+								<!--end::Title-->
+								<!--begin::Toolbar-->
+								<div class="card-toolbar">
+									<button class="btn btn-sm btn-light-primary fw-bolder" type="submit">@(Model.Id!=null ?"Update":"Create")</button>
+								</div>
+								<!--end::Toolbar-->
+							</div>
+							<!--end::Header-->
+							<!--begin::Card body-->
+							<div class="card-body">
+								<!--begin:Form-->
+								<div class="col-8">
+									<!--begin::Input group-->
+									<div class="d-flex flex-column mb-8 fv-row">
+										<!--begin::Label-->
+										<label asp-for="Title" class="d-flex align-items-center fs-6 fw-bold mb-2 required">
+										</label>
+										<!--end::Label-->
+										<input asp-for="Title" class="form-control form-control-solid" />
+										<span asp-validation-for="Title" class="text-danger"></span>
+									</div>
+									<!--end::Input group-->
+									<!--begin::Input group-->
+									<div class="d-flex flex-column mb-8 fv-row">
+										<input type="hidden" asp-for="Image" />
+										<!--begin::Label-->
+										<label asp-for="Image" class="d-flex align-items-center fs-6 fw-bold mb-2 required">
+										</label>
+										<!--end::Label-->
+										<!--begin::Dropzone-->
+										<div class="dropzone" id="image_dropzone">
+											<!--begin::Message-->
+											<div class="dz-message needsclick">
+												<!--begin::Icon-->
+												<i class="bi bi-file-earmark-arrow-up text-primary fs-3x"></i>
+												<!--end::Icon-->
+												<!--begin::Info-->
+												<div class="ms-4">
+													<h3 class="fs-5 fw-bolder text-gray-900 mb-1">Drop files here or click to upload.</h3>
+												</div>
+												<!--end::Info-->
+											</div>
+										</div>
+										<!--end::Dropzone-->
+										<span asp-validation-for="Image" class="text-danger"></span>
+									</div>
+									<!--end::Input group-->
+								</div>
+								<!--end:Form-->
+							</div>
+							<!--end::Card body-->
+						</form>
+					</div>
+					<!--end::Chart widget 3-->
+				</div>
+				<!--end::Col-->
+			</div>
+			<!--end::Row-->
+		</div>
+		<!--end::Container-->
+	</div>
+	<!--end::Post-->
+</div>
+
+@section scripts{
+<script>
+	initDropZone("#image_dropzone","#Image");
+</script>
+}

@@ -1,8 +1,18 @@
 using Admin.Infrastructure.Ioc;
+using FluentValidation.AspNetCore;
+using FormHelper;
+using System.Reflection;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddControllersWithViews();
+builder.Services.AddControllersWithViews()
+			.AddFluentValidation(cfg =>
+			{
+				cfg.DisableDataAnnotationsValidation = true;
+				cfg.RegisterValidatorsFromAssembly(Assembly.GetAssembly(typeof(Program)));
+			})
+			.AddFormHelper();
 
 builder.Services.RegisterInfrastructure();
 
@@ -22,6 +32,8 @@ app.UseStaticFiles();
 app.UseRouting();
 
 app.UseAuthorization();
+
+app.UseFormHelper();
 
 app.MapControllerRoute(
 	 name: "default",

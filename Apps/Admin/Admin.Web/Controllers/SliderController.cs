@@ -1,5 +1,8 @@
 ﻿using Admin.Application.Services.UI;
 using Admin.Application.UnitOfWork.UI;
+using Admin.Web.Configurations;
+using Admin.Web.ViewModels;
+using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Admin.Web.Controllers
@@ -15,14 +18,25 @@ namespace Admin.Web.Controllers
 		}
 
 		[HttpGet]
-		public async Task<IActionResult> Index()
+		public IActionResult Index()
 		{
 			return View();
 		}
-		[HttpPost]
-		public async Task<IActionResult> Create()
+		[HttpGet]
+		public IActionResult Create()
 		{
-			return View("Form");
+
+			return View("Form", new SliderVM());
+		}
+		[HttpPost]
+		public async Task<IActionResult> CreateAsync(
+			[CustomizeValidator(RuleSet =$"{Statics.CREATE_MODEL},{Statics.DEFAULT_MODEL}")] SliderVM modelVM)
+		{
+			if (!ModelState.IsValid)
+			{
+				return View("Form",modelVM);
+			}
+			return RedirectToAction(nameof(Index));
 		}
 		[HttpGet]
 		public async Task<IActionResult> GetData()
