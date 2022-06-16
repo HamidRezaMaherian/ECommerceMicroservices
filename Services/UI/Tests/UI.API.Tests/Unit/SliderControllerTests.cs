@@ -35,7 +35,7 @@ namespace UI.API.Tests.Unit
 		[Test]
 		public void Create_PasValidEntity_AddSlider()
 		{
-			var slider = new SliderDTO()
+			var slider = new CreateSliderDTO()
 			{
 				IsActive = true,
 				Title = "no title"
@@ -80,9 +80,9 @@ namespace UI.API.Tests.Unit
 			return file;
 		}
 
-		private SliderDTO CreateSlider()
+		private UpdateSliderDTO CreateSlider()
 		{
-			var slider = new SliderDTO()
+			var slider = new UpdateSliderDTO()
 			{
 				ImagePath = "no image",
 				Title = "no title",

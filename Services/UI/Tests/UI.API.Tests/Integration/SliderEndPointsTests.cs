@@ -76,7 +76,7 @@ namespace UI.API.Tests.Integration
 		[Test]
 		public void Create_PassValidObject_AddObject()
 		{
-			var slider = new SliderDTO()
+			var slider = new CreateSliderDTO()
 			{
 				Title = Guid.NewGuid().ToString(),
 				Image = MockFormFile(),
@@ -92,7 +92,7 @@ namespace UI.API.Tests.Integration
 		[Test]
 		public void Create_PassInvalidObject_ReturnBadRequest()
 		{
-			var slider = new SliderDTO();
+			var slider = new CreateSliderDTO();
 			var res = _httpClient.Post("/slider/create", slider);
 			Assert.AreEqual(HttpStatusCode.BadRequest, res.StatusCode);
 			Assert.IsFalse(_unitOfWork.SliderRepo.Exists(i => i.Title == slider.Title));
@@ -103,7 +103,7 @@ namespace UI.API.Tests.Integration
 			var slider = CreateSlider();
 			slider.Title = "updated-test";
 			var res = _httpClient.Put("/slider/update", slider);
-			var updatedSlider = _mapper.Map<SliderDTO>(
+			var updatedSlider = _mapper.Map<CreateSliderDTO>(
 				_unitOfWork.SliderRepo.Get(slider.Id));
 
 			Assert.AreEqual(HttpStatusCode.OK, res.StatusCode);
@@ -118,7 +118,7 @@ namespace UI.API.Tests.Integration
 			{
 				slider.Id,
 			});
-			var updatedSlider = _mapper.Map<SliderDTO>(
+			var updatedSlider = _mapper.Map<CreateSliderDTO>(
 				_unitOfWork.SliderRepo.Get(slider.Id));
 
 			Assert.AreEqual(HttpStatusCode.BadRequest, res.StatusCode);

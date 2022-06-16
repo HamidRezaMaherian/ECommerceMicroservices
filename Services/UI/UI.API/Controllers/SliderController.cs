@@ -31,13 +31,13 @@ namespace UI.API.Controllers
 			return NotFound(string.Format(Messages.NOT_FOUND,"Slider"));
 		}
 		[HttpPost]
-		public IActionResult Create([FromBody] SliderDTO slider)
+		public IActionResult Create([FromBody] CreateSliderDTO slider)
 		{
 			_sliderService.Add(slider);
 			return Created("", slider);
 		}
 		[HttpPut]
-		public IActionResult Update([FromBody] SliderDTO slider)
+		public IActionResult Update([FromBody] UpdateSliderDTO slider)
 		{
 			_sliderService.Update(slider);
 			return Ok(string.Format(Messages.SUCCEDED, "UPDATE"));
