@@ -1,13 +1,19 @@
-﻿namespace FileActor.Internal
+﻿using System;
+using System.Linq.Expressions;
+
+namespace FileActor.Internal
 {
 	public class FileStreamInfo
 	{
-		public FileStreamInfo(string propertyName)
+		public FileStreamInfo(object value, string relativePath, string targetProperty)
 		{
-			PropertyName = propertyName;
+			Value = value;
+			RelativePath = relativePath;
+			TargetProperty = targetProperty;
 		}
-		public string PropertyName { get; set; }
-		public string RelativePath { get; set; }
-		public string TargetProperty { get; set; }
+
+		public object Value { get; private set; }
+		public string RelativePath { get; private set; }
+		public string TargetProperty { get; private set; }
 	}
 }

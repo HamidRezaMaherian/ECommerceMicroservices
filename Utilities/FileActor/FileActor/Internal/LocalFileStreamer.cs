@@ -8,9 +8,9 @@ namespace FileActor.FileServices
 	public class LocalFileStreamer : IFileStreamer
 	{
 		private readonly string _rootPath;
-		private readonly IFileTypeHelperFactory _fileTypeFactory;
+		private readonly IFileTypeHelperProvider _fileTypeFactory;
 
-		public LocalFileStreamer(string rootPath, IFileTypeHelperFactory streamFactory)
+		public LocalFileStreamer(string rootPath, IFileTypeHelperProvider streamFactory)
 		{
 			_rootPath = rootPath;
 			_fileTypeFactory = streamFactory;
@@ -34,7 +34,7 @@ namespace FileActor.FileServices
 
 		public void Upload(object file, string path, string fileName)
 		{
-			IFileTypeHelper fileHelper = _fileTypeFactory.CreateFileHelper(file.GetType());
+			IFileTypeHelper fileHelper = _fileTypeFactory.ProvideFileHelper(file.GetType());
 			var fullPath = $"{_rootPath}/{ path}";
 			if (!Directory.Exists(fullPath))
 				Directory.CreateDirectory(fullPath);
@@ -43,7 +43,7 @@ namespace FileActor.FileServices
 
 		public async Task UploadAsync(object file, string path, string fileName)
 		{
-			IFileTypeHelper fileHelper = _fileTypeFactory.CreateFileHelper(file.GetType());
+			IFileTypeHelper fileHelper = _fileTypeFactory.ProvideFileHelper(file.GetType());
 			var fullPath = $"{_rootPath}/{ path}";
 			if (!Directory.Exists(fullPath))
 				Directory.CreateDirectory(fullPath);

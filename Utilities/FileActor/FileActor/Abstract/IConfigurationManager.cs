@@ -13,15 +13,9 @@ namespace FileActor.Abstract
 		/// <summary>
 		/// get all fileActor info of a class
 		/// </summary>
-		/// <typeparam name="T">class with fileActor Configuration</typeparam>
-		/// <returns>all fileActor information</returns>
-		IEnumerable<FileStreamInfo> GetAllInfo<T>();
-		/// <summary>
-		/// get all fileActor info of a class
-		/// </summary>
-		/// <param name="type">type with fileActor Configuration</param>
-		/// <returns>all fileActor information</returns>
-		IEnumerable<FileStreamInfo> GetAllInfo(Type type);
+		/// <param name="obj">obj of type which has fileActor Configuration</param>
+		/// <returns>all fileActor information with given object</returns>
+		IEnumerable<FileStreamInfo> GetAllInfo<T>(T obj);
 		/// <summary>
 		/// get a specific fileActor info from a property of a class
 		/// </summary>
@@ -29,13 +23,13 @@ namespace FileActor.Abstract
 		/// <typeparam name="TProperty">property of T which has fileActor Configuration</typeparam>
 		/// <param name="exp">selected property</param>
 		/// <returns>selected property information</returns>
-		FileStreamInfo GetInfo<T, TProperty>(Expression<Func<T, TProperty>> exp);
+		FileStreamInfo GetInfo<T, TProperty>(T obj,Expression<Func<T, TProperty>> exp);
 		/// <summary>
 		/// get a specific fileActor info from a property of a class
 		/// </summary>
-		/// <param name="type">type with fileActor Configuration</param>
+		/// <param name="obj">obj of type which has fileActor Configuration</param>
 		/// <param name="propertyName">selected property</param>
 		/// <returns></returns>
-		FileStreamInfo GetInfo(Type type, string propertyName);
+		FileStreamInfo GetInfo<T>(T obj, string propertyName);
 	}
 }

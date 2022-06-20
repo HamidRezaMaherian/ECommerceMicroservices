@@ -3,7 +3,7 @@ using FileActor.Abstract.Factory;
 using FileActor.AspNetCore.Internal;
 using FileActor.FileServices;
 using FileActor.Internal;
-using FileActor.Internal.Factory;
+using FileActor.Internal.Provider;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Linq;
@@ -45,7 +45,7 @@ namespace FileActor.AspNetCore
 		public static IServiceCollection AddLocalActor(this IServiceCollection services, string name, string rootPath)
 		{
 			var fileStreamerContainer = services.DiscoverService<IFileStreamerContainer>();
-			var fileStreamerFactory = services.DiscoverService<IFileTypeHelperFactory>();
+			var fileStreamerFactory = services.DiscoverService<IFileTypeHelperProvider>();
 			fileStreamerContainer.Insert(name, new LocalFileStreamer(rootPath, fileStreamerFactory));
 			return services;
 		}
@@ -68,19 +68,23 @@ namespace FileActor.AspNetCore
 		/// <exception cref="NullReferenceException"></exception>
 		public static IServiceCollection AddObjectConfigurations(this IServiceCollection services, Assembly assembly)
 		{
-			services.AddScoped<IConfigurationManager>(sp => new ObjectConfigManager(services.BuildServiceProvider()));
 			var definedTypes = assembly.DefinedTypes.Where(i => i.BaseType == typeof(FileActorConfigurable<>));
 			Parallel.ForEach(definedTypes, i =>
 			{
 				services.AddScoped(typeof(FileActorConfigurable<>).MakeGenericType(i.BaseType?.GenericTypeArguments ?? throw new NullReferenceException()), i);
 			});
+			services.AddScoped<IConfigProvider>((sp)=>
+			{
+				return new DIConfigProvider(sp);
+			});
+			services.AddScoped<IConfigurationManager,ObjectConfigManager>();
 			return services;
 		}
 		private static IServiceCollection AddFileTypeHelper(this IServiceCollection services)
 		{
-			services.AddScoped<IFileTypeHelperFactory>((services) =>
+			services.AddScoped<IFileTypeHelperProvider>((services) =>
 			{
-				var streamFactory = new FileStreamFactory();
+				var streamFactory = new FileStreamProvider();
 				streamFactory.Add(typeof(string), () => new Base64FileHelper());
 				streamFactory.Add(typeof(IFileTypeHelper), () => new FormFileStream());
 				return streamFactory;

@@ -3,15 +3,15 @@
 namespace FileActor.Abstract.Factory
 {
 	/// <summary>
-	/// factory for creation of related fileType helpers
+	/// provider for related fileType helpers
 	/// </summary>
-	public interface IFileTypeHelperFactory
+	public interface IFileTypeHelperProvider
 	{
 		/// <summary>
-		/// creates FileTypeHelper base on the given type
+		/// provides FileTypeHelper base on the given type
 		/// </summary>
 		/// <param name="type">typeof fileHelper</param>
 		/// <returns>created FileTypeHelper</returns>
-		IFileTypeHelper CreateFileHelper(Type type);
+		IFileTypeHelper ProvideFileHelper(Type type);
 	}
 }

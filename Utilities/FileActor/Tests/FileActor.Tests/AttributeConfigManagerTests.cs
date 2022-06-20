@@ -1,12 +1,7 @@
-using FileActor.Abstract;
-using FileActor.Exceptions;
 using FileActor.Internal;
 using FileActor.Tests.Helpers;
 using NUnit.Framework;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Linq.Expressions;
 
 namespace FileActor.Tests
 {
@@ -24,35 +19,38 @@ namespace FileActor.Tests
 		[TestCase(typeof(FakeClass1))]
 		public void GetAllInfo_ReturnAllInfos(Type type)
 		{
-			var validInfos = type.GetProperties()
-				.Where(i => i.CustomAttributes.Any(a => a.AttributeType == typeof(FileActionAttribute)));
-			var result = (IEnumerable<FileStreamInfo>)_configManager.GetType().GetMethod("GetAllInfo")?.MakeGenericMethod(type).Invoke(_configManager, null);
+			//var validInfos = type.GetProperties()
+			//	.Where(i => i.CustomAttributes.Any(a => a.AttributeType == typeof(FileActionAttribute)));
+			//var result = (IEnumerable<FileStreamInfo>)_configManager.GetType().GetMethod("GetAllInfo")?.MakeGenericMethod(type).Invoke(_configManager, null);
 
-			Assert.AreEqual(
-				validInfos.Count(),
-				result?.Count());
+			//Assert.AreEqual(
+			//	validInfos.Count(),
+			//	result?.Count());
 
-			CollectionAssert.AreEquivalent(validInfos.Select(i => i.Name), result?.Select(i => i.PropertyName));
+			//CollectionAssert.AreEquivalent(validInfos.Select(i => i.Name), result?.Select(i => i.TargetProperty));
+			Assert.Fail();
 		}
 		[Test]
 		public void GetInfo_InfoExist_ReturnInfo()
 		{
-			var validInfo = typeof(FakeClass).GetProperties()
-				.FirstOrDefault(i => i.CustomAttributes.Any(a => a.AttributeType == typeof(FileActionAttribute)) && i.Name == "File");
+			//var validInfo = typeof(FakeClass).GetProperties()
+			//	.FirstOrDefault(i => i.CustomAttributes.Any(a => a.AttributeType == typeof(FileActionAttribute)) && i.Name == "File");
 
-			Expression<Func<FakeClass, string>> exp = (i) => i.File;
-			var result = _configManager.GetInfo(exp);
+			//Expression<Func<FakeClass, string>> exp = (i) => i.File;
+			//var result = _configManager.GetInfo();
 
-			Assert.AreEqual(validInfo?.Name, result.PropertyName);
+			//Assert.AreEqual(validInfo?.Name, result.PropertyName);
+			Assert.Fail();
 		}
 		[Test]
 		public void GetInfo_InfoNotExist_ThrowException()
 		{
-			Expression<Func<FakeClass, int>> exp = (i) => i.MyProperty;
-			Assert.Throws<NotFoundException>(() =>
-			{
-				_configManager.GetInfo(exp);
-			});
+			//Expression<Func<FakeClass, int>> exp = (i) => i.MyProperty;
+			//Assert.Throws<NotFoundException>(() =>
+			//{
+			//	_configManager.GetInfo(exp);
+			//});
+			Assert.Fail();
 		}
 	}
 }

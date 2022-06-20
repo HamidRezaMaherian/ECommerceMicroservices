@@ -6,12 +6,12 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq.Expressions;
 
-namespace FileActor.Internal.Factory
+namespace FileActor.Internal.Provider
 {
-	public class FileStreamFactory : IFileTypeHelperFactory
+	public class FileStreamProvider : IFileTypeHelperProvider
 	{
 		private readonly IDictionary<string, Expression<Func<IFileTypeHelper>>> _fileStreams;
-		public FileStreamFactory()
+		public FileStreamProvider()
 		{
 			_fileStreams = new ConcurrentDictionary<string, Expression<Func<IFileTypeHelper>>>();
 		}
@@ -19,7 +19,7 @@ namespace FileActor.Internal.Factory
 		{
 			_fileStreams.Add(type.Name, factor);
 		}
-		public IFileTypeHelper CreateFileHelper(Type streamType)
+		public IFileTypeHelper ProvideFileHelper(Type streamType)
 		{
 			if (_fileStreams.TryGetValue(streamType.Name, out var stream))
 			{

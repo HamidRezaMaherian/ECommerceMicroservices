@@ -1,4 +1,5 @@
 ﻿using FileActor.Abstract;
+using FileActor.Abstract.Factory;
 using FileActor.Exceptions;
 using System;
 using System.Collections.Generic;
@@ -9,49 +10,25 @@ namespace FileActor.Internal
 {
 	public class AttributeConfigManager : IConfigurationManager
 	{
-		public IEnumerable<FileStreamInfo> GetAllInfo<T>()
+		public IEnumerable<FileStreamInfo> GetAllInfo<T>(T obj)
 		{
-			return typeof(T).GetProperties()
-						 .Where(i => IsPropertyValid(i))
-						 .Select(i =>
-						 {
-							 var attr = i.GetCustomAttribute<FileActionAttribute>();
-							 return new FileStreamInfo(i.Name)
-							 {
-								 RelativePath = attr?.Path,
-								 TargetProperty = attr?.TargetPropertyName
-							 };
-						 });
-		}
-
-		public IEnumerable<FileStreamInfo> GetAllInfo(Type type)
-		{
-			return type.GetProperties()
+			return obj.GetType().GetProperties()
 			 .Where(i => IsPropertyValid(i))
 			 .Select(i =>
 			 {
 				 var attr = i.GetCustomAttribute<FileActionAttribute>();
-				 return new FileStreamInfo(i.Name)
-				 {
-					 RelativePath = attr?.Path,
-					 TargetProperty = attr?.TargetPropertyName
-				 };
+				 return new FileStreamInfo(i.GetValue(obj), attr?.Path, attr?.TargetPropertyName);
 			 });
-
 		}
 
-		public FileStreamInfo GetInfo<T, TProperty>(Expression<Func<T, TProperty>> exp)
+		public FileStreamInfo GetInfo<T, TProperty>(T obj, Expression<Func<T, TProperty>> exp)
 		{
 			try
 			{
-
 				var member = exp.GetMember();
-				var attr = typeof(T).GetProperty(member.Name)?.GetCustomAttribute<FileActionAttribute>();
-				return new FileStreamInfo(member.Name)
-				{
-					RelativePath = attr?.Path,
-					TargetProperty = attr?.TargetPropertyName
-				};
+				var propertyInfo = typeof(T).GetProperty(member.Name);
+				var attr = propertyInfo?.GetCustomAttribute<FileActionAttribute>();
+				return new FileStreamInfo(propertyInfo.GetValue(obj), attr?.Path, attr?.TargetPropertyName);
 			}
 			catch (Exception e)
 			{
@@ -59,17 +36,13 @@ namespace FileActor.Internal
 			}
 		}
 
-		public FileStreamInfo GetInfo(Type type, string propertyName)
+		public FileStreamInfo GetInfo<T>(T obj, string propertyName)
 		{
 			try
 			{
-
-				var attr = type.GetProperty(propertyName)?.GetCustomAttribute<FileActionAttribute>();
-				return new FileStreamInfo(propertyName)
-				{
-					RelativePath = attr?.Path,
-					TargetProperty = attr?.TargetPropertyName
-				};
+				var propertyInfo = typeof(T).GetProperty(propertyName);
+				var attr = propertyInfo?.GetCustomAttribute<FileActionAttribute>();
+				return new FileStreamInfo(propertyInfo.GetValue(obj), attr?.Path, attr?.TargetPropertyName);
 			}
 			catch (Exception e)
 			{
@@ -85,39 +58,44 @@ namespace FileActor.Internal
 	}
 	public class ObjectConfigManager : IConfigurationManager
 	{
-		private readonly IServiceProvider _serviceProvider;
+		private readonly IConfigProvider _configProvider;
 
-		public ObjectConfigManager(IServiceProvider serviceProvider)
+		public ObjectConfigManager(IConfigProvider configProvider)
 		{
-			_serviceProvider = serviceProvider;
+			_configProvider = configProvider;
 		}
-		public IEnumerable<FileStreamInfo> GetAllInfo<T>()
+		public IEnumerable<FileStreamInfo> GetAllInfo<T>(T obj)
 		{
-			var configurableObj = (FileActorConfigurable<T>)_serviceProvider.GetService(typeof(FileActorConfigurable<T>));
-			return configurableObj.GetInfo();
-		}
-
-		public IEnumerable<FileStreamInfo> GetAllInfo(Type type)
-		{
-			throw new NotImplementedException();
+			var configurableObj = _configProvider.ProvideConfiguration(obj.GetType());
+			return configurableObj.GetInfo().Select(i=>new FileStreamInfo(i.Expression.Compile().Invoke(),i.RelativePath,i.Target));
 		}
 
-		public FileStreamInfo GetInfo<T, TProperty>(Expression<Func<T, TProperty>> exp)
+		public FileStreamInfo GetInfo<T, TProperty>(T obj, Expression<Func<T, TProperty>> exp)
 		{
 			try
 			{
-				var configurableObj = (FileActorConfigurable<T>)_serviceProvider.GetService(typeof(FileActorConfigurable<T>));
-				return configurableObj.GetInfo(exp);
-				}
+				var configurableObj = _configProvider.ProvideConfiguration(obj.GetType());
+				var config = configurableObj.GetInfo(exp.GetMember().Name);
+				return new FileStreamInfo(config.Expression.Compile().Invoke(), config.RelativePath, config.Target);
+			}
 			catch (Exception e)
 			{
 				throw new NotFoundException(e.Message);
 			}
 		}
 
-		public FileStreamInfo GetInfo(Type type, string propertyName)
+		public FileStreamInfo GetInfo<T>(T obj, string propertyName)
 		{
-			throw new NotImplementedException();
+			try
+			{
+				var configurableObj = _configProvider.ProvideConfiguration(obj.GetType());
+				var config = configurableObj.GetInfo(propertyName);
+				return new FileStreamInfo(config.Expression.Compile().Invoke(), config.RelativePath, config.Target);
+			}
+			catch (Exception e)
+			{
+				throw new NotFoundException(e.Message);
+			}
 		}
 	}
 }

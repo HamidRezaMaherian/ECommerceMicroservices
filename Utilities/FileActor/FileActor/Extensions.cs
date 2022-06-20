@@ -99,15 +99,5 @@ namespace FileActor
 					throw new NotSupportedException(node.NodeType.ToString());
 			}
 		}
-		public static FileStreamInfo SetTargetProperty(this FileStreamInfo info, string targetProperty)
-		{
-			info.TargetProperty = targetProperty;
-			return info;
-		}
-		public static FileStreamInfo SetPath(this FileStreamInfo info, string path)
-		{
-			info.RelativePath = path;
-			return info;
-		}
 	}
 }
