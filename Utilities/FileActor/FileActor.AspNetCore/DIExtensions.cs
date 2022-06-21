@@ -22,7 +22,7 @@ namespace FileActor.AspNetCore
 		public static IServiceCollection AddFileActor(this IServiceCollection services)
 		{
 			services.AddFileTypeHelper();
-			services.AddScoped<IFileServiceProvider, FileServiceProvider>();
+			services.AddScoped<IFileServiceActor, FileServiceActor>();
 			return services;
 		}
 		/// <summary>
@@ -68,7 +68,7 @@ namespace FileActor.AspNetCore
 		/// <exception cref="NullReferenceException"></exception>
 		public static IServiceCollection AddObjectConfigurations(this IServiceCollection services, Assembly assembly)
 		{
-			var definedTypes = assembly.DefinedTypes.Where(i => i.BaseType == typeof(FileActorConfigurable<>));
+			var definedTypes = assembly.DefinedTypes.Where(i => i.BaseType?.Name == typeof(FileActorConfigurable<>).Name);
 			Parallel.ForEach(definedTypes, i =>
 			{
 				services.AddScoped(typeof(FileActorConfigurable<>).MakeGenericType(i.BaseType?.GenericTypeArguments ?? throw new NullReferenceException()), i);

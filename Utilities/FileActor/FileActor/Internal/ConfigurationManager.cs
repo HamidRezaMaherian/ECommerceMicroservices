@@ -67,7 +67,7 @@ namespace FileActor.Internal
 		public IEnumerable<FileStreamInfo> GetAllInfo<T>(T obj)
 		{
 			var configurableObj = _configProvider.ProvideConfiguration(obj.GetType());
-			return configurableObj.GetInfo().Select(i=>new FileStreamInfo(i.Expression.Compile().Invoke(),i.RelativePath,i.Target));
+			return configurableObj.GetInfo().Select(i=>new FileStreamInfo(i.Expression.Compile().Invoke(obj),i.RelativePath,i.Target));
 		}
 
 		public FileStreamInfo GetInfo<T, TProperty>(T obj, Expression<Func<T, TProperty>> exp)
@@ -76,7 +76,7 @@ namespace FileActor.Internal
 			{
 				var configurableObj = _configProvider.ProvideConfiguration(obj.GetType());
 				var config = configurableObj.GetInfo(exp.GetMember().Name);
-				return new FileStreamInfo(config.Expression.Compile().Invoke(), config.RelativePath, config.Target);
+				return new FileStreamInfo(config.Expression.Compile().Invoke(obj), config.RelativePath, config.Target);
 			}
 			catch (Exception e)
 			{
@@ -90,7 +90,7 @@ namespace FileActor.Internal
 			{
 				var configurableObj = _configProvider.ProvideConfiguration(obj.GetType());
 				var config = configurableObj.GetInfo(propertyName);
-				return new FileStreamInfo(config.Expression.Compile().Invoke(), config.RelativePath, config.Target);
+				return new FileStreamInfo(config.Expression.Compile().Invoke(obj), config.RelativePath, config.Target);
 			}
 			catch (Exception e)
 			{

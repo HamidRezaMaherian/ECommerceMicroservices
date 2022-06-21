@@ -14,7 +14,9 @@ namespace FileActor.AspNetCore.Internal
 		}
 		public IFileActorConfigurable ProvideConfiguration(Type type)
 		{
-			return (IFileActorConfigurable)_serviceProvider.GetService(typeof(FileActorConfigurable<>).MakeGenericType(type))
+			return 
+				(IFileActorConfigurable)_serviceProvider.GetService(typeof(FileActorConfigurable<>).MakeGenericType(type))
+				?? (IFileActorConfigurable)_serviceProvider.GetService(typeof(FileActorConfigurable<>).MakeGenericType(type.BaseType))
 				?? throw new NotFoundException($"configuration for {type} not found");
 		}
 	}

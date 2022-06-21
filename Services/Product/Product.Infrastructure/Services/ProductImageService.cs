@@ -8,8 +8,8 @@ namespace Product.Infrastructure.Services
 {
 	public class ProductImageService : GenericActiveService<Domain.Entities.ProductImage, ProductImageDTO>, IProductImageService
 	{
-		private readonly IFileServiceProvider _fileServiceProvider;
-		public ProductImageService(IUnitOfWork unitOfWork, ICustomMapper mapper, IFileServiceProvider fileServiceProvider) : base(unitOfWork, mapper)
+		private readonly IFileServiceActor _fileServiceProvider;
+		public ProductImageService(IUnitOfWork unitOfWork, ICustomMapper mapper, IFileServiceActor fileServiceProvider) : base(unitOfWork, mapper)
 		{
 			_fileServiceProvider = fileServiceProvider;
 		}

@@ -11,20 +11,27 @@ namespace FileActor.Internal
 		}
 		public string Target { get; protected set; }
 		public string RelativePath { get; protected set; }
-		public Expression<Func<object>> Expression { get; protected set; }
+		public virtual Expression<Func<object, object>> Expression { get; }
 	}
-	public class ObjectStreamConfigProxy : ObjectStreamConfiguration
+	public class ObjectStreamConfiguration<T> : ObjectStreamConfiguration
+	{
+		public override Expression<Func<object, object>> Expression =>
+			(obj) => GenericExpression.Compile().Invoke((T)obj);
+
+		protected Expression<Func<T, object>> GenericExpression { get; set; }
+	}
+	public class ObjectStreamConfigProxy<T> : ObjectStreamConfiguration<T> where T : class
 	{
 		public ObjectStreamConfigProxy(string target)
 		{
 			Target = target;
 		}
-		public ObjectStreamConfigProxy SetExpression(Expression<Func<object>> expression)
+		public ObjectStreamConfigProxy<T> SetExpression(Expression<Func<T, object>> expression)
 		{
-			Expression = expression;
+			GenericExpression = expression;
 			return this;
 		}
-		public ObjectStreamConfigProxy SetRelativePath(string relativePath)
+		public ObjectStreamConfigProxy<T> SetRelativePath(string relativePath)
 		{
 			RelativePath = relativePath;
 			return this;

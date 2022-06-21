@@ -8,7 +8,7 @@ namespace Product.Infrastructure.Services
 {
 	public class ProductService : GenericActiveService<Domain.Entities.Product, ProductDTO>, IProductService
 	{
-		private readonly IFileServiceProvider _fileServiceProvider;
+		private readonly IFileServiceActor _fileServiceProvider;
 		public ProductService(IUnitOfWork unitOfWork, ICustomMapper mapper) : base(unitOfWork, mapper)
 		{
 		}

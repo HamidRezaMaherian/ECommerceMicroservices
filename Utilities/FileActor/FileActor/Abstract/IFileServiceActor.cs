@@ -8,7 +8,7 @@ namespace FileActor.Abstract
 	/// Generic version of IFileServiceProvider for specific type
 	/// </summary>
 	/// <typeparam name="T">type with fileactor configuration</typeparam>
-	public interface IFileServiceProvider<T> where T : class
+	public interface IFileServiceActor<T> where T : class
 	{
 		/// <summary>
 		/// Saves all file values of an object which has fileActor configuration for its type from all configured back stores
@@ -62,7 +62,7 @@ namespace FileActor.Abstract
 	/// <summary>
 	/// abstraction of fileServiceProvider for file actions on types with fileActor configurations
 	/// </summary>
-	public interface IFileServiceProvider
+	public interface IFileServiceActor
 	{
 		/// <summary>
 		/// Saves all file values of an object which has fileActor configuration for its type from all configured back stores

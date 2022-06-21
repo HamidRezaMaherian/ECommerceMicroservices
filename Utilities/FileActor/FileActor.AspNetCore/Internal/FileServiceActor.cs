@@ -6,12 +6,12 @@ using System.Threading.Tasks;
 
 namespace FileActor.AspNetCore.Internal
 {
-	public class FileServiceProvider : IFileServiceProvider
+	public class FileServiceActor : IFileServiceActor
 	{
 		readonly IConfigurationManager _configurationManager;
 		readonly IFileStreamerContainer _factory;
 		readonly IFileTypeHelperProvider _fileTypeHelperProvider;
-		public FileServiceProvider(IConfigurationManager configurationManager,
+		public FileServiceActor(IConfigurationManager configurationManager,
 			IFileStreamerContainer factory, IFileTypeHelperProvider fileTypeHelperProvider)
 		{
 			_configurationManager = configurationManager;
@@ -66,7 +66,7 @@ namespace FileActor.AspNetCore.Internal
 
 		public async Task DeleteAsync<T, TProperty>(Expression<Func<T, TProperty>> exp, T obj)
 		{
-			var info = _configurationManager.GetInfo(obj?.GetType(), exp.GetMember().Name);
+			var info = _configurationManager.GetInfo(obj, exp.GetMember().Name);
 			var streamers = _factory.GetAll();
 			await Parallel.ForEachAsync(streamers, async (streamer, _) =>
 			 {
@@ -77,7 +77,7 @@ namespace FileActor.AspNetCore.Internal
 
 		public void Save<T, TProperty>(Expression<Func<T, TProperty>> exp, T obj)
 		{
-			var info = _configurationManager.GetInfo(obj?.GetType(), exp.GetMember().Name);
+			var info = _configurationManager.GetInfo(obj, exp.GetMember().Name);
 			var streamers = _factory.GetAll();
 			if (info.Value != null)
 			{
@@ -92,7 +92,7 @@ namespace FileActor.AspNetCore.Internal
 
 		public void SaveAll<T>(T obj)
 		{
-			var allInfo = _configurationManager.GetAllInfo(obj?.GetType());
+			var allInfo = _configurationManager.GetAllInfo(obj);
 			var streamers = _factory.GetAll();
 			Parallel.ForEach(allInfo, (info) =>
 			{
@@ -111,7 +111,7 @@ namespace FileActor.AspNetCore.Internal
 
 		public async Task SaveAllAsync<T>(T obj)
 		{
-			var allInfo = _configurationManager.GetAllInfo(obj?.GetType());
+			var allInfo = _configurationManager.GetAllInfo(obj);
 			var streamers = _factory.GetAll();
 			await Parallel.ForEachAsync(allInfo, async (info, _) =>
 			{
@@ -130,7 +130,7 @@ namespace FileActor.AspNetCore.Internal
 
 		public async Task SaveAsync<T, TProperty>(Expression<Func<T, TProperty>> exp, T obj)
 		{
-			var info = _configurationManager.GetInfo(obj?.GetType(), exp.GetMember().Name);
+			var info = _configurationManager.GetInfo(obj, exp.GetMember().Name);
 			var streamers = _factory.GetAll();
 			if (info.Value != null)
 			{

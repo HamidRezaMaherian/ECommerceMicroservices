@@ -9,7 +9,7 @@ namespace UI.Infrastructure.Services
 {
 	public class SocialMediaService : GenericActiveService<SocialMedia, SocialMediaDTO>, ISocialMediaService
 	{
-		private readonly IFileServiceProvider _fileServiceProvider;
+		private readonly IFileServiceActor _fileServiceProvider;
 		public SocialMediaService(IUnitOfWork unitOfWork, ICustomMapper mapper) : base(unitOfWork, mapper)
 		{
 		}

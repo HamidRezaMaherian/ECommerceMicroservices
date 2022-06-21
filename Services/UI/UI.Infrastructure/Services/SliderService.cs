@@ -9,8 +9,8 @@ namespace UI.Infrastructure.Services
 {
 	public class SliderService : GenericActiveService<Slider, SliderDTO>, ISliderService
 	{
-		private readonly IFileServiceProvider _fileServiceProvider;
-		public SliderService(IUnitOfWork unitOfWork, ICustomMapper mapper, IFileServiceProvider fileServiceProvider) : base(unitOfWork, mapper)
+		private readonly IFileServiceActor _fileServiceProvider;
+		public SliderService(IUnitOfWork unitOfWork, ICustomMapper mapper, IFileServiceActor fileServiceProvider) : base(unitOfWork, mapper)
 		{
 			_fileServiceProvider = fileServiceProvider;
 		}

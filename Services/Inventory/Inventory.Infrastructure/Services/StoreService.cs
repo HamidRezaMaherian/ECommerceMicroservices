@@ -9,7 +9,7 @@ namespace Inventory.Infrastructure.Services
 {
 	public class StoreService : GenericActiveService<Store, StoreDTO>, IStoreService
 	{
-		private readonly IFileServiceProvider _fileServiceProvider;
+		private readonly IFileServiceActor _fileServiceProvider;
 		public StoreService(IUnitOfWork unitOfWork, ICustomMapper mapper) : base(unitOfWork, mapper)
 		{
 		}

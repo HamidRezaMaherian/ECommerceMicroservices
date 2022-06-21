@@ -5,17 +5,17 @@ using System.Linq.Expressions;
 
 namespace FileActor.Internal
 {
-	public abstract class FileActorConfigurable<T> : IFileActorConfigurable
+	public abstract class FileActorConfigurable<T> : IFileActorConfigurable where T : class
 	{
-		private IDictionary<string, ObjectStreamConfigProxy> _configurations = new ConcurrentDictionary<string, ObjectStreamConfigProxy>();
-		protected ObjectStreamConfigProxy StreamFor<TProperty>(Expression<Func<T, TProperty>> exp)
+		private IDictionary<string, ObjectStreamConfigProxy<T>> _configurations = new ConcurrentDictionary<string, ObjectStreamConfigProxy<T>>();
+		protected ObjectStreamConfigProxy<T> StreamFor<TProperty>(Expression<Func<T, TProperty>> exp)
 		{
 			var propertyName = exp.GetMember().Name;
-			var info = new ObjectStreamConfigProxy(propertyName);
+			var info = new ObjectStreamConfigProxy<T>(propertyName);
 			_configurations.TryAdd(propertyName, info);
 			return info;
 		}
-		public ObjectStreamConfiguration GetInfo<TProperty>(Expression<Func<T, TProperty>> exp)
+		public ObjectStreamConfiguration<T> GetInfo<TProperty>(Expression<Func<T, TProperty>> exp)
 		{
 			return _configurations[exp.GetMember().Name] ?? default;
 		}
@@ -26,7 +26,7 @@ namespace FileActor.Internal
 
 		public ObjectStreamConfiguration GetInfo(string property)
 		{
-			return _configurations[property] ?? default;
+			return (_configurations[property] ?? default);
 		}
 	}
 
