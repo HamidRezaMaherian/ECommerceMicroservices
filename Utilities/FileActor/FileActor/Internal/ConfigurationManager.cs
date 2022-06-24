@@ -17,7 +17,10 @@ namespace FileActor.Internal
 			 .Select(i =>
 			 {
 				 var attr = i.GetCustomAttribute<FileActionAttribute>();
-				 return new FileStreamInfo(i.GetValue(obj), attr?.Path, attr?.TargetPropertyName);
+				 return new FileStreamInfo(
+					 obj.GetType().GetProperty(attr.FileProperty).GetValue(obj),
+					 attr?.Path, 
+					 i.Name);
 			 });
 		}
 
@@ -28,7 +31,7 @@ namespace FileActor.Internal
 				var member = exp.GetMember();
 				var propertyInfo = typeof(T).GetProperty(member.Name);
 				var attr = propertyInfo?.GetCustomAttribute<FileActionAttribute>();
-				return new FileStreamInfo(propertyInfo.GetValue(obj), attr?.Path, attr?.TargetPropertyName);
+				return new FileStreamInfo(propertyInfo?.GetValue(obj), attr?.Path, propertyInfo.Name);
 			}
 			catch (Exception e)
 			{
@@ -42,7 +45,7 @@ namespace FileActor.Internal
 			{
 				var propertyInfo = typeof(T).GetProperty(propertyName);
 				var attr = propertyInfo?.GetCustomAttribute<FileActionAttribute>();
-				return new FileStreamInfo(propertyInfo.GetValue(obj), attr?.Path, attr?.TargetPropertyName);
+				return new FileStreamInfo(propertyInfo?.GetValue(obj), attr?.Path, propertyInfo.Name);
 			}
 			catch (Exception e)
 			{

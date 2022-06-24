@@ -5,10 +5,10 @@ namespace FileActor
 	public class FileActionAttribute : Attribute
 	{
 		public string Path { get; set; }
-		public string TargetPropertyName { get; set; }
-		public FileActionAttribute(string targetProperty, string path)
+		public string FileProperty { get; set; }
+		public FileActionAttribute(string fileProperty, string path)
 		{
-			TargetPropertyName = targetProperty;
+			FileProperty = fileProperty;
 			Path = path;
 		}
 	}

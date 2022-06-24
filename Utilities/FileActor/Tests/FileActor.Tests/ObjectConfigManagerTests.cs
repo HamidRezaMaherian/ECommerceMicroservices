@@ -6,7 +6,7 @@ namespace FileActor.Tests
 	[TestFixture]
 	public class ObjectConfigurationManagerTests
 	{
-		private ObjectConfigManager _configManager;
+		//private ObjectConfigManager _configManager;
 		[SetUp]
 		public void SetUp()
 		{

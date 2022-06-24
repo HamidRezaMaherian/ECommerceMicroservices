@@ -120,5 +120,10 @@ namespace FileActor.Abstract
 		/// <param name="exp">property expression</param>
 		/// <param name="obj">given object</param>
 		Task DeleteAsync<T, TProperty>(Expression<Func<T, TProperty>> exp, T obj);
+
+		void ReplaceAll<T>(T obj);
+		Task ReplaceAllAsync<T>(T obj);
+		void Replace<T,TProperty>(Expression<Func<T, TProperty>> exp, T obj);
+		Task ReplaceAsync<T, TProperty>(Expression<Func<T, TProperty>> exp, T obj);
 	}
 }
