@@ -6,7 +6,7 @@ using UI.Domain.Entities;
 
 namespace UI.Infrastructure.Services
 {
-	public class FaqCategoryService : GenericActiveService<FaqCategory, FaqCategoryDTO>, IFaqCategoryService
+	public class FaqCategoryService : GenericActiveService<string,FaqCategory, FaqCategoryDTO>, IFaqCategoryService
 	{
 		public FaqCategoryService(IUnitOfWork unitOfWork, ICustomMapper mapper) : base(unitOfWork, mapper)
 		{

@@ -8,11 +8,11 @@ public class ServiceMapper : Profile
 {
 	public ServiceMapper()
 	{
-		CreateMap<SliderDTO, Slider>().ReverseMap();
-		CreateMap<SocialMediaDTO, SocialMedia>().ReverseMap();
-		CreateMap<FaqDTO, FAQ>().ReverseMap();
-		CreateMap<FaqCategoryDTO, FaqCategory>().ReverseMap();
-		CreateMap<AboutUsDTO, AboutUs>().ReverseMap();
-		CreateMap<ContactUsDTO, ContactUs>().ReverseMap();
+		CreateMap<SliderDTO, Slider>().ForMember(i=>i.ImagePath,opt=>opt.Ignore());
+		CreateMap<SocialMediaDTO, SocialMedia>().ForMember(i => i.ImagePath, opt => opt.Ignore());
+		CreateMap<FaqDTO, FAQ>();
+		CreateMap<FaqCategoryDTO, FaqCategory>();
+		CreateMap<AboutUsDTO, AboutUs>();
+		CreateMap<ContactUsDTO, ContactUs>();
 	}
 }

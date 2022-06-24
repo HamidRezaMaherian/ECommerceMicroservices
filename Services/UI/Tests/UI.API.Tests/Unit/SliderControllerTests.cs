@@ -9,6 +9,8 @@ using static UI.API.Tests.Utils.TestUtilsExtension;
 using Microsoft.AspNetCore.Http;
 using System.Text;
 using System.IO;
+using UI.Application.Tools;
+using UI.API.Tests.Utils;
 
 namespace UI.API.Tests.Unit
 {
@@ -16,11 +18,13 @@ namespace UI.API.Tests.Unit
 	public class SliderControllerTests
 	{
 		private ISliderService _sliderervice;
+		private ICustomMapper _customMapper;
 		private SliderController _sliderController;
 		[OneTimeSetUp]
 		public void OneTimeSetUp()
 		{
 			var _sliders = new List<Slider>();
+			_customMapper = CreateMapper(new TestMapperProfile());
 			_sliderervice = MockAction<Slider, Application.DTOs.SliderDTO>
 				.MockServie<ISliderService>(_sliders).Object;
 			_sliderController = new SliderController(_sliderervice);
@@ -46,7 +50,7 @@ namespace UI.API.Tests.Unit
 		[Test]
 		public void Update_PasValidEntity_UpdateSlider()
 		{
-			var slider = CreateSlider();
+			var slider = _customMapper.Map<UpdateSliderDTO>(CreateSlider());
 			slider.Title = "updatedTest";
 			_sliderController.Update(slider);
 
@@ -80,16 +84,16 @@ namespace UI.API.Tests.Unit
 			return file;
 		}
 
-		private UpdateSliderDTO CreateSlider()
+		private Slider CreateSlider()
 		{
-			var slider = new UpdateSliderDTO()
+			var slider = new CreateSliderDTO()
 			{
 				ImagePath = "no image",
 				Title = "no title",
 				IsActive = true
 			};
 			_sliderervice.Add(slider);
-			return slider;
+			return _sliderervice.GetById(slider.Id);
 		}
 		#endregion
 	}

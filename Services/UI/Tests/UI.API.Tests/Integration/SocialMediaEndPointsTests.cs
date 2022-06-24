@@ -5,8 +5,10 @@ using NUnit.Framework;
 using Services.Shared.APIUtils;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net;
+using UI.API.Configurations.DTOs;
 using UI.API.Tests.Utils;
 using UI.Application.Configurations;
 using UI.Application.DTOs;
@@ -30,7 +32,7 @@ namespace UI.API.Tests.Integration
 		{
 			_mongoDbRunner = MongoDbRunner.Start();
 			var db = MockActions.MockDbContext(_mongoDbRunner);
-			_mapper = TestUtilsExtension.CreateMapper(new PersistMapperProfile(), new ServiceMapper());
+			_mapper = TestUtilsExtension.CreateMapper(new PersistMapperProfile(), new ServiceMapper(), new TestMapperProfile());
 			_unitOfWork = MockActions.MockUnitOfWork(db, _mapper);
 
 			var httpClient = new TestingWebAppFactory<Program>(s =>
@@ -72,10 +74,11 @@ namespace UI.API.Tests.Integration
 		[Test]
 		public void Create_PassValidObject_AddObject()
 		{
-			var socialMedia = new SocialMediaDTO()
+			var socialMedia = new CreateSocialMediaDTO()
 			{
 				Name = Guid.NewGuid().ToString(),
 				Link = "no link",
+				Image=MockFormFile(),
 				ImagePath = "no image",
 				IsActive = true,
 			};
@@ -88,7 +91,7 @@ namespace UI.API.Tests.Integration
 		[Test]
 		public void Create_PassInvalidObject_ReturnBadRequest()
 		{
-			var socialMedia = new SocialMediaDTO()
+			var socialMedia = new CreateSocialMediaDTO()
 			{
 				Name = Guid.NewGuid().ToString(),
 			};
@@ -102,8 +105,7 @@ namespace UI.API.Tests.Integration
 			var socialMedia = CreateSocialMedia();
 			socialMedia.Name = "updated-test";
 			var res = _httpClient.Put("/socialMedia/update", socialMedia);
-			var updatedSocialMedia = _mapper.Map<SocialMediaDTO>(
-				_unitOfWork.SocialMediaRepo.Get(socialMedia.Id));
+			var updatedSocialMedia = _unitOfWork.SocialMediaRepo.Get(socialMedia.Id);
 
 			Assert.AreEqual(HttpStatusCode.OK, res.StatusCode);
 			Assert.AreEqual(updatedSocialMedia.Name, socialMedia.Name);
@@ -117,8 +119,7 @@ namespace UI.API.Tests.Integration
 			{
 				socialMedia.Id,
 			});
-			var updatedSocialMedia = _mapper.Map<SocialMediaDTO>(
-				_unitOfWork.SocialMediaRepo.Get(socialMedia.Id));
+			var updatedSocialMedia = _unitOfWork.SocialMediaRepo.Get(socialMedia.Id);
 
 			Assert.AreEqual(HttpStatusCode.BadRequest, res.StatusCode);
 			Assert.AreNotEqual(updatedSocialMedia.Name, socialMedia.Name);
@@ -139,6 +140,11 @@ namespace UI.API.Tests.Integration
 			Assert.AreEqual(HttpStatusCode.NotFound, res.StatusCode);
 		}
 		#region HelperMethods
+		private string MockFormFile()
+		{
+			var file = File.ReadAllBytes(@"H:\Downloads\Picture\Slider\wallhaven-9m7zx1.jpg");
+			return Convert.ToBase64String(file);
+		}
 		private SocialMedia CreateSocialMedia()
 		{
 			var socialMedia = new SocialMedia()

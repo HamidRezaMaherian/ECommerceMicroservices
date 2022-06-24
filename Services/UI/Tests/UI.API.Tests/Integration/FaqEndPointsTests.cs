@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using UI.API.Configurations.DTOs;
 using UI.API.Tests.Utils;
 using UI.Application.Configurations;
 using UI.Application.DTOs;
@@ -30,7 +31,7 @@ namespace UI.API.Tests.Integration
 		{
 			_mongoDbRunner = MongoDbRunner.Start();
 			var db = MockActions.MockDbContext(_mongoDbRunner);
-			_mapper = TestUtilsExtension.CreateMapper(new PersistMapperProfile(), new ServiceMapper());
+			_mapper = TestUtilsExtension.CreateMapper(new PersistMapperProfile(), new ServiceMapper(), new TestMapperProfile());
 			_unitOfWork = MockActions.MockUnitOfWork(db, _mapper);
 
 			var httpClient = new TestingWebAppFactory<Program>(s =>
@@ -72,7 +73,7 @@ namespace UI.API.Tests.Integration
 		[Test]
 		public void Create_PassValidObject_AddObject()
 		{
-			var faq = new FaqDTO()
+			var faq = new CreateFaqDTO()
 			{
 				Question = "no q",
 				Answer = "no a",
@@ -89,7 +90,7 @@ namespace UI.API.Tests.Integration
 		[Test]
 		public void Create_PassInvalidObject_ReturnBadRequest()
 		{
-			var faq = new FaqDTO()
+			var faq = new CreateFaqDTO()
 			{
 				Question = "no q",
 				IsActive = true,
@@ -101,10 +102,10 @@ namespace UI.API.Tests.Integration
 		[Test]
 		public void Update_PassValidObject_UpdateObject()
 		{
-			var faq = CreateFaq();
+			var faq = _mapper.Map<UpdateFaqDTO>(CreateFaq());
 			faq.Question = "updated-test";
 			var res = _httpClient.Put("/faq/update", faq);
-			var updatedFaq = _mapper.Map<FaqDTO>(_unitOfWork.FaqRepo.Get(faq.Id));
+			var updatedFaq = _unitOfWork.FaqRepo.Get(faq.Id);
 
 			Assert.AreEqual(HttpStatusCode.OK, res.StatusCode);
 			Assert.AreEqual(updatedFaq.Question, faq.Question);
@@ -112,13 +113,13 @@ namespace UI.API.Tests.Integration
 		[Test]
 		public void Update_PassInvalidObject_ReturnBadRequest()
 		{
-			var faq = CreateFaq();
+			var faq = _mapper.Map<UpdateFaqDTO>(CreateFaq());
 			faq.Question = "updated-title";
 			var res = _httpClient.Put("/faq/update", new
 			{
 				faq.Id,
 			});
-			var updatedFaq = _mapper.Map<FaqDTO>(_unitOfWork.FaqRepo.Get(faq.Id));
+			var updatedFaq = _unitOfWork.FaqRepo.Get(faq.Id);
 
 			Assert.AreEqual(HttpStatusCode.BadRequest, res.StatusCode);
 			Assert.AreNotEqual(updatedFaq.Question, faq.Question);
@@ -139,7 +140,7 @@ namespace UI.API.Tests.Integration
 			Assert.AreEqual(HttpStatusCode.NotFound, res.StatusCode);
 		}
 		#region HelperMethods
-		private FaqDTO CreateFaq()
+		private FAQ CreateFaq()
 		{
 			var faq = new FAQ()
 			{
@@ -149,7 +150,7 @@ namespace UI.API.Tests.Integration
 				Answer = "no a"
 			};
 			_unitOfWork.FaqRepo.Add(faq);
-			return _mapper.Map<FaqDTO>(faq);
+			return faq;
 		}
 		private FaqCategory CreateCategory()
 		{

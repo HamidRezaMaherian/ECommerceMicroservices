@@ -1,7 +1,6 @@
 ﻿namespace UI.Application.DTOs;
-public class FaqCategoryDTO
+public abstract class FaqCategoryDTO:BaseDTO<string>
 {
-	public string Id { get; set; }
-	public string Name { get; set; }
-	public bool IsActive { get; set; }
+	public virtual string Name { get; set; }
+	public virtual bool IsActive { get; set; }
 }

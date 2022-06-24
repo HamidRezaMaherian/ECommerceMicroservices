@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Services.Shared.Resources;
-using UI.Application.DTOs;
+using UI.API.Configurations.DTOs;
 using UI.Application.Services;
 using UI.Domain.Entities;
 
@@ -23,13 +23,13 @@ namespace UI.API.Controllers
 			return _faqCategoryService.GetAll().ToList();
 		}
 		[HttpPost]
-		public IActionResult Create([FromBody] FaqCategoryDTO faqCategory)
+		public IActionResult Create([FromBody] CreateFaqCategoryDTO faqCategory)
 		{
 			_faqCategoryService.Add(faqCategory);
-			return Created("",faqCategory);
+			return Created("", faqCategory);
 		}
 		[HttpPut]
-		public IActionResult Update([FromBody] FaqCategoryDTO faqCategory)
+		public IActionResult Update([FromBody] UpdateFaqCategoryDTO faqCategory)
 		{
 			_faqCategoryService.Update(faqCategory);
 			return Ok(string.Format(Messages.SUCCEDED, "UPDATE"));

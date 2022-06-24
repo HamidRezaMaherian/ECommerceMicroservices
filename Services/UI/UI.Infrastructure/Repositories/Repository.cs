@@ -12,7 +12,7 @@ using UI.Infrastructure.Persist.DAOs;
 namespace UI.Infrastructure.Repositories
 {
 	public abstract class Repository<T, TDAO> : IRepository<T>
-		where T : EntityPrimaryBase<string>
+		where T :EntityPrimaryBase<string>
 		where TDAO : EntityPrimaryBaseDAO<string>
 	{
 		protected readonly ApplicationDbContext _db;
@@ -56,7 +56,7 @@ namespace UI.Infrastructure.Repositories
 		{
 			try
 			{
-				var result = _dbCollection.DeleteOne(i => i.Id == entity.Id.ToString());
+				var result = _dbCollection.DeleteOne(i => i.Id == entity.Id);
 				if (result.DeletedCount == 0)
 				{
 					throw new DeleteOperationException("Id Not Exist");
@@ -121,7 +121,8 @@ namespace UI.Infrastructure.Repositories
 			ArgumentNullException.ThrowIfNull(id);
 			try
 			{
-				return _mapper.Map<T>(_dbCollection.AsQueryable().FirstOrDefault(i => i.Id == id.ToString()));
+				return _mapper.Map<T>(_dbCollection.AsQueryable()
+					.FirstOrDefault(i => i.Id == id.ToString().Replace("-","").Substring(0,24)));
 			}
 			catch (Exception e)
 			{

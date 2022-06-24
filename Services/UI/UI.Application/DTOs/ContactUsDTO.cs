@@ -1,5 +1,5 @@
 ﻿namespace UI.Application.DTOs;
-public class ContactUsDTO
+public abstract class ContactUsDTO
 {
 	//public string Id { get; set; }
 	public string Address { get; set; }

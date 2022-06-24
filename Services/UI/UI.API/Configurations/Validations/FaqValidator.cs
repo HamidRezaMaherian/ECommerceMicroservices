@@ -2,21 +2,32 @@
 using FluentValidation.AspNetCore;
 using FluentValidation.Results;
 using Microsoft.AspNetCore.Mvc;
+using UI.API.Configurations.DTOs;
 using UI.Application.DTOs;
 using UI.Application.UnitOfWork;
 
 namespace UI.API.Configurations.Validations
 {
-	public class FaqValidator : AbstractValidator<FaqDTO>, IValidatorInterceptor
+	public class CreateFaqValidator : AbstractValidator<CreateFaqDTO>
 	{
-		public FaqValidator(IUnitOfWork unitOfWork)
+		public CreateFaqValidator(IUnitOfWork unitOfWork)
 		{
-			RuleSet("update-model", () =>
+			RuleFor(i => i.Id).Null().Empty();
+			RuleFor(i => i.Question).NotEmpty().NotNull();
+			RuleFor(i => i.Answer).NotNull();
+			RuleFor(i => i.CategoryId).Must(categoryId =>
 			{
-				RuleFor(i => i.Id).NotNull().Must(id =>
-				{
-					return unitOfWork.FaqRepo.Exists(i => i.Id == id);
-				});
+				return unitOfWork.FaqCategoryRepo.Exists(i => i.Id == categoryId);
+			});
+		}
+	}
+	public class UpdateFaqValidator : AbstractValidator<UpdateFaqDTO>
+	{
+		public UpdateFaqValidator(IUnitOfWork unitOfWork)
+		{
+			RuleFor(i => i.Id).NotNull().Must(id =>
+			{
+				return unitOfWork.FaqRepo.Exists(i => i.Id == id);
 			});
 			RuleFor(i => i.Question).NotEmpty().NotNull();
 			RuleFor(i => i.Answer).NotNull();
@@ -25,24 +36,5 @@ namespace UI.API.Configurations.Validations
 				return unitOfWork.FaqCategoryRepo.Exists(i => i.Id == categoryId);
 			});
 		}
-		public ValidationResult AfterAspNetValidation(ActionContext actionContext, IValidationContext validationContext, ValidationResult result)
-		{
-			if (actionContext.HttpContext.Request.Method.ToLower() == HttpMethod.Put.Method.ToLower())
-			{
-				var updateModelRes = this.Validate(validationContext.InstanceToValidate as FaqDTO,
-				(opt) =>
-				{
-					opt.IncludeRuleSets("update-model");
-				});
-				result.Errors.AddRange(updateModelRes.Errors);
-			}
-			return result;
-		}
-
-		public IValidationContext BeforeAspNetValidation(ActionContext actionContext, IValidationContext commonContext)
-		{
-			return commonContext;
-		}
-
 	}
 }

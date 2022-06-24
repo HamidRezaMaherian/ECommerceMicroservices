@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using Mongo2Go;
 using MongoDB.Driver;
 using NUnit.Framework;
@@ -9,7 +8,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
-using System.Text;
 using UI.API.Configurations.DTOs;
 using UI.API.Tests.Utils;
 using UI.Application.Configurations;
@@ -34,7 +32,7 @@ namespace UI.API.Tests.Integration
 		{
 			_mongoDbRunner = MongoDbRunner.Start();
 			var db = MockActions.MockDbContext(_mongoDbRunner);
-			_mapper = TestUtilsExtension.CreateMapper(new PersistMapperProfile(), new ServiceMapper());
+			_mapper = TestUtilsExtension.CreateMapper(new PersistMapperProfile(), new ServiceMapper(), new TestMapperProfile());
 			_unitOfWork = MockActions.MockUnitOfWork(db, _mapper);
 
 			var httpClient = new TestingWebAppFactory<Program>(s =>
@@ -100,11 +98,10 @@ namespace UI.API.Tests.Integration
 		[Test]
 		public void Update_PassValidObject_UpdateObject()
 		{
-			var slider = CreateSlider();
+			var slider = _mapper.Map<UpdateSliderDTO>(CreateSlider());
 			slider.Title = "updated-test";
 			var res = _httpClient.Put("/slider/update", slider);
-			var updatedSlider = _mapper.Map<CreateSliderDTO>(
-				_unitOfWork.SliderRepo.Get(slider.Id));
+			var updatedSlider = _unitOfWork.SliderRepo.Get(slider.Id);
 
 			Assert.AreEqual(HttpStatusCode.OK, res.StatusCode);
 			Assert.AreEqual(updatedSlider.Title, slider.Title);
@@ -112,14 +109,13 @@ namespace UI.API.Tests.Integration
 		[Test]
 		public void Update_PassInvalidObject_ReturnBadRequest()
 		{
-			var slider = CreateSlider();
+			var slider = _mapper.Map<UpdateSliderDTO>(CreateSlider());
 			slider.Title = "updated-title";
 			var res = _httpClient.Put("/slider/update", new
 			{
 				slider.Id,
 			});
-			var updatedSlider = _mapper.Map<CreateSliderDTO>(
-				_unitOfWork.SliderRepo.Get(slider.Id));
+			var updatedSlider = _unitOfWork.SliderRepo.Get(slider.Id);
 
 			Assert.AreEqual(HttpStatusCode.BadRequest, res.StatusCode);
 			Assert.AreNotEqual(updatedSlider.Title, slider.Title);
@@ -154,7 +150,7 @@ namespace UI.API.Tests.Integration
 			var fakeId = Guid.NewGuid().ToString();
 			var res = _httpClient.Get($"/slider/get/{fakeId}");
 
-			Assert.AreEqual(HttpStatusCode.NotFound,res.StatusCode);
+			Assert.AreEqual(HttpStatusCode.NotFound, res.StatusCode);
 		}
 		#region HelperMethods
 		private string MockFormFile()
@@ -162,7 +158,7 @@ namespace UI.API.Tests.Integration
 			var file = File.ReadAllBytes(@"H:\Downloads\Picture\Slider\wallhaven-9m7zx1.jpg");
 			return Convert.ToBase64String(file);
 		}
-		private Application.DTOs.SliderDTO CreateSlider()
+		private Slider CreateSlider()
 		{
 			var slider = new Slider()
 			{
@@ -171,7 +167,7 @@ namespace UI.API.Tests.Integration
 				IsActive = true
 			};
 			_unitOfWork.SliderRepo.Add(slider);
-			return _mapper.Map<Application.DTOs.SliderDTO>(slider);
+			return slider;
 		}
 		#endregion
 	}

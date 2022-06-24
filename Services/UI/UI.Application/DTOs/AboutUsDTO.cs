@@ -1,5 +1,5 @@
 ﻿namespace UI.Application.DTOs;
-public class AboutUsDTO
+public abstract class AboutUsDTO
 {
 	public string Title { get; set; }
 	public string ShortDesc { get; set; }

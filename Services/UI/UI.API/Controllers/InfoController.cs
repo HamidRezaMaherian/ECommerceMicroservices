@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Services.Shared.Resources;
-using UI.Application.DTOs;
+using UI.API.Configurations.DTOs;
 using UI.Application.Services;
 using UI.Domain.Entities;
 
@@ -29,13 +28,13 @@ namespace UI.API.Controllers
 			return _contactUsService.FirstOrDefault();
 		}
 		[HttpPut("aboutus")]
-		public IActionResult UpdateAboutUs(AboutUsDTO aboutUs)
+		public IActionResult UpdateAboutUs(UpdateAboutUsDTO aboutUs)
 		{
 			_aboutUsService.Update(aboutUs);
 			return Ok();
 		}
 		[HttpPut("contactus")]
-		public IActionResult UpdateContactUs(ContactUsDTO contactUs)
+		public IActionResult UpdateContactUs(UpdateContactUsDTO contactUs)
 		{
 			_contactUsService.Update(contactUs);
 			return Ok();

@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Services.Shared.Resources;
+using UI.API.Configurations.DTOs;
 using UI.Application.DTOs;
 using UI.Application.Services;
 using UI.Domain.Entities;
@@ -22,13 +23,13 @@ namespace UI.API.Controllers
 			return _socialMediaService.GetAll().ToList();
 		}
 		[HttpPost]
-		public IActionResult Create([FromBody]SocialMediaDTO socialMedia)
+		public IActionResult Create([FromBody]CreateSocialMediaDTO socialMedia)
 		{
 			_socialMediaService.Add(socialMedia);
 			return Created("",socialMedia);
 		}
 		[HttpPut]
-		public IActionResult Update([FromBody] SocialMediaDTO socialMedia)
+		public IActionResult Update([FromBody] UpdateSocialMediaDTO socialMedia)
 		{
 			_socialMediaService.Update(socialMedia);
 			return Ok(string.Format(Messages.SUCCEDED, "UPDATE"));

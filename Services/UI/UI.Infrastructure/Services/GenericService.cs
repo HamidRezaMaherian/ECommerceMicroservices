@@ -1,5 +1,6 @@
 ﻿using Services.Shared.AppUtils;
 using System.Linq.Expressions;
+using UI.Application.DTOs;
 using UI.Application.Repositories;
 using UI.Application.Services;
 using UI.Application.Tools;
@@ -8,7 +9,9 @@ using UI.Domain.Common;
 
 namespace UI.Infrastructure.Services
 {
-	public abstract class GenericBaseService<T, Tdto> : IBaseService<T, Tdto> where T : class
+	public abstract class GenericBaseService<Tid,T, Tdto> : IBaseService<T, Tdto> 
+		where T : EntityPrimaryBase<Tid>
+		where Tdto : BaseDTO<Tid>
 	{
 		protected readonly IRepository<T> _repo;
 		protected readonly ICustomMapper _mapper;
@@ -24,28 +27,15 @@ namespace UI.Infrastructure.Services
 		{
 			return _repo.Get(id);
 		}
-		public virtual TypeDTO GetById<TypeDTO>(object id) where TypeDTO : class
-		{
-			var modelDTO = _mapper.Map<TypeDTO>(GetById(id));
-			return modelDTO;
-		}
 
 		public virtual T FirstOrDefault()
 		{
 			return _repo.Get().FirstOrDefault();
 		}
-		public virtual TypeDTO FirstOrDefault<TypeDTO>() where TypeDTO : class
-		{
-			return _mapper.Map<TypeDTO>(FirstOrDefault());
-		}
 
 		public virtual IEnumerable<T> GetAll()
 		{
 			return _repo.Get().ToList();
-		}
-		public virtual IEnumerable<TypeDTO> GetAll<TypeDTO>() where TypeDTO : class
-		{
-			return _mapper.Map<IEnumerable<TypeDTO>>(GetAll());
 		}
 		public virtual IEnumerable<T> GetAll(Expression<Func<T, bool>> condition)
 		{
@@ -64,13 +54,13 @@ namespace UI.Infrastructure.Services
 		{
 			var entity = _mapper.Map<T>(entityDTO);
 			_repo.Add(entity);
-			_mapper.Map(entity,entityDTO);
+			entityDTO.Id = entity.Id;
 		}
 		public virtual void Update(Tdto entityDTO)
 		{
-			var entity = _mapper.Map<T>(entityDTO);
+			var entity = _repo.Get(entityDTO.Id);
+		   _mapper.Map(entityDTO, entity);
 			_repo.Update(entity);
-			_mapper.Map(entity, entityDTO);
 		}
 
 		public virtual void Delete(object id)
@@ -84,7 +74,9 @@ namespace UI.Infrastructure.Services
 		}
 
 	}
-	public abstract class GenericActiveService<T, Tdto> : GenericBaseService<T, Tdto>, IBaseActiveService<T, Tdto> where T : class, IBaseActive
+	public abstract class GenericActiveService<Tid,T, Tdto> : GenericBaseService<Tid,T, Tdto>, IBaseActiveService<T, Tdto>
+		where T : EntityPrimaryBase<Tid>, IBaseActive
+		where Tdto : BaseDTO<Tid>
 	{
 		public GenericActiveService(IUnitOfWork unitOfWork, ICustomMapper mapper) : base(unitOfWork, mapper) { }
 
@@ -94,20 +86,12 @@ namespace UI.Infrastructure.Services
 				_repo.Get().Where(i => i.IsActive).ToList()
 				;
 		}
-		public virtual IEnumerable<TypeDTO> GetAllActive<TypeDTO>() where TypeDTO : class
-		{
-			return _mapper.Map<IEnumerable<TypeDTO>>(GetAllActive());
-		}
 		public virtual IEnumerable<T> GetAllActive(Expression<Func<T, bool>> condition)
 		{
 			return _repo.Get(new QueryParams<T>()
 			{
 				Expression = ExpressionHelper.And(i => i.IsActive, condition)
 			});
-		}
-		public virtual IEnumerable<TypeDTO> GetAllActive<TypeDTO>(Expression<Func<T, bool>> condition) where TypeDTO : class
-		{
-			return _mapper.Map<IEnumerable<TypeDTO>>(GetAllActive(condition));
 		}
 	}
 }

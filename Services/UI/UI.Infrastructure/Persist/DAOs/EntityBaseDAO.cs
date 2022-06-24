@@ -16,7 +16,7 @@ namespace UI.Infrastructure.Persist.DAOs
 	{
 		[BsonId]
 		[BsonRepresentation(MongoDB.Bson.BsonType.ObjectId)]
-		public virtual T Id { get; set; }
+		public T Id { get; set; }
 	}
 	public abstract class EntityBaseDAO<T> : EntityPrimaryBaseDAO<T>, IBaseActive, IBaseDelete
 	{

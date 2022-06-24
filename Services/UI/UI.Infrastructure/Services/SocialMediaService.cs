@@ -7,11 +7,17 @@ using UI.Domain.Entities;
 
 namespace UI.Infrastructure.Services
 {
-	public class SocialMediaService : GenericActiveService<SocialMedia, SocialMediaDTO>, ISocialMediaService
+	public class SocialMediaService : GenericActiveService<string,SocialMedia, SocialMediaDTO>, ISocialMediaService
 	{
 		private readonly IFileServiceActor _fileServiceProvider;
-		public SocialMediaService(IUnitOfWork unitOfWork, ICustomMapper mapper) : base(unitOfWork, mapper)
+		private readonly IObjectMocker<SocialMedia,SocialMediaDTO> _objectMocker;
+		public SocialMediaService(IUnitOfWork unitOfWork,
+			ICustomMapper mapper,
+			IFileServiceActor fileServiceProvider,
+			IObjectMocker<SocialMedia, SocialMediaDTO> objectMocker) : base(unitOfWork, mapper)
 		{
+			_fileServiceProvider = fileServiceProvider;
+			_objectMocker = objectMocker;
 		}
 		public override void Add(SocialMediaDTO entityDTO)
 		{
@@ -23,7 +29,7 @@ namespace UI.Infrastructure.Services
 			var obj = _repo.Get(id);
 			if (obj != null)
 			{
-				_fileServiceProvider.DeleteAll(obj);
+				_fileServiceProvider.DeleteAll(_objectMocker.MockObject(obj));
 				_repo.Delete(obj);
 			}
 		}

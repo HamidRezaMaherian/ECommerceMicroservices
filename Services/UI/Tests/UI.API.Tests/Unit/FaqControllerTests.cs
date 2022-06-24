@@ -2,9 +2,12 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using UI.API.Configurations.DTOs;
 using UI.API.Controllers;
+using UI.API.Tests.Utils;
 using UI.Application.DTOs;
 using UI.Application.Services;
+using UI.Application.Tools;
 using UI.Domain.Entities;
 using static UI.API.Tests.Utils.TestUtilsExtension;
 
@@ -14,11 +17,13 @@ namespace UI.API.Tests.Unit
 	public class FaqControllerTests
 	{
 		private IFaqService _faqService;
+		private ICustomMapper _customMapper;
 		private FaqController _faqController;
 		[OneTimeSetUp]
 		public void OneTimeSetUp()
 		{
 			var _faqs = new List<FAQ>();
+			_customMapper = CreateMapper(new TestMapperProfile());
 			_faqService = MockAction<FAQ, FaqDTO>
 				.MockServie<IFaqService>(_faqs).Object;
 			_faqController = new FaqController(_faqService);
@@ -33,7 +38,7 @@ namespace UI.API.Tests.Unit
 		[Test]
 		public void Create_PasValidEntity_AddFaq()
 		{
-			var faq = new FaqDTO()
+			var faq = new CreateFaqDTO()
 			{
 				CategoryId = Guid.NewGuid().ToString(),
 				Question = "no q",
@@ -46,7 +51,7 @@ namespace UI.API.Tests.Unit
 		[Test]
 		public void Update_PasValidEntity_UpdateFaq()
 		{
-			var faq = CreateFaq();
+			var faq = _customMapper.Map<UpdateFaqDTO>(CreateFaq());
 			faq.Question = "updatedQuestion";
 			_faqController.Update(faq);
 
@@ -61,9 +66,9 @@ namespace UI.API.Tests.Unit
 			Assert.IsFalse(_faqService.Exists(i => i.Id == faq.Id));
 		}
 		#region HelperMethods
-		private FaqDTO CreateFaq()
+		private FAQ CreateFaq()
 		{
-			var faq = new FaqDTO()
+			var faq = new CreateFaqDTO()
 			{
 				CategoryId = Guid.NewGuid().ToString(),
 				Question = "no q",
@@ -71,7 +76,7 @@ namespace UI.API.Tests.Unit
 				IsActive = true
 			};
 			_faqService.Add(faq);
-			return faq;
+			return _faqService.GetById(faq.Id);
 		}
 		#endregion
 	}

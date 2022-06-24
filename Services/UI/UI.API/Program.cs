@@ -24,7 +24,7 @@ public class Program
 
 		builder.Services.AddFileActor()
 			.AddInMemoryContainer()
-			.AddAttributeConfiguration()
+			.AddObjectConfigurations(Assembly.GetAssembly(typeof(UI.Application.DTOs.SliderDTO)))
 			.AddLocalActor("lc", builder.Environment.WebRootPath);
 
 		var app = builder.Build();

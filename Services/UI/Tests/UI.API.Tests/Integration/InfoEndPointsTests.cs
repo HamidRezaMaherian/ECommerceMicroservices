@@ -5,9 +5,9 @@ using NUnit.Framework;
 using Services.Shared.APIUtils;
 using System.Linq;
 using System.Net;
+using UI.API.Configurations.DTOs;
 using UI.API.Tests.Utils;
 using UI.Application.Configurations;
-using UI.Application.DTOs;
 using UI.Application.Tools;
 using UI.Application.UnitOfWork;
 using UI.Domain.Entities;
@@ -25,7 +25,7 @@ namespace UI.API.Tests.Integration
 		[OneTimeSetUp]
 		public void OneTimeSetUp()
 		{
-			_mapper = TestUtilsExtension.CreateMapper(new PersistMapperProfile(), new ServiceMapper());
+			_mapper = TestUtilsExtension.CreateMapper(new PersistMapperProfile(), new ServiceMapper(), new TestMapperProfile());
 			_mongoDbRunner = MongoDbRunner.Start();
 			var db = MockActions.MockDbContext(_mongoDbRunner);
 			_unitOfWork = MockActions.MockUnitOfWork
@@ -73,7 +73,7 @@ namespace UI.API.Tests.Integration
 		[Test]
 		public void UpdateContactUs_PassValidObject_UpdateObject()
 		{
-			var contactUs = _mapper.Map<ContactUsDTO>(
+			var contactUs = _mapper.Map<UpdateContactUsDTO>(
 				_unitOfWork.ContactUsRepo.Get().FirstOrDefault()
 				);
 			contactUs.Email = "updatedtest@test.com";
@@ -100,7 +100,7 @@ namespace UI.API.Tests.Integration
 		[Test]
 		public void UpdateAboutUs_PassValidObject_UpdateObject()
 		{
-			var aboutUs = _mapper.Map<AboutUsDTO>(
+			var aboutUs = _mapper.Map<UpdateAboutUsDTO>(
 				_unitOfWork.AboutUsRepo.Get().FirstOrDefault());
 			aboutUs.Title = "updatedtest";
 			var res = _httpClient.Put("/info/aboutUs/", aboutUs);
@@ -116,7 +116,7 @@ namespace UI.API.Tests.Integration
 			aboutUs.Title = "updatedtest";
 			var res = _httpClient.Put("/info/aboutUs", new
 			{
-					aboutUs.Title
+				aboutUs.Title
 			});
 			var updatedAboutUs = _unitOfWork.AboutUsRepo.Get().FirstOrDefault();
 

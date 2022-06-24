@@ -1,5 +1,4 @@
-﻿using FileActor;
-using System.Text.Json.Serialization;
+﻿using System.Text.Json.Serialization;
 
 namespace UI.API.Configurations.DTOs
 {
@@ -7,16 +6,19 @@ namespace UI.API.Configurations.DTOs
 	{
 		[JsonIgnore]
 		public override string Id { get => base.Id; set => base.Id = value; }
-		[FileAction(nameof(ImagePath), "/images")]
 		public string Image { get; set; }
 		[JsonIgnore]
 		public override string ImagePath { get => base.ImagePath; set => base.ImagePath = value; }
+		public override object GetImage() => Image;
 	}
 	public class UpdateSliderDTO : Application.DTOs.SliderDTO
 	{
-		[FileAction(nameof(ImagePath), "/images")]
 		public string Image { get; set; }
 		[JsonIgnore]
 		public override string ImagePath { get => base.ImagePath; set => base.ImagePath = value; }
+		public override object GetImage()
+		{
+			return Image;
+		}
 	}
 }

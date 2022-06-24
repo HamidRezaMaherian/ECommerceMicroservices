@@ -1,9 +1,9 @@
 ﻿namespace UI.Application.DTOs;
-public class SocialMediaDTO
+public abstract class SocialMediaDTO : BaseDTO<string>
 {
-	public virtual string Id { get; set; }
 	public virtual string Name { get; set; }
 	public virtual string Link { get; set; }
 	public virtual string ImagePath { get; set; }
 	public virtual bool IsActive { get; set; }
+	public abstract object GetImage();
 }

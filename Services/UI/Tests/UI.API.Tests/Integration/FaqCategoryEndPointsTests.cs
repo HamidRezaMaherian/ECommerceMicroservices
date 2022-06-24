@@ -7,9 +7,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using UI.API.Configurations.DTOs;
 using UI.API.Tests.Utils;
 using UI.Application.Configurations;
-using UI.Application.DTOs;
 using UI.Application.Tools;
 using UI.Application.UnitOfWork;
 using UI.Domain.Entities;
@@ -30,7 +30,7 @@ namespace UI.API.Tests.Integration
 		{
 			_mongoDbRunner = MongoDbRunner.Start();
 			var db = MockActions.MockDbContext(_mongoDbRunner);
-			_mapper = TestUtilsExtension.CreateMapper(new PersistMapperProfile(), new ServiceMapper());
+			_mapper = TestUtilsExtension.CreateMapper(new PersistMapperProfile(), new ServiceMapper(), new TestMapperProfile());
 			_unitOfWork = MockActions.MockUnitOfWork(db, _mapper);
 
 			var httpClient = new TestingWebAppFactory<Program>(s =>
@@ -78,7 +78,7 @@ namespace UI.API.Tests.Integration
 		[Test]
 		public void Create_PassValidObject_AddObject()
 		{
-			var faqCategory = new FaqCategoryDTO()
+			var faqCategory = new CreateFaqCategoryDTO()
 			{
 				Name = Guid.NewGuid().ToString(),
 				IsActive = true,
@@ -92,7 +92,7 @@ namespace UI.API.Tests.Integration
 		[Test]
 		public void Create_PassInvalidObject_ReturnBadRequest()
 		{
-			var faqCategory = new FaqCategoryDTO()
+			var faqCategory = new CreateFaqCategoryDTO()
 			{
 				IsActive = true,
 			};
@@ -103,11 +103,11 @@ namespace UI.API.Tests.Integration
 		[Test]
 		public void Update_PassValidObject_UpdateObject()
 		{
-			var faqCategory = CreateFaqCategory();
+			var faqCategory = _mapper.Map<UpdateFaqCategoryDTO>(CreateFaqCategory());
 			faqCategory.Name = "updated-test";
+
 			var res = _httpClient.Put("/faqCategory/update", faqCategory);
-			var updatedFaqCategory = _mapper.Map<FaqCategoryDTO>
-				(_unitOfWork.FaqCategoryRepo.Get(faqCategory.Id));
+			var updatedFaqCategory = _unitOfWork.FaqCategoryRepo.Get(faqCategory.Id);
 
 			Assert.AreEqual(HttpStatusCode.OK, res.StatusCode);
 			Assert.AreEqual(updatedFaqCategory.Name, faqCategory.Name);
@@ -115,13 +115,13 @@ namespace UI.API.Tests.Integration
 		[Test]
 		public void Update_PassInvalidObject_ReturnBadRequest()
 		{
-			var faqCategory = CreateFaqCategory();
+			var faqCategory = _mapper.Map<UpdateFaqCategoryDTO>(CreateFaqCategory());
 			faqCategory.Name = "updated-title";
 			var res = _httpClient.Put("/faqCategory/update", new
 			{
 				faqCategory.Id,
 			});
-			var updatedFaqCategory = _mapper.Map<FaqCategoryDTO>(_unitOfWork.FaqCategoryRepo.Get(faqCategory.Id));
+			var updatedFaqCategory = _unitOfWork.FaqCategoryRepo.Get(faqCategory.Id);
 
 			Assert.AreEqual(HttpStatusCode.BadRequest, res.StatusCode);
 			Assert.AreNotEqual(updatedFaqCategory.Name, faqCategory.Name);
@@ -142,7 +142,7 @@ namespace UI.API.Tests.Integration
 			Assert.AreEqual(HttpStatusCode.NotFound, res.StatusCode);
 		}
 		#region HelperMethods
-		private FaqCategoryDTO CreateFaqCategory()
+		private FaqCategory CreateFaqCategory()
 		{
 			var faqCategory = new FaqCategory()
 			{
@@ -150,7 +150,7 @@ namespace UI.API.Tests.Integration
 				IsActive = true
 			};
 			_unitOfWork.FaqCategoryRepo.Add(faqCategory);
-			return _mapper.Map<FaqCategoryDTO>(faqCategory);
+			return faqCategory;
 		}
 
 		#endregion

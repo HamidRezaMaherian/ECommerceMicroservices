@@ -1,9 +1,9 @@
 ﻿using FluentValidation;
-using UI.Application.DTOs;
+using UI.API.Configurations.DTOs;
 
 namespace UI.API.Configurations.Validations
 {
-	public class ContactUsValidator : AbstractValidator<ContactUsDTO>
+	public class ContactUsValidator : AbstractValidator<UpdateContactUsDTO>
 	{
 		public ContactUsValidator()
 		{
@@ -11,8 +11,6 @@ namespace UI.API.Configurations.Validations
 			RuleFor(i => i.Location).NotEmpty().NotNull();
 			RuleFor(i => i.Address).NotEmpty().NotNull();
 			RuleFor(i => i.PhoneNumber).NotEmpty().NotNull();
-			//RuleFor(i => i.Lat).NotEmpty().NotNull();
-			//RuleFor(i => i.Lng).NotEmpty().NotNull();
 		}
 	}
 }

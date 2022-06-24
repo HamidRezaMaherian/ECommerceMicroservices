@@ -1,7 +1,4 @@
 ﻿using FluentValidation;
-using FluentValidation.AspNetCore;
-using FluentValidation.Results;
-using Microsoft.AspNetCore.Mvc;
 using UI.API.Configurations.DTOs;
 using UI.Application.UnitOfWork;
 

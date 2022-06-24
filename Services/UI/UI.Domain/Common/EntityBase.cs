@@ -6,7 +6,7 @@
 	}
 	public abstract class EntityPrimaryBase<T>
 	{
-		public virtual T Id { get; set; }
+		public T Id { get; set; }
 	}
 	public abstract class EntityBase<T> : EntityPrimaryBase<T>, IBaseActive
 	{
