@@ -40,8 +40,7 @@ namespace UI.Infrastructure.IOC
 		}
 		private static void RegisterMockers(this IServiceCollection services)
 		{
-			services.AddScoped<IObjectMocker<Slider, SliderDTO>, SliderDTOMocker>();
-			services.AddScoped<IObjectMocker<SocialMedia,SocialMediaDTO>, SocialMediaDTOMocker>();
+			services.AddScoped<IObjectMocker, ObjectMocker>();
 		}
 		private static void RegisterPersistant(this IServiceCollection services)
 		{

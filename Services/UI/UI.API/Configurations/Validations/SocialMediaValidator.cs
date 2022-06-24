@@ -34,8 +34,8 @@ namespace UI.API.Configurations.Validations
 				.NotEmpty()
 				.NotNull();
 			RuleFor(i => i.ImagePath)
-				.NotEmpty()
-				.NotNull();
+				.Empty()
+				.Null();
 			RuleFor(i => i.Link)
 				.NotEmpty()
 				.NotNull();

@@ -30,6 +30,9 @@ namespace UI.API.Configurations.Validations
 			RuleFor(i => i.Title)
 				.NotEmpty()
 				.NotNull();
+			RuleFor(i => i.ImagePath)
+				.Null()
+				.Empty();
 		}
 	}
 }

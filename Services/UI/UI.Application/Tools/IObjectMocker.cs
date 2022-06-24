@@ -1,7 +1,7 @@
 ﻿namespace UI.Application.Tools
 {
-	public interface IObjectMocker<T, Tdto>
+	public interface IObjectMocker
 	{
-		Tdto MockObject(T obj);
+		T MockObject<T>() where T:class;
 	}
 }

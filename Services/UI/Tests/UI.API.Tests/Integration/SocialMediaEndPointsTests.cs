@@ -151,7 +151,6 @@ namespace UI.API.Tests.Integration
 			{
 				Name = "no name",
 				Link = "no link",
-				ImagePath = "no image",
 				IsActive = true
 			};
 			_unitOfWork.SocialMediaRepo.Add(socialMedia);
