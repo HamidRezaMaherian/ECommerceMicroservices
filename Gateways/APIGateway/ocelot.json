@@ -5,7 +5,7 @@
 			"DownstreamScheme": "http",
 			"ServiceName": "ui",
 			"UpstreamPathTemplate": "/ui/{url}",
-			"UpstreamHttpMethod": [ "Get" ]
+			"UpstreamHttpMethod": [ "Get", "Post", "Put", "Delete" ]
 		},
 		{
 			"DownstreamPathTemplate": "/{url}",
@@ -23,7 +23,7 @@
 		}
 	],
 	"GlobalConfiguration": {
-		"BaseUrl": "https://localhost:5009",
+		//"BaseUrl": "https://localhost:5009",
 		"ServiceDiscoveryProvider": {
 			"Scheme": "http",
 			"Host": "localhost",

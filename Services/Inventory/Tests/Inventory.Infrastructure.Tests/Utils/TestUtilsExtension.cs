@@ -108,10 +108,6 @@ namespace Inventory.Infrastructure.Tests.Utils
 		{
 			_mockConfigureServices = mockConfigureServices;
 		}
-		public TestingWebAppFactory()
-		{
-
-		}
 		protected override void ConfigureWebHost(IWebHostBuilder builder)
 		{
 			if (_mockConfigureServices != null)

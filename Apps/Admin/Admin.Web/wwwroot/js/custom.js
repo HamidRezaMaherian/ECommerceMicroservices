@@ -9,7 +9,7 @@ const initDropZone = (selector, targetSelector, maxFiles = 1) => {
 		addRemoveLinks: true,
 	});
 	myDropzone.on("addedfile", async (file) => {
-		var base64 = await convertToBase64(file);
+		var base64 = (await convertToBase64(file)).split(',')[1];
 		document.querySelector(targetSelector).value += base64;
 	});
 	myDropzone.on("removedfile", async (file) => {

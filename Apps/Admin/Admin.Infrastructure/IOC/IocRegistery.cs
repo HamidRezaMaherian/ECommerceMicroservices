@@ -6,6 +6,7 @@ using Admin.Infrastructure.UnitOfWork;
 using Consul;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Polly;
 
 namespace Admin.Infrastructure.Ioc
 {
@@ -19,11 +20,13 @@ namespace Admin.Infrastructure.Ioc
 			{
 				opt.Address = new Uri(configuration?["ServiceDiscovery:Address"] ?? "http://localhost:8500");
 			});
+
 			var gateWayUri = new Uri(serviceDiscoveryClient.GetRequestUriAsync("apigateway").Result);
 			serviceCollection.AddHttpClient(nameof(GatewayHttpClient), (service, opt) =>
 			 {
 				 opt.BaseAddress = gateWayUri;
-			 });
+			 }).AddTransientHttpErrorPolicy(policy => policy.WaitAndRetryAsync(3, (_) => TimeSpan.FromSeconds(10)));
+
 			serviceCollection.AddScoped<HttpClientHelper<GatewayHttpClient>>();
 			serviceCollection.AddScoped<ISliderService, SliderService>();
 			serviceCollection.AddScoped<IUIUnitOfWork>(builder =>

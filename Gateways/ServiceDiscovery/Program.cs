@@ -1,3 +1,6 @@
+using Consul;
+using Newtonsoft.Json;
+
 namespace ServiceDiscovery
 {
 	public class Program
@@ -13,6 +16,8 @@ namespace ServiceDiscovery
 			builder.Services.AddEndpointsApiExplorer();
 			builder.Services.AddSwaggerGen();
 
+			builder.Services.ConfigureConsul();
+
 			var app = builder.Build();
 
 			// Configure the HTTP request pipeline.
@@ -26,24 +31,22 @@ namespace ServiceDiscovery
 
 			app.UseAuthorization();
 
-			var summaries = new[]
+			app.MapPost("/service/register", (IConsulClient consulClient, ServiceRegisterDTO serviceRegistrationInput) =>
 			{
-				"Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-		  };
-
-			app.MapGet("/weatherforecast", (HttpContext httpContext) =>
-			{
-				var forecast = Enumerable.Range(1, 5).Select(index =>
-					new WeatherForecast
-					{
-						Date = DateTime.Now.AddDays(index),
-						TemperatureC = Random.Shared.Next(-20, 55),
-						Summary = summaries[Random.Shared.Next(summaries.Length)]
-					})
-					.ToArray();
-				return forecast;
+				var serviceRegister = JsonConvert.DeserializeObject<AgentServiceRegistration>(
+					JsonConvert.SerializeObject(serviceRegistrationInput)
+					);
+				serviceRegister.ID = $"{serviceRegister.Name}:{Guid.NewGuid()}";
+				consulClient?.Agent.ServiceDeregister(serviceRegister.ID).Wait();
+				consulClient?.Agent.ServiceRegister(serviceRegister).Wait();
 			})
-			.WithName("GetWeatherForecast");
+			.WithName("ServiceRegister");
+
+			app.MapDelete("/service/unregister/{id}", (IConsulClient consulClient,string id) =>
+			{
+				consulClient?.Agent.ServiceDeregister(id).Wait();
+			})
+			.WithName("ServiceUnregister");
 
 			app.Run();
 		}

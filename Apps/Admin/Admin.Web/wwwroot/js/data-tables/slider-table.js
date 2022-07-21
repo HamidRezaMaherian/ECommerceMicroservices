@@ -66,17 +66,10 @@ var Delete = async (id) => {
 		},
 	}).then(async function (result) {
 		if (result.value) {
-			Swal.fire({
-				text: "Deleting selected customers",
-				icon: "info",
-				buttonsStyling: false,
-				showConfirmButton: false,
-			}).then(async  () =>{
-				await $.ajax({
-					url: `/slider/delete/${id}`,
-					method: "DELETE"
-				});
-				}).then(function () {
+			var result = await $.ajax({
+				url: `/slider/delete/${id}`,
+				method: "POST",
+				success: function () {
 					Swal.fire({
 						text: "Record Deleted Successfully",
 						icon: "success",
@@ -85,8 +78,10 @@ var Delete = async (id) => {
 						customClass: {
 							confirmButton: "btn fw-bold btn-primary",
 						}
-				});
+					});
+				}
 			});
+			console.log(result);
 		}
 	});
 }
