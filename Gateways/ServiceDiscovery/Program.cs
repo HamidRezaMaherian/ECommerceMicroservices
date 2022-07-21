@@ -1,4 +1,5 @@
 using Consul;
+using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 
 namespace ServiceDiscovery
@@ -36,13 +37,13 @@ namespace ServiceDiscovery
 				var serviceRegister = JsonConvert.DeserializeObject<AgentServiceRegistration>(
 					JsonConvert.SerializeObject(serviceRegistrationInput)
 					);
-				serviceRegister.ID = $"{serviceRegister.Name}:{Guid.NewGuid()}";
+				serviceRegister.ID = $"{serviceRegister.Name}/{serviceRegister.Address}:{serviceRegister.Port}";
 				consulClient?.Agent.ServiceDeregister(serviceRegister.ID).Wait();
 				consulClient?.Agent.ServiceRegister(serviceRegister).Wait();
 			})
 			.WithName("ServiceRegister");
 
-			app.MapDelete("/service/unregister/{id}", (IConsulClient consulClient,string id) =>
+			app.MapDelete("/service/unregister/{id}", (IConsulClient consulClient, string id) =>
 			{
 				consulClient?.Agent.ServiceDeregister(id).Wait();
 			})

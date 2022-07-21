@@ -39,7 +39,7 @@ public class Program
 		.AddDeveloperSigningCredential()
 		.AddInMemoryClients(Config.Clients);
 		//.AddProfileService<IdentityProfile>();
-
+		RegisterInstances(builder);
 		var app = builder.Build();
 		app.UseHttpLogging();
 
@@ -68,4 +68,24 @@ public class Program
 			db.Database.Migrate();
 		}
 	}
+	private static void RegisterInstances(WebApplicationBuilder builder)
+	{
+		if (builder.Environment.IsDevelopment())
+		{
+			var httpClient = new HttpClient();
+			httpClient.BaseAddress = new Uri(builder.Configuration["ServiceDiscoveryURL"].ToString());
+			var urls = builder.Configuration["ASPNETCORE_URLS"];
+			foreach (var item in urls.Split(';'))
+			{
+				var url = new Uri(item);
+				var result = httpClient.PostAsJsonAsync("/service/register", new
+				{
+					Name = "identity",
+					Address = url.Host,
+					Port = url.Port
+				}).Result;
+			}
+		}
+	}
+
 }

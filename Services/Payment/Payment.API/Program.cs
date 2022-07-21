@@ -32,6 +32,7 @@ public class Program
 			})
 			.ConfigureHttpContext(opt => opt.UseDefaultAspNetCore());
 
+		RegisterInstances(builder);
 		var app = builder.Build();
 		app.UseHttpLogging();
 
@@ -48,5 +49,24 @@ public class Program
 		app.MapHealthChecks("/health");
 		app.UseParbadVirtualGatewayWhenDeveloping();
 		app.Run();
+	}
+	private static void RegisterInstances(WebApplicationBuilder builder)
+	{
+		if (builder.Environment.IsDevelopment())
+		{
+			var httpClient = new HttpClient();
+			httpClient.BaseAddress = new Uri(builder.Configuration["ServiceDiscoveryURL"].ToString());
+			var urls = builder.Configuration["ASPNETCORE_URLS"];
+			foreach (var item in urls.Split(';'))
+			{
+				var url = new Uri(item);
+				var result = httpClient.PostAsJsonAsync("/service/register", new
+				{
+					Name = "payment",
+					Address = url.Host,
+					Port = url.Port
+				}).Result;
+			}
+		}
 	}
 }
