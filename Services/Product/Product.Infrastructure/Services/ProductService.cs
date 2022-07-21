@@ -9,9 +9,8 @@ namespace Product.Infrastructure.Services
 	public class ProductService : GenericActiveService<Domain.Entities.Product, ProductDTO>, IProductService
 	{
 		private readonly IFileServiceActor _fileServiceProvider;
-		public ProductService(IUnitOfWork unitOfWork, ICustomMapper mapper, IFileServiceActor fileServiceProvider) : base(unitOfWork, mapper)
+		public ProductService(IUnitOfWork unitOfWork, ICustomMapper mapper) : base(unitOfWork, mapper)
 		{
-			_fileServiceProvider = fileServiceProvider;
 		}
 		public override void Add(ProductDTO entityDTO)
 		{

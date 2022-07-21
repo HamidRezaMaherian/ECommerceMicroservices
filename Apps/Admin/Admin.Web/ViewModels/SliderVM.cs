@@ -1,9 +1,10 @@
-﻿using Admin.Application.DTOs.UI;
-
-namespace Admin.Web.ViewModels
+﻿namespace Admin.Web.ViewModels
 {
-	public class SliderVM : SliderDTO
+	public class SliderVM
 	{
-		public override string Image { get; set; }
+		public string Id { get; set; }
+		public string Title { get; set; }
+		public string ImagePath { get; set; }
+		public string Image { get; set; }
 	}
 }
