@@ -1,9 +1,8 @@
 {
 	"Routes": [
-		{	
+		{
 			"DownstreamPathTemplate": "/{url}",
-			"DownstreamScheme": "http",
-			"ServiceName": "ui",
+			"ServiceName": "UI-API",
 			"UpstreamPathTemplate": "/ui/{url}",
 			"UpstreamHttpMethod": [ "Get", "Post", "Put", "Delete" ],
 			"LoadBalancerOptions": {
@@ -12,8 +11,7 @@
 		},
 		{
 			"DownstreamPathTemplate": "/{url}",
-			"DownstreamScheme": "http",
-			"ServiceName": "basket",
+			"ServiceName": "BASKET-API",
 			"UpstreamPathTemplate": "/basket/{url}",
 			"UpstreamHttpMethod": [ "Get", "Post", "Put", "Delete" ],
 			"LoadBalancerOptions": {
@@ -22,8 +20,7 @@
 		},
 		{
 			"DownstreamPathTemplate": "/{url}",
-			"DownstreamScheme": "http",
-			"ServiceName": "discount",
+			"ServiceName": "DISCOUNT-API",
 			"UpstreamPathTemplate": "/discount/{url}",
 			"UpstreamHttpMethod": [ "Get", "Post", "Put", "Delete" ],
 			"LoadBalancerOptions": {

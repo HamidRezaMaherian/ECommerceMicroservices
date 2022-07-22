@@ -50,6 +50,8 @@ public class Program
 		}
 		app.UseStaticFiles();
 
+		builder.Services.AddServiceDiscovery("identity");
+
 		app.UseIdentityServer();
 		app.UseAuthorization();
 

@@ -20,8 +20,7 @@ public class Program
 		});
 		builder.Services.RegisterInfrastructure();
 
-
-		RegisterInstances(builder);
+		builder.Services.AddServiceDiscovery("basket");
 
 		var app = builder.Build();
 
@@ -37,21 +36,5 @@ public class Program
 		app.MapControllers();
 		app.MapHealthChecks("/health");
 		app.Run();
-	}
-	private static void RegisterInstances(WebApplicationBuilder builder)
-	{
-		var httpClient = new HttpClient();
-		httpClient.BaseAddress = new Uri(builder.Configuration["ServiceDiscoveryURL"].ToString());
-		var urls = builder.Configuration["ASPNETCORE_URLS"];
-		foreach (var item in urls.Split(';'))
-		{
-			var url = new Uri(item);
-			_ = httpClient.PostAsJsonAsync("/service/register", new
-			{
-				Name = "basket",
-				Address = url.Host,
-				Port = url.Port
-			}).Result;
-		}
 	}
 }

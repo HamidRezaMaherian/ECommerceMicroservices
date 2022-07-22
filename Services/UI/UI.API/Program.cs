@@ -26,8 +26,9 @@ public class Program
 			.AddInMemoryContainer()
 			.AddObjectConfigurations(Assembly.GetAssembly(typeof(UI.Application.DTOs.SliderDTO)))
 			.AddLocalActor("lc", builder.Environment.WebRootPath);
+			
+		builder.Services.AddServiceDiscovery("ui");
 
-		RegisterInstances(builder);
 		var app = builder.Build();
 		app.UseHttpLogging();
 
@@ -45,24 +46,4 @@ public class Program
 		app.MapHealthChecks("/health");
 		app.Run();
 	}
-	private static void RegisterInstances(WebApplicationBuilder builder)
-	{
-		if (builder.Environment.IsDevelopment())
-		{
-			var httpClient = new HttpClient();
-			httpClient.BaseAddress = new Uri(builder.Configuration["ServiceDiscoveryURL"].ToString());
-			var urls = builder.Configuration["ASPNETCORE_URLS"];
-			foreach (var item in urls.Split(';'))
-			{
-				var url = new Uri(item);
-				var result = httpClient.PostAsJsonAsync("/service/register", new
-				{
-					Name = "ui",
-					Address = url.Host,
-					Port = url.Port
-				}).Result;
-			}
-		}
-	}
-
 }

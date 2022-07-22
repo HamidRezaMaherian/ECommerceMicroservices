@@ -14,8 +14,8 @@
 		<PackageReference Include="fluentvalidation.AspNetCore" Version="10.3.6" />
 		<PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.14.0" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="6.0.5">
-		  <PrivateAssets>all</PrivateAssets>
-		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
 		<PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
 	</ItemGroup>
@@ -23,10 +23,13 @@
 	<ItemGroup>
 		<ProjectReference Include="..\..\..\Utilities\FileActor\FileActor.AspNetCore\FileActor.AspNetCore.csproj" />
 		<ProjectReference Include="..\Product.Infrastructure\Product.Infrastructure.csproj" />
+		<ProjectReference Include="..\..\..\Gateways\ServiceDiscovery\ServiceDiscovery.csproj" />
 	</ItemGroup>
-
 	<ItemGroup>
-	  <Folder Include="wwwroot\" />
+		<ProjectReference Include="..\..\..\Gateways\ServiceDiscovery\ServiceDiscovery.csproj" />
+	</ItemGroup>
+	<ItemGroup>
+		<Folder Include="wwwroot\" />
 	</ItemGroup>
 
 </Project>

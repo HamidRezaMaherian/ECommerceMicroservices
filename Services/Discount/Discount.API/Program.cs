@@ -16,6 +16,7 @@ public class Program
 				 cfg.DisableDataAnnotationsValidation = true;
 				 cfg.RegisterValidatorsFromAssembly(Assembly.GetAssembly(typeof(Program)));
 			 });
+		builder.Services.AddServiceDiscovery("discount");
 
 		builder.Services.RegisterInfrastructure();
 		builder.Services.AddHealthChecks();
@@ -23,8 +24,6 @@ public class Program
 		builder.Services.AddEndpointsApiExplorer();
 		builder.Services.AddSwaggerGen();
 		builder.Services.AddGrpc();
-
-		RegisterInstances(builder);
 
 		var app = builder.Build();
 		app.UseHttpLogging();
@@ -41,21 +40,5 @@ public class Program
 		app.MapControllers();
 		app.MapHealthChecks("/health");
 		app.Run();
-	}
-	private static void RegisterInstances(WebApplicationBuilder builder)
-	{
-		var httpClient = new HttpClient();
-		httpClient.BaseAddress = new Uri(builder.Configuration["ServiceDiscoveryURL"].ToString());
-		var urls = builder.Configuration["ASPNETCORE_URLS"];
-		foreach (var item in urls.Split(';'))
-		{
-			var url = new Uri(item);
-			_ = httpClient.PostAsJsonAsync("/service/register", new
-			{
-				Name = "discount",
-				Address = url.Host,
-				Port = url.Port
-			}).Result;
-		}
 	}
 }

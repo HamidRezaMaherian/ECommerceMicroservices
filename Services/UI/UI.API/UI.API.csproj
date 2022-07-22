@@ -21,9 +21,11 @@
 		<ProjectReference Include="..\..\..\Utilities\FileActor\FileActor.AspNetCore\FileActor.AspNetCore.csproj" />
 		<ProjectReference Include="..\UI.Infrastructure\UI.Infrastructure.csproj" />
 	</ItemGroup>
-
 	<ItemGroup>
-	  <Folder Include="wwwroot\" />
+		<ProjectReference Include="..\..\..\Gateways\ServiceDiscovery\ServiceDiscovery.csproj" />
+	</ItemGroup>
+	<ItemGroup>
+		<Folder Include="wwwroot\" />
 	</ItemGroup>
 
 </Project>

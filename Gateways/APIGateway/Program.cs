@@ -9,6 +9,7 @@ public class Program
 	{
 		var builder = WebApplication.CreateBuilder(args);
 		builder.Services.AddHealthChecks();
+		builder.Services.AddServiceDiscovery("apigateway");
 		builder.Configuration.AddJsonFile($"ocelot.json");
 		builder.Services.AddOcelot().AddConsul().AddPolly();
 		var app = builder.Build();
