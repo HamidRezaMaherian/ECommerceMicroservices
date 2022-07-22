@@ -1,25 +1,34 @@
 {
 	"Routes": [
-		{
+		{	
 			"DownstreamPathTemplate": "/{url}",
 			"DownstreamScheme": "http",
 			"ServiceName": "ui",
 			"UpstreamPathTemplate": "/ui/{url}",
-			"UpstreamHttpMethod": [ "Get", "Post", "Put", "Delete" ]
+			"UpstreamHttpMethod": [ "Get", "Post", "Put", "Delete" ],
+			"LoadBalancerOptions": {
+				"Type": "LeastConnection"
+			}
 		},
 		{
 			"DownstreamPathTemplate": "/{url}",
 			"DownstreamScheme": "http",
 			"ServiceName": "basket",
 			"UpstreamPathTemplate": "/basket/{url}",
-			"UpstreamHttpMethod": [ "Get", "Post", "Put", "Delete" ]
+			"UpstreamHttpMethod": [ "Get", "Post", "Put", "Delete" ],
+			"LoadBalancerOptions": {
+				"Type": "LeastConnection"
+			}
 		},
 		{
 			"DownstreamPathTemplate": "/{url}",
 			"DownstreamScheme": "http",
 			"ServiceName": "discount",
 			"UpstreamPathTemplate": "/discount/{url}",
-			"UpstreamHttpMethod": [ "Get", "Post", "Put", "Delete" ]
+			"UpstreamHttpMethod": [ "Get", "Post", "Put", "Delete" ],
+			"LoadBalancerOptions": {
+				"Type": "LeastConnection"
+			}
 		}
 	],
 	"GlobalConfiguration": {
