@@ -11,7 +11,7 @@ public class Program
 		builder.Services.AddEndpointsApiExplorer();
 		builder.Services.AddSwaggerGen();
 		builder.Services.AddHealthChecks();
-		builder.Services.AddServiceDiscovery("order");
+		builder.Services.AddServiceDiscoveryRegistration();
 
 		var app = builder.Build();
 		app.UseHttpLogging();

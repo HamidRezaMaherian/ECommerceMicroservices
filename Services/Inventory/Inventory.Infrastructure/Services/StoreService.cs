@@ -10,8 +10,9 @@ namespace Inventory.Infrastructure.Services
 	public class StoreService : GenericActiveService<Store, StoreDTO>, IStoreService
 	{
 		private readonly IFileServiceActor _fileServiceProvider;
-		public StoreService(IUnitOfWork unitOfWork, ICustomMapper mapper) : base(unitOfWork, mapper)
+		public StoreService(IUnitOfWork unitOfWork, ICustomMapper mapper, IFileServiceActor fileServiceProvider) : base(unitOfWork, mapper)
 		{
+			_fileServiceProvider = fileServiceProvider;
 		}
 		public override void Add(StoreDTO entityDTO)
 		{

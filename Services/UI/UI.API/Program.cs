@@ -27,7 +27,7 @@ public class Program
 			.AddObjectConfigurations(Assembly.GetAssembly(typeof(UI.Application.DTOs.SliderDTO)))
 			.AddLocalActor("lc", builder.Environment.WebRootPath);
 			
-		builder.Services.AddServiceDiscovery("ui");
+		builder.Services.AddServiceDiscoveryRegistration();
 
 		var app = builder.Build();
 		app.UseHttpLogging();

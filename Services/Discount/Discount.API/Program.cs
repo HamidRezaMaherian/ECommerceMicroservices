@@ -16,7 +16,7 @@ public class Program
 				 cfg.DisableDataAnnotationsValidation = true;
 				 cfg.RegisterValidatorsFromAssembly(Assembly.GetAssembly(typeof(Program)));
 			 });
-		builder.Services.AddServiceDiscovery("discount");
+		builder.Services.AddServiceDiscoveryRegistration();
 
 		builder.Services.RegisterInfrastructure();
 		builder.Services.AddHealthChecks();

@@ -28,7 +28,7 @@ public class Program
 		builder.Services.AddSwaggerGen();
 		builder.Services.RegisterInfrastructure();
 
-		builder.Services.AddServiceDiscovery("inventory");
+		builder.Services.AddServiceDiscoveryRegistration();
 		var app = builder.Build();
 		app.UseHttpLogging();
 		// Configure the HTTP request pipeline.

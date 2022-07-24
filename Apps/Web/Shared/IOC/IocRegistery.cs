@@ -11,7 +11,7 @@ namespace WebApp.Shared.Ioc
 		public static void RegisterSharedServices(this IServiceCollection serviceCollection)
 		{
 			using var serviceProvider = serviceCollection.BuildServiceProvider();
-			serviceCollection.AddServiceDiscovery("webapp");
+			//serviceCollection.AddServiceDiscoveryRegistration();
 			var configuration = serviceProvider.GetService<IConfiguration>();
 			serviceCollection.AddHttpClient<GatewayHttpClient>((_, opt) =>
 			{

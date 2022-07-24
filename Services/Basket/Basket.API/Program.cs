@@ -20,7 +20,7 @@ public class Program
 		});
 		builder.Services.RegisterInfrastructure();
 
-		builder.Services.AddServiceDiscovery("basket");
+		builder.Services.AddServiceDiscoveryRegistration();
 
 		var app = builder.Build();
 

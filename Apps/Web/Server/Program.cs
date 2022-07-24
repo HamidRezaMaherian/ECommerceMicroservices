@@ -89,9 +89,10 @@ public class Program
 		string identityAddress = null;
 		try
 		{
-			identityAddress = await services.BuildServiceProvider()
-		.GetService<IConsulClient>()
-		.GetRequestUriAsync("identity");
+			identityAddress = "";
+		//	identityAddress = await services.BuildServiceProvider()
+		//.GetService<IConsulClient>()
+		//.GetRequestUriAsync("identity");
 		}
 		catch { }
 		return identityAddress;

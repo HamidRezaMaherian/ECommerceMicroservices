@@ -3,7 +3,6 @@ using Admin.Application.UnitOfWork.UI;
 using Admin.Infrastructure.APIUtils;
 using Admin.Infrastructure.Services.UI;
 using Admin.Infrastructure.UnitOfWork;
-using Consul;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -15,10 +14,10 @@ namespace Admin.Infrastructure.Ioc
 		{
 			using var serviceProvider = serviceCollection.BuildServiceProvider();
 			var configuration = serviceProvider.GetService<IConfiguration>();
-			serviceCollection.AddServiceDiscovery("adminapp");
-			serviceCollection.AddHttpClient(nameof(GatewayHttpClient), (_, opt) =>
+			serviceCollection.AddServiceDiscoveryRegistration();
+			serviceCollection.AddHttpClient(nameof(GatewayHttpClient), (opt) =>
 			 {
-				 opt.BaseAddress = new Uri("http://apigateway");
+				 opt.BaseAddress = new Uri("http://APIGateway/");
 			 })
 			 .AddClientServiceDiscovery();
 

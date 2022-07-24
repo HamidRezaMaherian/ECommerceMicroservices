@@ -32,7 +32,7 @@ public class Program
 			})
 			.ConfigureHttpContext(opt => opt.UseDefaultAspNetCore());
 
-		builder.Services.AddServiceDiscovery("payment");
+		builder.Services.AddServiceDiscoveryRegistration();
 		var app = builder.Build();
 		app.UseHttpLogging();
 
