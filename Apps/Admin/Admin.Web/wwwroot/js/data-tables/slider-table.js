@@ -1,19 +1,19 @@
 ﻿"use strict";
-var initDataTable = async () => {
-	var data = await getData("/slider/getdata");
-	$("#kt_datatable_example_5").DataTable({
-		searchDelay: 500,
-		processing: true,
-		data,
-		stateSave: true,
-		columns: [
-			{ data: 'title' },
-			{ data: 'imagePath' },
-			{
-				data: 'id',
-				render: (data) => {
-					return `
-							<a href="update/${data}" class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1">
+var KTDatatable = function () {
+	var init = async (data) => {
+		$("#kt_datatable_example_5").DataTable({
+			searchDelay: 500,
+			processing: true,
+			data,
+			stateSave: true,
+			columns: [
+				{ data: 'title' },
+				{ data: 'imagePath' },
+				{
+					data: 'id',
+					render: (data) => {
+						return `
+							<a href="/slider/update/${data}" class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1">
 								<span class="svg-icon svg-icon-3">
 									<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
 										<path opacity="0.3" d="M21.4 8.35303L19.241 10.511L13.485 4.755L15.643 2.59595C16.0248 2.21423 16.5426 1.99988 17.0825 1.99988C17.6224 1.99988 18.1402 2.21423 18.522 2.59595L21.4 5.474C21.7817 5.85581 21.9962 6.37355 21.9962 6.91345C21.9962 7.45335 21.7817 7.97122 21.4 8.35303ZM3.68699 21.932L9.88699 19.865L4.13099 14.109L2.06399 20.309C1.98815 20.5354 1.97703 20.7787 2.03189 21.0111C2.08674 21.2436 2.2054 21.4561 2.37449 21.6248C2.54359 21.7934 2.75641 21.9115 2.989 21.9658C3.22158 22.0201 3.4647 22.0084 3.69099 21.932H3.68699Z" fill="black"></path>
@@ -31,26 +31,38 @@ var initDataTable = async () => {
 								</span>
 							</a>
 							`;
+					}
 				}
-			}
-		],
-		language: {
-			"lengthMenu": "Show _MENU_",
-		},
-		dom:
-			"<'row'" +
-			"<'col-sm-6 d-flex align-items-center justify-conten-start'l>" +
-			"<'col-sm-6 d-flex align-items-center justify-content-end'f>" +
-			">" +
+			],
+			language: {
+				"lengthMenu": "Show _MENU_",
+			},
+			dom:
+				"<'row'" +
+				"<'col-sm-6 d-flex align-items-center justify-conten-start'l>" +
+				"<'col-sm-6 d-flex align-items-center justify-content-end'f>" +
+				">" +
 
-			"<'table-responsive'tr>" +
+				"<'table-responsive'tr>" +
 
-			"<'row'" +
-			"<'col-sm-12 col-md-5 d-flex align-items-center justify-content-center justify-content-md-start'i>" +
-			"<'col-sm-12 col-md-7 d-flex align-items-center justify-content-center justify-content-md-end'p>" +
-			">"
-	});
-}
+				"<'row'" +
+				"<'col-sm-12 col-md-5 d-flex align-items-center justify-content-center justify-content-md-start'i>" +
+				"<'col-sm-12 col-md-7 d-flex align-items-center justify-content-center justify-content-md-end'p>" +
+				">"
+		});
+	}
+	var reload = function (data) {
+		$('#kt_datatable_example_5').DataTable().clear().rows.add(data).draw()
+	};
+	var trigger = function (btn) {
+		$('#kt_datatable_example_5').DataTable().button(btn).trigger();
+	};
+	return {
+		init: init,
+		reload: reload,
+		trigger: trigger,
+	}
+}();
 var Delete = async (id) => {
 	Swal.fire({
 		text: "Are you sure you want to delete selected customers?",
@@ -66,17 +78,10 @@ var Delete = async (id) => {
 		},
 	}).then(async function (result) {
 		if (result.value) {
-			Swal.fire({
-				text: "Deleting selected customers",
-				icon: "info",
-				buttonsStyling: false,
-				showConfirmButton: false,
-			}).then(async  () =>{
-				await $.ajax({
-					url: `/slider/delete/${id}`,
-					method: "DELETE"
-				});
-				}).then(function () {
+			await $.ajax({
+				url: `/slider/delete/${id}`,
+				method: "DELETE",
+				success: async function () {
 					Swal.fire({
 						text: "Record Deleted Successfully",
 						icon: "success",
@@ -85,11 +90,13 @@ var Delete = async (id) => {
 						customClass: {
 							confirmButton: "btn fw-bold btn-primary",
 						}
-				});
+					});
+					KTDatatable.reload(await getData("/slider/getdata"));
+				}
 			});
 		}
 	});
 }
-KTUtil.onDOMContentLoaded(function () {
-	initDataTable();
+KTUtil.onDOMContentLoaded(async function () {
+	KTDatatable.init(await getData("/slider/getdata"));
 });

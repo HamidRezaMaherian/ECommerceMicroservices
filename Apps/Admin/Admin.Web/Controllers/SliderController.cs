@@ -1,5 +1,4 @@
-﻿using Admin.Application.Services.UI;
-using Admin.Application.UnitOfWork.UI;
+﻿using Admin.Application.UnitOfWork.UI;
 using Admin.Web.Configurations;
 using Admin.Web.ViewModels;
 using FluentValidation.AspNetCore;
@@ -30,21 +29,36 @@ namespace Admin.Web.Controllers
 		}
 		[HttpPost]
 		public async Task<IActionResult> CreateAsync(
-			[CustomizeValidator(RuleSet =$"{Statics.CREATE_MODEL},{Statics.DEFAULT_MODEL}")] SliderVM modelVM)
+			[CustomizeValidator(RuleSet = $"{Statics.CREATE_MODEL},{Statics.DEFAULT_MODEL}")] SliderVM modelVM)
 		{
 			if (!ModelState.IsValid)
-			{
-				return View("Form",modelVM);
-			}
+				return View("Form", modelVM);
+
+			await _uiUnit.Slider.AddAsync(modelVM);
+			return RedirectToAction(nameof(Index));
+		}
+		[HttpGet]
+		public async Task<IActionResult> UpdateAsync(string id)
+		{
+			return View("Form",await _uiUnit.Slider.GetByIdAsync<SliderVM>(id));
+		}
+		[HttpPost]
+		public async Task<IActionResult> UpdateAsync(
+			[CustomizeValidator(RuleSet = $"{Statics.UPDATE_MODEL},{Statics.DEFAULT_MODEL}")] SliderVM modelVM)
+		{
+			if (!ModelState.IsValid)
+				return View("Form", modelVM);
+
+			await _uiUnit.Slider.UpdateAsync(modelVM);
 			return RedirectToAction(nameof(Index));
 		}
 		[HttpGet]
 		public async Task<IActionResult> GetData()
 		{
 			return Json(await _uiUnit.Slider.GetAllAsync());
-
 		}
-		[HttpDelete("{id}")]
+		[HttpDelete]
+		[IgnoreAntiforgeryToken]
 		public async Task<IActionResult> Delete(string id)
 		{
 			await _uiUnit.Slider.DeleteAsync(id);

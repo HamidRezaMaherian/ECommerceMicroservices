@@ -2,7 +2,6 @@
 	"Routes": [
 		{
 			"DownstreamPathTemplate": "/{url}",
-			"DownstreamScheme": "https",
 			"ServiceName": "UI-API",
 			"UpstreamPathTemplate": "/ui/{url}",
 			"UpstreamHttpMethod": [ "Get", "Post", "Put", "Delete" ],
