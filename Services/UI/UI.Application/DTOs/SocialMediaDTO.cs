@@ -8,8 +8,4 @@ public abstract class SocialMediaDTO : BaseDTO<string>
 	public virtual string ImagePath { get; set; }
 	public virtual bool IsActive { get; set; }
 	public abstract object GetImage();
-	public void SetFiles(SocialMedia entity)
-	{
-		ImagePath=entity.ImagePath;
-	}
 }

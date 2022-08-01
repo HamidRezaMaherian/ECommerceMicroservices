@@ -14,6 +14,7 @@ using UI.Application.Configurations;
 using UI.Application.Tools;
 using UI.Application.UnitOfWork;
 using UI.Domain.Entities;
+using UI.Domain.ValueObjects;
 using UI.Infrastructure.Persist;
 using UI.Infrastructure.Persist.Mappings;
 
@@ -32,7 +33,7 @@ namespace UI.API.Tests.Integration
 		{
 			_mongoDbRunner = MongoDbRunner.Start();
 			var db = MockActions.MockDbContext(_mongoDbRunner);
-			_mapper = TestUtilsExtension.CreateMapper(new PersistMapperProfile(), new ServiceMapper(), new TestMapperProfile());
+			_mapper = TestUtilsExtension.CreateMapper(new PersistMapperProfile(null), new ServiceMapper(), new TestMapperProfile());
 			_unitOfWork = MockActions.MockUnitOfWork(db, _mapper);
 
 			var httpClient = new TestingWebAppFactory<Program>(s =>
@@ -162,7 +163,7 @@ namespace UI.API.Tests.Integration
 		{
 			var slider = new Slider()
 			{
-				ImagePath = "no image",
+				Image = new Blob("", "", "no image"),
 				Title = "no title",
 				IsActive = true
 			};

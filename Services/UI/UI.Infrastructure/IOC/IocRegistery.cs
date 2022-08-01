@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using AutoMapper;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using MongoDB.Driver;
 using UI.Application.Configurations;
@@ -16,18 +17,33 @@ namespace UI.Infrastructure.IOC
 {
 	public static class IocRegistery
 	{
-		public static void RegisterInfrastructure(this IServiceCollection services)
+		public static IServiceCollection RegisterInfrastructure(this IServiceCollection services)
 		{
 			services.RegisterServices();
 			services.RegisterPersistant();
 			services.RegisterConfigurations();
-			services.RegisterMockers();
+			return services;
 		}
+		public static void AddCdnResolver<T>(this IServiceCollection services) where T:class,ICdnResolver
+		{
+			services.AddSingleton<ICdnResolver,T>();
+		}
+
 		private static void RegisterConfigurations(this IServiceCollection services)
 		{
-			services.AddAutoMapper(typeof(PersistMapperProfile), typeof(ServiceMapper));
+			services.AddSingleton<ServiceMapper>();
+			services.AddSingleton<PersistMapperProfile>();
+			services.AddSingleton(provider =>
+			{
+				return new MapperConfiguration(cfg =>
+				{
+					cfg.AddProfile(provider.GetService<ServiceMapper>());
+					cfg.AddProfile(provider.GetService<PersistMapperProfile>());
+				}).CreateMapper();
+			});
 			services.AddSingleton<ICustomMapper, CustomMapper>();
 		}
+
 
 		private static void RegisterServices(this IServiceCollection services)
 		{
@@ -37,10 +53,6 @@ namespace UI.Infrastructure.IOC
 			services.AddScoped<ISliderService, SliderService>();
 			services.AddScoped<IAboutUsService, AboutUsService>();
 			services.AddScoped<IContactUsService, ContactUsService>();
-		}
-		private static void RegisterMockers(this IServiceCollection services)
-		{
-			services.AddScoped<IObjectMocker, ObjectMocker>();
 		}
 		private static void RegisterPersistant(this IServiceCollection services)
 		{

@@ -25,7 +25,7 @@ namespace UI.API.Tests.Integration
 		[OneTimeSetUp]
 		public void OneTimeSetUp()
 		{
-			_mapper = TestUtilsExtension.CreateMapper(new PersistMapperProfile(), new ServiceMapper(), new TestMapperProfile());
+			_mapper = TestUtilsExtension.CreateMapper(new PersistMapperProfile(null), new ServiceMapper(), new TestMapperProfile());
 			_mongoDbRunner = MongoDbRunner.Start();
 			var db = MockActions.MockDbContext(_mongoDbRunner);
 			_unitOfWork = MockActions.MockUnitOfWork

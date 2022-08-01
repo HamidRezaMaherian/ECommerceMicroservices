@@ -2,6 +2,8 @@ using FluentValidation.AspNetCore;
 using System.Reflection;
 using FileActor.AspNetCore;
 using UI.Infrastructure.IOC;
+using UI.API.Configurations;
+
 public class Program
 {
 	public static void Main(string[] args)
@@ -11,6 +13,8 @@ public class Program
 
 		// Add services to the container.
 		builder.Services.AddHealthChecks();
+		builder.Services.AddHttpContextAccessor();
+
 		builder.Services.AddControllers()
 			.AddFluentValidation(cfg =>
 			{
@@ -18,7 +22,9 @@ public class Program
 				cfg.RegisterValidatorsFromAssembly(Assembly.GetAssembly(typeof(Program)));
 			});
 		// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-		builder.Services.RegisterInfrastructure();
+		builder.Services.RegisterInfrastructure()
+			.AddCdnResolver<LocalCdnResolver>();
+
 		builder.Services.AddEndpointsApiExplorer();
 		builder.Services.AddSwaggerGen();
 
@@ -26,7 +32,7 @@ public class Program
 			.AddInMemoryContainer()
 			.AddObjectConfigurations(Assembly.GetAssembly(typeof(UI.Application.DTOs.SliderDTO)))
 			.AddLocalActor("lc", builder.Environment.WebRootPath);
-			
+
 		builder.Services.AddServiceDiscoveryRegistration();
 
 		var app = builder.Build();
@@ -41,7 +47,6 @@ public class Program
 		app.UseStaticFiles();
 
 		app.UseAuthorization();
-
 		app.MapControllers();
 		app.MapHealthChecks("/health");
 		app.Run();

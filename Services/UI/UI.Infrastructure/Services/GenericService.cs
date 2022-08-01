@@ -46,8 +46,7 @@ namespace UI.Infrastructure.Services
 		}
 		public virtual IEnumerable<TypeDTO> GetAll<TypeDTO>(Expression<Func<T, bool>> condition) where TypeDTO : class
 		{
-			var ccc = GetAll(condition);
-			return _mapper.Map<IEnumerable<TypeDTO>>(ccc);
+			return _mapper.Map<IEnumerable<TypeDTO>>(GetAll(condition));
 		}
 
 		public virtual void Add(Tdto entityDTO)

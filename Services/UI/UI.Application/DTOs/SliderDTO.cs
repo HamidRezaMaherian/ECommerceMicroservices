@@ -7,8 +7,4 @@ public abstract class SliderDTO:BaseDTO<string>
 	public virtual string ImagePath { get; set; }
 	public virtual bool IsActive { get; set; }
 	public abstract object GetImage();
-	public void SetFiles(Slider entity)
-	{
-		ImagePath=entity.ImagePath;
-	}
 }

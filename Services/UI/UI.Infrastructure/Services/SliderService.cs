@@ -10,11 +10,9 @@ namespace UI.Infrastructure.Services
 	public class SliderService : GenericActiveService<string,Slider, SliderDTO>, ISliderService
 	{
 		private readonly IFileServiceActor _fileServiceProvider;
-		private readonly IObjectMocker _objectMocker;
-		public SliderService(IUnitOfWork unitOfWork, ICustomMapper mapper, IFileServiceActor fileServiceProvider, IObjectMocker objectMocker) : base(unitOfWork, mapper)
+		public SliderService(IUnitOfWork unitOfWork, ICustomMapper mapper, IFileServiceActor fileServiceProvider) : base(unitOfWork, mapper)
 		{
 			_fileServiceProvider = fileServiceProvider;
-			_objectMocker = objectMocker;
 		}
 		public override void Add(SliderDTO entityDTO)
 		{
@@ -24,7 +22,6 @@ namespace UI.Infrastructure.Services
 		public override void Update(SliderDTO entityDTO)
 		{
 			var entity = _repo.Get(entityDTO.Id);
-			entityDTO.SetFiles(entity);
 			_fileServiceProvider.ReplaceAll(entityDTO);
 			_mapper.Map(entityDTO, entity);
 			_repo.Update(entity);
@@ -34,9 +31,7 @@ namespace UI.Infrastructure.Services
 			var obj = _repo.Get(id);
 			if (obj != null)
 			{
-				var entityDTO = _objectMocker.MockObject<SliderDTO>();
-				entityDTO.SetFiles(obj);
-				_fileServiceProvider.DeleteAll(entityDTO);
+				_fileServiceProvider.DeleteAll(obj);
 				_repo.Delete(id);
 			}
 		}

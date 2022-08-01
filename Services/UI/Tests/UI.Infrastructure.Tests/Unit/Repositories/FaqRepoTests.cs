@@ -27,7 +27,7 @@ namespace UI.Infrastructure.Tests.Unit.Repositories
 		{
 			_mongoStarter = Mongo2Go.MongoDbRunner.StartForDebugging();
 			_db = MockActions.MockDbContext(_mongoStarter);
-			_mapper = TestUtilsExtension.CreateMapper(new PersistMapperProfile());
+			_mapper = TestUtilsExtension.CreateMapper(new PersistMapperProfile(null));
 			_faqRepo = new FaqRepo(_db, _mapper);
 		}
 		[TearDown]
