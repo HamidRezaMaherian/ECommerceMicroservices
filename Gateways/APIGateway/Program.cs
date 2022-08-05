@@ -12,8 +12,10 @@ public class Program
 		builder.Services.AddServiceDiscoveryRegistration();
 		builder.Configuration.AddJsonFile($"ocelot.json");
 		builder.Services.AddOcelot().AddConsul().AddPolly();
+		builder.Services.AddCors();
 		var app = builder.Build();
 		app.UseHealthChecks("/health");
+		app.UseCors();
 		app.UseOcelot().Wait();
 		app.Run();
 	}
