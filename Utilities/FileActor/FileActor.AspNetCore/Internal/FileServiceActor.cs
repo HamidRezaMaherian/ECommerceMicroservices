@@ -3,6 +3,7 @@ using FileActor.Abstract.Factory;
 using FileActor.Internal;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 
@@ -55,53 +56,6 @@ namespace FileActor.AspNetCore.Internal
 			await DeleteAsync(obj, info, _streamers);
 		}
 
-		public void Replace<T, TProperty>(Expression<Func<T, TProperty>> exp, T obj)
-		{
-			var info = _configurationManager.GetInfo(obj, exp.GetMember().Name);
-			if (info.Value != null)
-			{
-				Delete(obj, info, _streamers);
-				Save(obj, info, _streamers);
-			}
-		}
-
-		public void ReplaceAll<T>(T obj)
-		{
-			var allInfo = _configurationManager.GetAllInfo(obj);
-			Parallel.ForEach(allInfo, (info) =>
-			{
-				if (info.Value != null)
-				{
-					Delete(obj, info, _streamers);
-					Save(obj, info, _streamers);
-				}
-			});
-
-		}
-
-		public async Task ReplaceAllAsync<T>(T obj)
-		{
-			var allInfo = _configurationManager.GetAllInfo(obj);
-			await Parallel.ForEachAsync(allInfo, async (info, _) =>
-			{
-				if (info.Value != null)
-				{
-					await DeleteAsync(obj, info, _streamers);
-					await SaveAsync(obj, info, _streamers);
-				}
-			});
-		}
-
-		public async Task ReplaceAsync<T, TProperty>(Expression<Func<T, TProperty>> exp, T obj)
-		{
-			var info = _configurationManager.GetInfo(obj, exp.GetMember().Name);
-			if (info.Value != null)
-			{
-				await DeleteAsync(obj, info, _streamers);
-				await SaveAsync(obj, info, _streamers);
-			}
-		}
-
 		public void Save<T, TProperty>(Expression<Func<T, TProperty>> exp, T obj)
 		{
 			var info = _configurationManager.GetInfo(obj, exp.GetMember().Name);
@@ -132,49 +86,105 @@ namespace FileActor.AspNetCore.Internal
 			await SaveAsync(obj, info, _streamers);
 		}
 
-		#region PrivateMethods
-		private void Save(object obj, FileStreamInfo info, IEnumerable<IFileStreamer> streamers)
+
+		public void Replace<T, TProperty>(Expression<Func<T, TProperty>> exp, T obj)
 		{
-			if (info.Value != null)
+			var info = _configurationManager.GetInfo(obj, exp.GetMember().Name);
+			var value = info.GetFileObj.Invoke(obj);
+			if (value!= null)
+			{
+				Delete(obj, info, _streamers);
+				Save(obj, info, _streamers);
+			}
+		}
+
+		public void ReplaceAll<T>(T obj)
+		{
+			var allInfo = _configurationManager.GetAllInfo(obj);
+			Parallel.ForEach(allInfo, (info) =>
+			{
+				var value = info.GetFileObj.Invoke(obj);
+				if (value!= null)
+				{
+					Delete(obj, info, _streamers);
+					Save(obj, info, _streamers);
+				}
+			});
+
+		}
+
+		public async Task ReplaceAllAsync<T>(T obj)
+		{
+			var allInfo = _configurationManager.GetAllInfo(obj);
+			await Parallel.ForEachAsync(allInfo, async (info, _) =>
+			{
+				var value = info.GetFileObj.Invoke(obj);
+				if (value != null)
+				{
+					await DeleteAsync(obj, info, _streamers);
+					await SaveAsync(obj, info, _streamers);
+				}
+			});
+		}
+
+		public async Task ReplaceAsync<T, TProperty>(Expression<Func<T, TProperty>> exp, T obj)
+		{
+			var info = _configurationManager.GetInfo(obj, exp.GetMember().Name);
+			var value = info.GetFileObj.Invoke(obj);
+			if (value!= null)
+			{
+				await DeleteAsync(obj, info, _streamers);
+				await SaveAsync(obj, info, _streamers);
+			}
+		}
+		#region PrivateMethods
+		private void Save(object obj, ObjectStreamConfiguration info, IEnumerable<IFileStreamer> streamers)
+		{
+			var value = info.GetFileObj.Invoke(obj);
+			if (value != null)
 			{
 				var fileName = Guid.NewGuid().ToString();
 				foreach (var streamer in streamers)
 				{
-					streamer.Upload(info.Value, info.RelativePath, fileName);
+					streamer.Upload(value, info.RelativePath, fileName);
 				};
-				var typeHelper = _fileTypeHelperProvider.ProvideFileHelper(info.Value.GetType());
-				obj?.GetType().GetProperty(info.TargetProperty)?.SetValue(obj, $"{info.RelativePath}/{fileName}{typeHelper.GetExtension(info.Value)}");
+				var typeHelper = _fileTypeHelperProvider.ProvideFileHelper(value.GetType());
+				info.OnAfterSaved.Invoke(obj, new FileActor.Internal.FileInfo("", info.RelativePath, $"{fileName}{typeHelper.GetExtension(value)}"));
 			}
 		}
-		private async Task SaveAsync(object obj, FileStreamInfo info, IEnumerable<IFileStreamer> streamers)
+		private async Task SaveAsync(object obj, ObjectStreamConfiguration info, IEnumerable<IFileStreamer> streamers)
 		{
-			if (info.Value != null)
+			var value = info.GetFileObj.Invoke(obj);
+			if (value != null)
 			{
 				var fileName = Guid.NewGuid().ToString();
 				await Parallel.ForEachAsync(streamers, async (streamer, _) =>
 				{
-					await streamer.UploadAsync(info.Value, info.RelativePath, fileName);
+					await streamer.UploadAsync(value, info.RelativePath, fileName);
 				});
-				var typeHelper = _fileTypeHelperProvider.ProvideFileHelper(info.Value.GetType());
-				obj?.GetType().GetProperty(info.TargetProperty)?.SetValue(obj, $"{info.RelativePath}/{fileName}{typeHelper.GetExtension(info.Value)}");
+				var typeHelper = _fileTypeHelperProvider.ProvideFileHelper(value.GetType());
+				info.OnAfterSaved.Invoke(obj, new FileActor.Internal.FileInfo("", info.RelativePath, $"{fileName}{typeHelper.GetExtension(value)}"));
 			}
 		}
-		private void Delete(object obj, FileStreamInfo info, IEnumerable<IFileStreamer> streamers)
+		private void Delete(object obj, ObjectStreamConfiguration info, IEnumerable<IFileStreamer> streamers)
 		{
 			Parallel.ForEach(streamers, (streamer) =>
 			{
-				streamer.Delete(info.Value?.ToString());
+				streamer.Delete(
+					Path.Combine(info.RelativePath, info.GetFileName.Invoke(obj))
+					);
 			});
-			obj?.GetType().GetProperty(info.TargetProperty)?.SetValue(obj, "");
-
+			info.OnAfterDeleted.Invoke(obj);
 		}
-		private async Task DeleteAsync(object obj, FileStreamInfo info, IEnumerable<IFileStreamer> streamers)
+		private async Task DeleteAsync(object obj, ObjectStreamConfiguration info, IEnumerable<IFileStreamer> streamers)
 		{
 			await Parallel.ForEachAsync(streamers, async (streamer, _) =>
 			{
-				await streamer.DeleteAsync(info.Value.ToString());
+				await streamer.DeleteAsync(
+					Path.Combine(info.RelativePath, info.GetFileName.Invoke(obj))
+					);
 			});
-			obj?.GetType().GetProperty(info.TargetProperty)?.SetValue(obj, "");
+			info.OnAfterDeleted.Invoke(obj);
 		}
 		#endregion
 	}

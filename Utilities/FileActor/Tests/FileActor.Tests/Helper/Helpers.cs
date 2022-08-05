@@ -30,7 +30,7 @@ namespace FileActor.Tests.Helpers
 	{
 		public FakeClassConfiguration()
 		{
-			StreamFor(i => i.File).SetExpression(null).SetRelativePath("sdf");
+			StreamFor(i => i.File).SetRelativePath("sdf");
 		}
 	}
 	class FakeClass1Configuration : FileActorConfigurable<FakeClass1>

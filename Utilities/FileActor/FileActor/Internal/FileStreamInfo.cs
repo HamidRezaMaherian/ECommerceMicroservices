@@ -1,19 +1,22 @@
 ﻿using System;
-using System.Linq.Expressions;
 
 namespace FileActor.Internal
 {
-	public class FileStreamInfo
-	{
-		public FileStreamInfo(object value, string relativePath, string targetProperty)
-		{
-			Value = value;
-			RelativePath = relativePath;
-			TargetProperty = targetProperty;
-		}
+	//public class ObjectStreamConfiguration
+	//{
+	//	public ObjectStreamConfiguration(string name, object value, string relativePath, Action<object, FileInfo> onAfterSaved, Action<object> onAfterDeleted)
+	//	{
+	//		Name = name;
+	//		Value = value;
+	//		RelativePath = relativePath;
+	//		OnAfterSaved = onAfterSaved;
+	//		OnAfterDeleted = onAfterDeleted;
+	//	}
 
-		public object Value { get; private set; }
-		public string RelativePath { get; private set; }
-		public string TargetProperty { get; private set; }
-	}
+	//	public string Name { get; private set; }
+	//	public object Value { get; private set; }
+	//	public string RelativePath { get; private set; }
+	//	public Action<object, FileInfo> OnAfterSaved { get; private set; }
+	//	public Action<object> OnAfterDeleted { get; private set; }
+	//}
 }

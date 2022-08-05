@@ -10,7 +10,11 @@ public class SliderDTOFileActorConfig : FileActorConfigurable<SliderDTO>
 	{
 		StreamFor(i => i.ImagePath)
 			.SetRelativePath("/images/sliders")
-			.SetExpression((obj) => obj.GetImage());
+			.SetFileGet(obj => obj.GetImage())
+			.SetOnAfterSaved((obj, info) =>
+			{
+				obj.ImagePath = info.ToString();
+			});
 	}
 }
 
@@ -20,7 +24,12 @@ public class SliderFileActorConfig : FileActorConfigurable<Slider>
 	{
 		StreamFor(i => i.Image)
 			.SetRelativePath("/images/sliders")
-			.SetExpression((obj) => null);
+			.SetFileGet(obj => obj.Image.Name)
+			.SetGetFileName(obj=>obj.Image.Name)
+			.SetOnAfterDeleted(obj =>
+			{
+				obj.Image = null;
+			});
 
 	}
 }

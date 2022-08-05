@@ -10,28 +10,32 @@ namespace FileActor.Internal
 {
 	public class AttributeConfigManager : IConfigurationManager
 	{
-		public IEnumerable<FileStreamInfo> GetAllInfo<T>(T obj)
+		public IEnumerable<ObjectStreamConfiguration> GetAllInfo<T>(T obj) 
 		{
 			return obj.GetType().GetProperties()
 			 .Where(i => IsPropertyValid(i))
 			 .Select(i =>
 			 {
 				 var attr = i.GetCustomAttribute<FileActionAttribute>();
-				 return new FileStreamInfo(
-					 obj.GetType().GetProperty(attr.FileProperty).GetValue(obj),
-					 attr?.Path, 
-					 i.Name);
+				 return new ObjectStreamConfigProxy<T>(i?.Name)
+					.SetFileGet((obj) => i?.GetValue(obj).ToString())
+					.SetOnAfterSaved((obj, info) => i?.SetValue(obj, info.ToString()))
+					.SetOnAfterDeleted((obj) => i?.SetValue(obj, ""));
 			 });
 		}
 
-		public FileStreamInfo GetInfo<T, TProperty>(T obj, Expression<Func<T, TProperty>> exp)
+		public ObjectStreamConfiguration GetInfo<T, TProperty>(T obj, Expression<Func<T, TProperty>> exp) 
 		{
 			try
 			{
 				var member = exp.GetMember();
 				var propertyInfo = typeof(T).GetProperty(member.Name);
 				var attr = propertyInfo?.GetCustomAttribute<FileActionAttribute>();
-				return new FileStreamInfo(propertyInfo?.GetValue(obj), attr?.Path, propertyInfo.Name);
+				return new ObjectStreamConfigProxy<T>(propertyInfo?.Name)
+					.SetFileGet((obj) => propertyInfo?.GetValue(obj).ToString())
+					.SetOnAfterSaved((obj, info) => propertyInfo?.SetValue(obj, info.ToString()))
+					.SetOnAfterDeleted((obj) => propertyInfo?.SetValue(obj, ""));
+
 			}
 			catch (Exception e)
 			{
@@ -39,19 +43,21 @@ namespace FileActor.Internal
 			}
 		}
 
-		public FileStreamInfo GetInfo<T>(T obj, string propertyName)
+		public ObjectStreamConfiguration GetInfo<T>(T obj, string propertyName) 
 		{
 			try
 			{
 				var propertyInfo = typeof(T).GetProperty(propertyName);
 				var attr = propertyInfo?.GetCustomAttribute<FileActionAttribute>();
-				return new FileStreamInfo(propertyInfo?.GetValue(obj), attr?.Path, propertyInfo.Name);
+				return new ObjectStreamConfigProxy<T>(propertyInfo?.Name)
+					.SetFileGet((obj) => propertyInfo?.GetValue(obj).ToString())
+					.SetOnAfterSaved((obj, info) => propertyInfo?.SetValue(obj, info.ToString()))
+					.SetOnAfterDeleted((obj)=>propertyInfo?.SetValue(obj,""));
 			}
 			catch (Exception e)
 			{
 				throw new NotFoundException(e.Message, e.InnerException);
 			}
-
 		}
 
 		private bool IsPropertyValid(PropertyInfo info)
@@ -67,19 +73,18 @@ namespace FileActor.Internal
 		{
 			_configProvider = configProvider;
 		}
-		public IEnumerable<FileStreamInfo> GetAllInfo<T>(T obj)
+		public IEnumerable<ObjectStreamConfiguration> GetAllInfo<T>(T obj) 
 		{
 			var configurableObj = _configProvider.ProvideConfiguration(obj.GetType());
-			return configurableObj.GetInfo().Select(i=>new FileStreamInfo(i.Expression.Compile().Invoke(obj),i.RelativePath,i.Target));
+			return configurableObj.GetInfo();
 		}
 
-		public FileStreamInfo GetInfo<T, TProperty>(T obj, Expression<Func<T, TProperty>> exp)
+		public ObjectStreamConfiguration GetInfo<T, TProperty>(T obj, Expression<Func<T, TProperty>> exp) 
 		{
 			try
 			{
 				var configurableObj = _configProvider.ProvideConfiguration(obj.GetType());
-				var config = configurableObj.GetInfo(exp.GetMember().Name);
-				return new FileStreamInfo(config.Expression.Compile().Invoke(obj), config.RelativePath, config.Target);
+				return configurableObj.GetInfo(exp.GetMember().Name);
 			}
 			catch (Exception e)
 			{
@@ -87,13 +92,12 @@ namespace FileActor.Internal
 			}
 		}
 
-		public FileStreamInfo GetInfo<T>(T obj, string propertyName)
+		public ObjectStreamConfiguration GetInfo<T>(T obj, string propertyName) 
 		{
 			try
 			{
 				var configurableObj = _configProvider.ProvideConfiguration(obj.GetType());
-				var config = configurableObj.GetInfo(propertyName);
-				return new FileStreamInfo(config.Expression.Compile().Invoke(obj), config.RelativePath, config.Target);
+				return configurableObj.GetInfo(propertyName);
 			}
 			catch (Exception e)
 			{

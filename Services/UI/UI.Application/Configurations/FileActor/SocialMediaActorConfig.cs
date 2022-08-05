@@ -9,6 +9,7 @@ public class SocialMediaFileActorConfig : FileActorConfigurable<SocialMediaDTO>
 	{
 		StreamFor(i => i.ImagePath)
 			.SetRelativePath("/images/socialMedias")
-			.SetExpression((obj) => obj.GetImage());
+			.SetFileGet((obj) => obj.GetImage())
+			.SetOnAfterSaved((obj, info) =>obj.ImagePath = info.ToString());
 	}
 }

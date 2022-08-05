@@ -27,6 +27,7 @@ public class Program
 
 		builder.Services.AddEndpointsApiExplorer();
 		builder.Services.AddSwaggerGen();
+		builder.Services.AddCors();
 
 		builder.Services.AddFileActor()
 			.AddInMemoryContainer()
@@ -47,6 +48,7 @@ public class Program
 		app.UseStaticFiles();
 
 		app.UseAuthorization();
+		app.UseCors();
 		app.MapControllers();
 		app.MapHealthChecks("/health");
 		app.Run();

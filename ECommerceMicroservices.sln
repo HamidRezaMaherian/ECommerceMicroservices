@@ -157,7 +157,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Admin.Infrastructure.Tests"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Admin.Web.Tests", "Apps\Admin\Tests\Admin.Web.Tests\Admin.Web.Tests.csproj", "{52581977-DF29-4DEB-B2B6-27610BC6F004}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServiceDiscovery", "Gateways\ServiceDiscovery\ServiceDiscovery.csproj", "{52CE825B-FFAE-4851-9BCE-367F5F17A5DC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ServiceDiscovery", "Gateways\ServiceDiscovery\ServiceDiscovery.csproj", "{52CE825B-FFAE-4851-9BCE-367F5F17A5DC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

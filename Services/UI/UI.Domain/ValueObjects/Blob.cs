@@ -20,7 +20,7 @@
 		}
 		public override string ToString()
 		{
-			return string.Concat(Server, RelativePath, Name);
+			return Path.Combine(Server, RelativePath, Name);
 		}
 	}
 }
