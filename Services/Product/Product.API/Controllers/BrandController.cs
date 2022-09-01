@@ -25,15 +25,15 @@ namespace Product.API.Controllers
 		[HttpPost]
 		[ProducesResponseType(StatusCodes.Status200OK)]
 		[ProducesResponseType(StatusCodes.Status400BadRequest)]
-		public IActionResult Create([FromBody] BrandDTO brandDTO)
+		public IActionResult Create([FromBody] CreateBrandDTO brandDTO)
 		{
 			_brandService.Add(brandDTO);
-			return Created("",brandDTO);
+			return Created("", brandDTO);
 		}
 		[HttpPut]
 		[ProducesResponseType(StatusCodes.Status200OK)]
 		[ProducesResponseType(StatusCodes.Status400BadRequest)]
-		public IActionResult Update([FromBody] BrandDTO brandDTO)
+		public IActionResult Update([FromBody] UpdateBrandDTO brandDTO)
 		{
 			_brandService.Update(brandDTO);
 			return Ok();

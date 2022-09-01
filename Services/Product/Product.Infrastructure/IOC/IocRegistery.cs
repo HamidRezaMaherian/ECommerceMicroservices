@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Product.Application.Configurations;
@@ -14,15 +15,32 @@ namespace Product.Infrastructure.IOC
 {
 	public static class IocRegistery
 	{
-		public static void RegisterInfrastructure(this IServiceCollection services, IConfiguration configuration)
+		public static IServiceCollection RegisterInfrastructure(this IServiceCollection services, IConfiguration configuration)
 		{
 			services.RegisterServices();
 			services.RegisterPersistant(configuration);
 			services.RegisterConfigurations();
+			return services;
 		}
+		public static void AddCdnResolver<T>(this IServiceCollection services) where T : class, ICdnResolver
+		{
+			services.AddSingleton<ICdnResolver, T>();
+		}
+
+		#region Private
+
 		private static void RegisterConfigurations(this IServiceCollection services)
 		{
-			services.AddAutoMapper(typeof(PersistMapperProfile), typeof(ServiceMapper));
+			services.AddSingleton<ServiceMapper>();
+			services.AddSingleton<PersistMapperProfile>();
+			services.AddSingleton(provider =>
+			{
+				return new MapperConfiguration(cfg =>
+				{
+					cfg.AddProfile(provider.GetService<ServiceMapper>());
+					cfg.AddProfile(provider.GetService<PersistMapperProfile>());
+				}).CreateMapper();
+			});
 			services.AddSingleton<ICustomMapper, CustomMapper>();
 		}
 		private static void RegisterServices(this IServiceCollection services)
@@ -30,12 +48,14 @@ namespace Product.Infrastructure.IOC
 			services.AddScoped<IProductService, ProductService>();
 			services.AddScoped<IProductCategoryService, ProductCategoryService>();
 			services.AddScoped<IBrandService, BrandService>();
+			services.AddScoped<IProductImageService, ProductImageService>();
 		}
 		private static void RegisterPersistant(this IServiceCollection services, IConfiguration configuration)
 		{
 			services.AddDbContextPool<ApplicationDbContext>(cfg =>
 			{
-				cfg.UseMySQL(configuration.GetConnectionString("DefaultConnection"));
+				var connString = configuration.GetConnectionString("DefaultConnection");
+				cfg.UseMySql(connString,ServerVersion.AutoDetect(connString));
 			});
 			services.AddScoped<IUnitOfWork, UnitOfWork>();
 			services.MigrateDatabase();
@@ -50,5 +70,8 @@ namespace Product.Infrastructure.IOC
 				db.Database.Migrate();
 			}
 		}
+
+		#endregion
+
 	}
 }

@@ -1,4 +1,5 @@
-﻿using Product.Application.Repositories;
+﻿using Product.Application.Exceptions;
+using Product.Application.Repositories;
 using Product.Application.Services;
 using Product.Application.Tools;
 using Product.Application.UnitOfWork;
@@ -22,48 +23,46 @@ namespace Product.Infrastructure.Services
 
 		public virtual T GetById(object id)
 		{
-			return _repo.Get(id);
-		}
-		public virtual TypeDTO GetById<TypeDTO>(object id) where TypeDTO : class
-		{
-			var modelDTO = _mapper.Map<TypeDTO>(GetById(id));
-			return modelDTO;
+			ArgumentNullException.ThrowIfNull(id);
+			try
+			{
+				return _repo.Get(id);
+			}
+			catch (Exception e)
+			{
+				throw new ReadOperationException(e.Message, e.InnerException);
+			}
 		}
 
 		public virtual T FirstOrDefault()
 		{
 			return _repo.Get().FirstOrDefault();
 		}
-		public virtual TypeDTO FirstOrDefault<TypeDTO>() where TypeDTO : class
-		{
-			return _mapper.Map<TypeDTO>(FirstOrDefault());
-		}
 
 		public virtual IEnumerable<T> GetAll()
 		{
 			return _repo.Get().ToList();
 		}
-		public virtual IEnumerable<TypeDTO> GetAll<TypeDTO>() where TypeDTO : class
-		{
-			return _mapper.Map<IEnumerable<TypeDTO>>(GetAll());
-		}
 		public virtual IEnumerable<T> GetAll(Expression<Func<T, bool>> condition)
 		{
+			ArgumentNullException.ThrowIfNull(condition);
 			return _repo.Get(new QueryParams<T>()
 			{
 				Expression = condition
 			}).ToList();
 		}
-		public virtual IEnumerable<TypeDTO> GetAll<TypeDTO>(Expression<Func<T, bool>> condition) where TypeDTO : class
-		{
-			var ccc = GetAll(condition);
-			return _mapper.Map<IEnumerable<TypeDTO>>(ccc);
-		}
 
 		public virtual void Add(Tdto entityDTO)
 		{
 			var entity = _mapper.Map<T>(entityDTO);
-			_repo.Add(entity);
+			try
+			{
+				_repo.Add(entity);
+			}
+			catch (Exception e)
+			{
+				throw new InsertOperationException(e.Message, e.InnerException);
+			}
 			_mapper.Map(entity, entityDTO);
 		}
 		public virtual void Update(Tdto entityDTO)
@@ -81,6 +80,7 @@ namespace Product.Infrastructure.Services
 
 		public bool Exists(Expression<Func<T, bool>> condition)
 		{
+			ArgumentNullException.ThrowIfNull(condition);
 			return _repo.Get().Any(condition.Compile());
 		}
 	}
@@ -94,20 +94,12 @@ namespace Product.Infrastructure.Services
 				_repo.Get().Where(i => i.IsActive).ToList()
 				;
 		}
-		public virtual IEnumerable<TypeDTO> GetAllActive<TypeDTO>() where TypeDTO : class
-		{
-			return _mapper.Map<IEnumerable<TypeDTO>>(GetAllActive());
-		}
 		public virtual IEnumerable<T> GetAllActive(Expression<Func<T, bool>> condition)
 		{
 			return _repo.Get(new QueryParams<T>()
 			{
 				Expression = ExpressionHelper.And(i => i.IsActive, condition)
 			});
-		}
-		public virtual IEnumerable<TypeDTO> GetAllActive<TypeDTO>(Expression<Func<T, bool>> condition) where TypeDTO : class
-		{
-			return _mapper.Map<IEnumerable<TypeDTO>>(GetAllActive(condition));
 		}
 	}
 }

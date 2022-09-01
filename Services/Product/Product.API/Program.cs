@@ -1,5 +1,6 @@
 using FileActor.AspNetCore;
 using FluentValidation.AspNetCore;
+using Product.API.Configurations;
 using Product.Infrastructure.IOC;
 using System.Reflection;
 
@@ -18,14 +19,15 @@ public class Program
 			});
 		builder.Services.AddFileActor()
 			.AddInMemoryContainer()
-			.AddAttributeConfiguration()
+			.AddObjectConfigurations(Assembly.GetAssembly(typeof(Product.Application.DTOs.ProductDTO)))
 			.AddLocalActor("lc", builder.Environment.WebRootPath);
 
 		builder.Services.AddHealthChecks();
 		builder.Services.AddServiceDiscoveryRegistration();
 		builder.Services.AddEndpointsApiExplorer();
 		builder.Services.AddSwaggerGen();
-		builder.Services.RegisterInfrastructure(builder.Configuration);
+		builder.Services.RegisterInfrastructure(builder.Configuration)
+			.AddCdnResolver<LocalCdnResolver>();
 
 		var app = builder.Build();
 		app.UseHttpLogging();

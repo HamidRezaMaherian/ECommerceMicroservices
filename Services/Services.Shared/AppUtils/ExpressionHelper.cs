@@ -86,7 +86,15 @@ namespace Services.Shared.AppUtils
 						var newNode = ConvertNode(me.Expression, subst);
 						return Expression.MakeMemberAccess(newNode, newNode.Type.GetMember(me.Member.Name).Single());
 					}
-				case ExpressionType.Equal: /* will probably work for a range of common binary-expressions */
+				/* will probably work for a range of common binary-expressions */
+				case ExpressionType.Equal:
+				case ExpressionType.Add:
+				case ExpressionType.AndAlso:
+				case ExpressionType.Or:
+				case ExpressionType.LessThan:
+				case ExpressionType.LessThanOrEqual:
+				case ExpressionType.GreaterThan:
+				case ExpressionType.GreaterThanOrEqual:
 					{
 						var be = (BinaryExpression)node;
 						return Expression.MakeBinary(be.NodeType, ConvertNode(be.Left, subst), ConvertNode(be.Right, subst), be.IsLiftedToNull, be.Method);

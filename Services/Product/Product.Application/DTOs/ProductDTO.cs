@@ -1,8 +1,8 @@
 ﻿namespace Product.Application.DTOs;
 
-public class ProductDTO
+public abstract class ProductDTO
 {
-	public string Id { get; set; }
+	public virtual string Id { get; set; }
 	public virtual string Name { get; set; }
 	public virtual string ShortDesc { get; set; }
 	public virtual string Description { get; set; }
@@ -11,6 +11,7 @@ public class ProductDTO
 
 	public virtual string MainImagePath { get; set; }
 
+	public abstract object GetMainImage();
 	public virtual DateTime CreatedDateTime { get; set; }
 
 	public string CategoryId { get; set; }

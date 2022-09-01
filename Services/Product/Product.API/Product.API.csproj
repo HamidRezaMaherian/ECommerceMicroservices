@@ -13,7 +13,7 @@
 	<ItemGroup>
 		<PackageReference Include="fluentvalidation.AspNetCore" Version="10.3.6" />
 		<PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.14.0" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="6.0.5">
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="6.0.7">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
@@ -29,6 +29,7 @@
 		<ProjectReference Include="..\..\..\Gateways\ServiceDiscovery\ServiceDiscovery.csproj" />
 	</ItemGroup>
 	<ItemGroup>
+		<Folder Include="wwwroot\" />
 		<Folder Include="wwwroot\" />
 	</ItemGroup>
 

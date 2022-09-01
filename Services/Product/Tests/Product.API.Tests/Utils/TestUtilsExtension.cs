@@ -87,7 +87,12 @@ namespace Product.API.Tests.Utils
 				return store.Object;
 			}
 		}
-
+		public static ICdnResolver MockCdnResolver()
+		{
+			var moq = new Mock<ICdnResolver>();
+			moq.Setup(i => i.GetAddress()).Returns("/");
+			return moq.Object;
+		}
 		public static ICustomMapper CreateMapper<T1, T2>()
 		{
 			var automapperConfig = new MapperConfiguration(i => i.CreateMap<T1, T2>().ReverseMap());

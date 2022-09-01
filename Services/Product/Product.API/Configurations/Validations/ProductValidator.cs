@@ -2,62 +2,42 @@
 using FluentValidation.AspNetCore;
 using FluentValidation.Results;
 using Microsoft.AspNetCore.Mvc;
+using Product.API.Configurations.DTOs;
 using Product.Application.DTOs;
 using Product.Application.UnitOfWork;
 using Services.Shared.Resources;
 
 namespace Product.API.Configurations.Validations
 {
-	public class ProductValidator : AbstractValidator<ProductDTO>, IValidatorInterceptor
+	public class CreateProductValidator : AbstractValidator<CreateProductDTO>
 	{
-		public ProductValidator(IUnitOfWork unitOfWork)
+		public CreateProductValidator()
 		{
-			RuleSet("update-model", () =>
-			{
-				RuleFor(i => i.Id)
-				.NotNull()
-				.Must(id =>
-				{
-					return unitOfWork.ProductRepo.Exists(i => i.Id == id);
-				});
-			});
-
 			RuleFor(i => i.Name)
 				.NotEmpty()
 				.NotNull();
-
-			RuleFor(i => i.CategoryId)
-				.Must(categoryId =>
-				{
-					return unitOfWork.ProductCategoryRepo.Exists(i => i.Id == categoryId);
-				}).WithMessage(obj => string.Format(Messages.NOT_FOUND, nameof(obj.CategoryId)))
-				.NotEmpty()
-				.NotNull();
-			RuleFor(i => i.CreatedDateTime)
-				.NotEmpty()
-				.NotNull();
-			RuleFor(i => i.UnitPrice)
+			RuleFor(i => i.MainImage)
 				.NotEmpty()
 				.NotNull();
 		}
-		public ValidationResult AfterAspNetValidation(ActionContext actionContext, IValidationContext validationContext, ValidationResult result)
+
+	}
+	public class UpdateProductValidator : AbstractValidator<UpdateProductDTO>
+	{
+		public UpdateProductValidator(IUnitOfWork unitOfWork)
 		{
-			if (actionContext.HttpContext.Request.Method.ToLower() == HttpMethod.Put.Method.ToLower())
+			RuleFor(i => i.Id)
+			.NotNull()
+			.Must(id =>
 			{
-				var updateModelRes = this.Validate(validationContext.InstanceToValidate as ProductDTO,
-				(opt) =>
-				{
-					opt.IncludeRuleSets("update-model");
-				});
-				result.Errors.AddRange(updateModelRes.Errors);
-			}
-			return result;
+				return unitOfWork.ProductRepo.Exists(i => i.Id == id);
+			});
+			RuleFor(i => i.Name)
+				.NotEmpty()
+				.NotNull();
+			RuleFor(i => i.MainImagePath)
+				.Null()
+				.Empty();
 		}
-
-		public IValidationContext BeforeAspNetValidation(ActionContext actionContext, IValidationContext commonContext)
-		{
-			return commonContext;
-		}
-
 	}
 }

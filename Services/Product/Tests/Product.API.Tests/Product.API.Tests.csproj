@@ -11,7 +11,7 @@
 		<PackageReference Include="Moq" Version="4.17.1" />
 		<PackageReference Include="Automapper" Version="11.0.1" />
 		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.11.0" />
-		<PackageReference Include="microsoft.EntityFrameworkCore.InMemory" Version="6.0.5" />
+		<PackageReference Include="microsoft.EntityFrameworkCore.InMemory" Version="6.0.7" />
 		<PackageReference Include="Moq" Version="4.17.1" />
 		<PackageReference Include="NUnit" Version="3.13.2" />
 		<PackageReference Include="NUnit3TestAdapter" Version="4.0.0" />

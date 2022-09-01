@@ -1,9 +1,7 @@
 
 using Microsoft.AspNetCore.Mvc;
-using Product.API.Configurations.Validations;
 using Product.API.Configurations.DTOs;
 using Product.Application.Services;
-using Services.Shared.APIUtils;
 using Services.Shared.Resources;
 
 namespace Product.API.Controllers
@@ -25,14 +23,14 @@ namespace Product.API.Controllers
 		}
 		[HttpPost]
 		[ProducesResponseType(StatusCodes.Status200OK)]
-		public IActionResult Create([FromBody] ProductDTO productDTO)
+		public IActionResult Create([FromBody] CreateProductDTO productDTO)
 		{
 			_productService.Add(productDTO);
-			return Created("",productDTO);
+			return Created("", productDTO);
 		}
 		[HttpPut]
 		[ProducesResponseType(StatusCodes.Status200OK)]
-		public IActionResult Update([FromBody] ProductDTO productDTO)
+		public IActionResult Update([FromBody] UpdateProductDTO productDTO)
 		{
 			_productService.Update(productDTO);
 			return Ok();

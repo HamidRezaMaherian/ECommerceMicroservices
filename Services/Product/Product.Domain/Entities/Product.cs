@@ -1,4 +1,5 @@
 ﻿using Product.Domain.Common;
+using Product.Domain.ValueObjects;
 
 namespace Product.Domain.Entities
 {
@@ -9,7 +10,7 @@ namespace Product.Domain.Entities
 		public string Description { get; set; }
 		public decimal UnitPrice { get; set; }
 
-		public string MainImagePath { get; set; }
+		public Blob MainImage { get; set; }
 
 		public DateTime CreatedDateTime { get; set; }
 

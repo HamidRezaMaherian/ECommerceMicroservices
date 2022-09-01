@@ -1,12 +1,15 @@
 ﻿using AutoMapper;
+using FileActor.Abstract;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Moq;
 using Product.Application.Repositories;
 using Product.Application.Services;
 using Product.Application.Tools;
 using Product.Domain.Common;
+using Product.Infrastructure.Persist;
 using Product.Infrastructure.Tools;
 using Services.Shared.AppUtils;
 using System;
@@ -16,9 +19,9 @@ using System.Linq.Expressions;
 
 namespace Product.Infrastructure.Tests.Utils
 {
-	public static class TestUtilsExtension
+	public static class TestUtilities
 	{
-		public static class MockAction<T, Tdto> where T : EntityPrimaryBase<string>
+		public static class Mocker<T, Tdto> where T : EntityPrimaryBase<string>
 		{
 			public static IRepository<T> MockRepository(ICollection<T> list)
 			{
@@ -87,7 +90,12 @@ namespace Product.Infrastructure.Tests.Utils
 				return store.Object;
 			}
 		}
-
+		public static ICdnResolver CreateCdnResolver()
+		{
+			var moq = new Mock<ICdnResolver>();
+			moq.Setup(i => i.GetAddress()).Returns("/");
+			return moq.Object;
+		}
 		public static ICustomMapper CreateMapper<T1, T2>()
 		{
 			var automapperConfig = new MapperConfiguration(i => i.CreateMap<T1, T2>().ReverseMap());
@@ -98,6 +106,29 @@ namespace Product.Infrastructure.Tests.Utils
 		{
 			var automapperConfig = new MapperConfiguration(i => i.AddProfiles(profiles));
 			return new CustomMapper(new Mapper(automapperConfig));
+		}
+		public static ApplicationDbContext CreateDbContext(string name)
+		{
+			var dbOptionsBuilder = new DbContextOptionsBuilder<ApplicationDbContext>();
+			dbOptionsBuilder.UseInMemoryDatabase(name);
+			return new ApplicationDbContext(dbOptionsBuilder.Options);
+		}
+		public static IFileServiceActor CreateFileServiceActor()
+		{
+			var moq = new Mock<IFileServiceActor>();
+			moq.Setup((obj) => obj.SaveAll<It.IsAnyType>(It.IsAny<It.IsAnyType>()));
+			moq.Setup((obj) => obj.SaveAll(It.IsAny<object>()));
+			return moq.Object;
+		}
+		public static void Verify<T, R>(T obj, Expression<Func<T, R>> predicate, int timesCount) where T : class
+		{
+			var moq = new Mock<T>(() => obj);
+			moq.Verify(predicate, Times.AtMost(timesCount));
+		}
+		public static void Verify<T>(T obj, Expression<Action<T>> predicate, int timesCount) where T : class
+		{
+			var moq = new Mock<T>(() => obj);
+			moq.Verify(predicate, Times.AtMost(timesCount));
 		}
 	}
 	public class TestingWebAppFactory<TEntryPoint> : WebApplicationFactory<TEntryPoint> where TEntryPoint : class

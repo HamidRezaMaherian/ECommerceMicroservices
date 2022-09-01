@@ -1,12 +1,14 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using NUnit.Framework;
+using Product.API.Configurations.DTOs;
 using Product.API.Tests.Utils;
 using Product.Application.Configurations;
 using Product.Application.DTOs;
 using Product.Application.Tools;
 using Product.Application.UnitOfWork;
 using Product.Domain.Entities;
+using Product.Domain.ValueObjects;
 using Product.Infrastructure.Persist;
 using Product.Infrastructure.Persist.Mappings;
 using Services.Shared.APIUtils;
@@ -29,7 +31,7 @@ namespace Product.API.Tests.Integration
 		{
 			string dbName = "test_db";
 			var dbContext = MockActions.MockDbContext(dbName);
-			_mapper = TestUtilsExtension.CreateMapper(new PersistMapperProfile(), new ServiceMapper());
+			_mapper = TestUtilsExtension.CreateMapper(new PersistMapperProfile(TestUtilsExtension.MockCdnResolver()), new ServiceMapper());
 			_unitOfWork = new UnitOfWork(dbContext, _mapper);
 			var httpClient = new TestingWebAppFactory<Program>(s =>
 			{
@@ -68,7 +70,7 @@ namespace Product.API.Tests.Integration
 		[Test]
 		public void Create_PassValidObject_AddObject()
 		{
-			var product = new ProductDTO()
+			var product = new CreateProductDTO()
 			{
 				Name = "test",
 				CategoryId = CreateMockCategoryObj().Id,
@@ -87,7 +89,7 @@ namespace Product.API.Tests.Integration
 		[Test]
 		public void Create_PassInvalidObject_ReturnBadRequest()
 		{
-			var product = new ProductDTO()
+			var product = new CreateProductDTO()
 			{
 				CategoryId = Guid.NewGuid().ToString(),
 				CreatedDateTime = DateTime.Now,
@@ -162,7 +164,7 @@ namespace Product.API.Tests.Integration
 				CreatedDateTime = DateTime.Now,
 				Description = "no desc",
 				ShortDesc = "no description",
-				MainImagePath = "no path",
+				MainImage =new Blob("","/images/product",""),
 				UnitPrice = 29348
 			};
 			_unitOfWork.ProductRepo.Add(product);

@@ -2,6 +2,7 @@
 using NUnit.Framework;
 using Product.Application.Exceptions;
 using Product.Application.Tools;
+using Product.Domain.ValueObjects;
 using Product.Infrastructure.Persist;
 using Product.Infrastructure.Persist.DAOs;
 using Product.Infrastructure.Persist.Mappings;
@@ -10,6 +11,7 @@ using Product.Infrastructure.Tests.Utils;
 using Services.Shared.AppUtils;
 using System;
 using System.Linq;
+using static Product.Infrastructure.Tests.Utils.TestUtilities;
 
 namespace Product.Infrastructure.Tests.Unit.Repositories
 {
@@ -22,8 +24,8 @@ namespace Product.Infrastructure.Tests.Unit.Repositories
 		[SetUp]
 		public void Setup()
 		{
-			_db = MockActions.MockDbContext("TestDb");
-			_mapper = TestUtilsExtension.CreateMapper(new PersistMapperProfile());
+			_db = CreateDbContext("TestDb");
+			_mapper = CreateMapper(new PersistMapperProfile(CreateCdnResolver()));
 			_productRepo = new ProductRepo(_db, _mapper);
 		}
 		[TearDown]
@@ -43,7 +45,7 @@ namespace Product.Infrastructure.Tests.Unit.Repositories
 				IsActive = true,
 				Description = "no desc",
 				UnitPrice = 45000,
-				MainImagePath = "no image"
+				MainImage = new Blob("","","")
 			};
 			_productRepo.Add(product);
 			_db.SaveChanges();
@@ -56,7 +58,7 @@ namespace Product.Infrastructure.Tests.Unit.Repositories
 			{
 				Name = "Test",
 				IsActive = true,
-				MainImagePath = "no image"
+				MainImage = new Blob("", "", "")
 			};
 			Assert.Throws<InsertOperationException>(() =>
 			{

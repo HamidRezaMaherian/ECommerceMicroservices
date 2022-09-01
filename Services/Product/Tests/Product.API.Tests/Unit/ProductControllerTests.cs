@@ -30,7 +30,7 @@ namespace Product.API.Tests.Unit
 		[Test]
 		public void GetAll_ReturnAllProducts()
 		{
-			_productService.Add(new()
+			_productService.Add(new CreateProductDTO()
 			{
 				Id = "1",
 				Name = "Name",
@@ -41,7 +41,7 @@ namespace Product.API.Tests.Unit
 		[Test]
 		public void Create_AddProduct()
 		{
-			var product = new ProductDTO()
+			var product = new CreateProductDTO()
 			{
 				Id = "1",
 				Name = "Name",

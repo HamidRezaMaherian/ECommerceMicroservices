@@ -26,10 +26,11 @@ namespace Product.API.Tests.Unit
 		[Test]
 		public void GetAll_ReturnAllProducts()
 		{
-			var brand = new BrandDTO()
+			var brand = new CreateBrandDTO()
 			{
 				Id = Guid.NewGuid().ToString(),
 				Name = "Name",
+				Image=""
 			};
 			_brandService.Add(brand);
 			var res = _brandController.GetAll();
@@ -38,10 +39,11 @@ namespace Product.API.Tests.Unit
 		[Test]
 		public void Create_AddBrand()
 		{
-			var brand = new BrandDTO()
+			var brand = new CreateBrandDTO()
 			{
 				Id = Guid.NewGuid().ToString(),
 				Name = "Name",
+				Image="sdklf"
 			};
 			var result = _brandController.Create(brand);
 			Assert.IsNotNull(_brandService.GetById(brand.Id));

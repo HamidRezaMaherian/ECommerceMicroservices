@@ -30,15 +30,15 @@ namespace Product.Infrastructure.Repositories
 			{
 				_db.SaveChanges();
 			}
-			catch (Exception e)
+			catch (Exception)
 			{
-				throw new InsertOperationException(e.Message, e.InnerException);
+				throw;
 			}
 			finally
 			{
 				DetachEntity(result.Entity);
+				_mapper.Map(result.Entity, entity);
 			}
-			_mapper.Map(result.Entity, entity);
 		}
 		public virtual void Delete(object id)
 		{
@@ -47,9 +47,9 @@ namespace Product.Infrastructure.Repositories
 				var entity = Get(id);
 				_dbSet.Remove(_mapper.Map<TDAO>(entity));
 			}
-			catch (Exception e)
+			catch (Exception)
 			{
-				throw new DeleteOperationException(e.Message, e.InnerException);
+				throw;
 			}
 		}
 		public bool Exists(Expression<Func<T, bool>> predicate)
@@ -58,9 +58,9 @@ namespace Product.Infrastructure.Repositories
 			{
 				return _dbSet.Any(ExpressionHelper.Convert<T, TDAO>(predicate));
 			}
-			catch (Exception e)
+			catch (Exception)
 			{
-				throw new ReadOperationException(e.Message, e.InnerException);
+				throw;
 			}
 		}
 
@@ -72,9 +72,9 @@ namespace Product.Infrastructure.Repositories
 				DetachEntity(entityDAO);
 				_dbSet.Remove(entityDAO);
 			}
-			catch (Exception e)
+			catch (Exception)
 			{
-				throw new DeleteOperationException(e.Message, e.InnerException);
+				throw;
 			}
 		}
 
@@ -98,9 +98,9 @@ namespace Product.Infrastructure.Repositories
 				query = queryParams.Take != 0 ? query.Take(queryParams.Take) : query;
 				return _mapper.Map<IEnumerable<T>>(query.ToList());
 			}
-			catch (Exception e)
+			catch (Exception)
 			{
-				throw new ReadOperationException(e.Message, e.InnerException);
+				throw;
 			}
 		}
 		public virtual IEnumerable<T> Get()
@@ -109,9 +109,9 @@ namespace Product.Infrastructure.Repositories
 			{
 				return _mapper.Map<IEnumerable<T>>(_dbSet.AsNoTracking().ToList());
 			}
-			catch (Exception e)
+			catch (Exception)
 			{
-				throw new ReadOperationException(e.Message, e.InnerException);
+				throw;
 			}
 		}
 
@@ -124,9 +124,9 @@ namespace Product.Infrastructure.Repositories
 				DetachEntity(entity);
 				return _mapper.Map<T>(entity);
 			}
-			catch (Exception e)
+			catch (Exception)
 			{
-				throw new ReadOperationException(e.Message, e.InnerException);
+				throw;
 			}
 		}
 
@@ -139,9 +139,9 @@ namespace Product.Infrastructure.Repositories
 				_db.Entry(entityDAO).State = EntityState.Modified;
 				_db.SaveChanges();
 			}
-			catch (Exception e)
+			catch (Exception)
 			{
-				throw new UpdateOperationException(e.Message, e.InnerException);
+				throw;
 			}
 			finally
 			{

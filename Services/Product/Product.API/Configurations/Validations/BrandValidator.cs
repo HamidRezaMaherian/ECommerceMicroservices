@@ -1,45 +1,38 @@
 ﻿using FluentValidation;
-using FluentValidation.AspNetCore;
-using FluentValidation.Results;
-using Microsoft.AspNetCore.Mvc;
-using Product.Application.DTOs;
+using Product.API.Configurations.DTOs;
 using Product.Application.UnitOfWork;
 
 namespace Product.API.Configurations.Validations
 {
-	public class BrandValidator : AbstractValidator<BrandDTO>, IValidatorInterceptor
+	public class CreateBrandValidator : AbstractValidator<CreateBrandDTO>
 	{
-		public BrandValidator(IUnitOfWork unitOfWork)
+		public CreateBrandValidator()
 		{
-			RuleSet("update-model", () =>
+			RuleFor(i => i.Name)
+				.NotEmpty()
+				.NotNull();
+			RuleFor(i => i.Image)
+				.NotEmpty()
+				.NotNull();
+		}
+
+	}
+	public class UpdateBrandValidator : AbstractValidator<UpdateBrandDTO>
+	{
+		public UpdateBrandValidator(IUnitOfWork unitOfWork)
+		{
+			RuleFor(i => i.Id)
+			.NotNull()
+			.Must(id =>
 			{
-				RuleFor(i => i.Id).NotNull().Must(id =>
-				{
-					return unitOfWork.BrandRepo.Exists(i => i.Id == id);
-				});
+				return unitOfWork.BrandRepo.Exists(i => i.Id == id);
 			});
-			RuleFor(i => i.Name).NotEmpty().NotNull();
-			RuleFor(i => i.ImagePath).NotNull();
-
+			RuleFor(i => i.Name)
+				.NotEmpty()
+				.NotNull();
+			RuleFor(i => i.ImagePath)
+				.Null()
+				.Empty();
 		}
-		public ValidationResult AfterAspNetValidation(ActionContext actionContext, IValidationContext validationContext, ValidationResult result)
-		{
-			if (actionContext.HttpContext.Request.Method.ToLower() == HttpMethod.Put.Method.ToLower())
-			{
-				var updateModelRes = this.Validate(validationContext.InstanceToValidate as BrandDTO,
-				(opt) =>
-				{
-					opt.IncludeRuleSets("update-model");
-				});
-				result.Errors.AddRange(updateModelRes.Errors);
-			}
-			return result;
-		}
-
-		public IValidationContext BeforeAspNetValidation(ActionContext actionContext, IValidationContext commonContext)
-		{
-			return commonContext;
-		}
-
 	}
 }

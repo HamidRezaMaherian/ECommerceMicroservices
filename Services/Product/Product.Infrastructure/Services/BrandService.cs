@@ -18,6 +18,13 @@ namespace Product.Infrastructure.Services
 			_fileServiceProvider.SaveAll(entityDTO);
 			base.Add(entityDTO);
 		}
+		public override void Update(BrandDTO entityDTO)
+		{
+			var entity = _repo.Get(entityDTO.Id);
+			_fileServiceProvider.ReplaceAll(entityDTO);
+			_mapper.Map(entityDTO, entity);
+			_repo.Update(entity);
+		}
 		public override void Delete(object id)
 		{
 			var obj = _repo.Get(id);

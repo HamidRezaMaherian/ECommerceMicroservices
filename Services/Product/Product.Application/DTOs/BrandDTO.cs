@@ -1,8 +1,10 @@
 ﻿namespace Product.Application.DTOs;
 
-public class BrandDTO
+public abstract class BrandDTO
 {
-	public string Id { get; set; }
+	public virtual string Id { get; set; }
 	public virtual string Name { get; set; }
 	public virtual string ImagePath { get; set; }
+
+	public abstract object GetImage();
 }

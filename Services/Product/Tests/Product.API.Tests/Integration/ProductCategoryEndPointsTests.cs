@@ -29,7 +29,7 @@ namespace Product.API.Tests.Integration
 		{
 			string dbName = "test_db";
 			var dbContext = MockActions.MockDbContext(dbName);
-			_mapper = TestUtilsExtension.CreateMapper(new PersistMapperProfile(), new ServiceMapper());
+			_mapper = TestUtilsExtension.CreateMapper(new PersistMapperProfile(TestUtilsExtension.MockCdnResolver()), new ServiceMapper());
 			_unitOfWork = new UnitOfWork(dbContext, _mapper);
 
 			var httpClient = new TestingWebAppFactory<Program>(s =>

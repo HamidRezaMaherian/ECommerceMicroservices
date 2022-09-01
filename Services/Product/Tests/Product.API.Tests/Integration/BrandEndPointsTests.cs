@@ -1,12 +1,14 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using NUnit.Framework;
+using Product.API.Configurations.DTOs;
 using Product.API.Tests.Utils;
 using Product.Application.Configurations;
 using Product.Application.DTOs;
 using Product.Application.Tools;
 using Product.Application.UnitOfWork;
 using Product.Domain.Entities;
+using Product.Domain.ValueObjects;
 using Product.Infrastructure.Persist;
 using Product.Infrastructure.Persist.Mappings;
 using Services.Shared.APIUtils;
@@ -28,7 +30,7 @@ namespace Product.API.Tests.Integration
 		{
 			string dbName = "test_db";
 			var dbContext = MockActions.MockDbContext(dbName);
-			_mapper = TestUtilsExtension.CreateMapper(new PersistMapperProfile(), new ServiceMapper());
+			_mapper = TestUtilsExtension.CreateMapper(new PersistMapperProfile(TestUtilsExtension.MockCdnResolver()), new ServiceMapper());
 			_unitOfWork = new UnitOfWork(dbContext, _mapper);
 
 			var httpClient = new TestingWebAppFactory<Program>(s =>
@@ -75,7 +77,7 @@ namespace Product.API.Tests.Integration
 		[Test]
 		public void Create_PassValidObject_AddObject()
 		{
-			var brand = new BrandDTO()
+			var brand = new CreateBrandDTO()
 			{
 				Name = "test",
 				ImagePath = "no image"
@@ -89,7 +91,7 @@ namespace Product.API.Tests.Integration
 		[Test]
 		public void Create_PassInvalidObject_ReturnBadRequest()
 		{
-			var brand = new BrandDTO();
+			var brand = new CreateBrandDTO();
 			var res = _httpClient.Post("/brand/create", brand);
 
 			Assert.AreEqual(HttpStatusCode.BadRequest, res.StatusCode);
@@ -135,13 +137,14 @@ namespace Product.API.Tests.Integration
 			var res = _httpClient.Delete($"/brand/delete/{fakeId}");
 			Assert.AreEqual(HttpStatusCode.NotFound, res.StatusCode);
 		}
+
 		#region PrivateMethods
 		private BrandDTO CreateBrand()
 		{
 			var brand = new Brand()
 			{
 				Name = "test",
-				ImagePath = "no image",
+				Image = new Blob("", "/images/brand", ""),
 				IsActive = true,
 			};
 			_unitOfWork.BrandRepo.Add(brand);

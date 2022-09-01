@@ -3,6 +3,7 @@ using NUnit.Framework;
 using Product.Application.Exceptions;
 using Product.Application.Tools;
 using Product.Domain.Entities;
+using Product.Domain.ValueObjects;
 using Product.Infrastructure.Persist;
 using Product.Infrastructure.Persist.DAOs;
 using Product.Infrastructure.Persist.Mappings;
@@ -11,6 +12,7 @@ using Product.Infrastructure.Tests.Utils;
 using Services.Shared.AppUtils;
 using System;
 using System.Linq;
+using static Product.Infrastructure.Tests.Utils.TestUtilities;
 
 namespace Product.Infrastructure.Tests.Unit.Repositories
 {
@@ -24,8 +26,8 @@ namespace Product.Infrastructure.Tests.Unit.Repositories
 		public void Setup()
 		{
 			_db?.Dispose();
-			_db = MockActions.MockDbContext("TestDb");
-			_mapper = TestUtilsExtension.CreateMapper(new PersistMapperProfile());
+			_db = CreateDbContext("TestDb");
+			_mapper = CreateMapper(new PersistMapperProfile(CreateCdnResolver()));
 			_brandRepo = new BrandRepo(_db, _mapper);
 		}
 		[Test]
@@ -34,7 +36,7 @@ namespace Product.Infrastructure.Tests.Unit.Repositories
 			var brand = new Brand()
 			{
 				Name = "Test",
-				ImagePath = "no image",
+				Image =new Blob("","",""),
 				IsActive = true,
 			};
 			_brandRepo.Add(brand);
