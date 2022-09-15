@@ -12,6 +12,7 @@ public class Program
 
 		var builder = WebApplication.CreateBuilder(args);
 
+		builder.Logging.RegisterLoggingProvider(builder.Configuration);
 		// Add services to the container.
 		builder.Services.AddControllers();
 		builder.Services.AddRazorPages();

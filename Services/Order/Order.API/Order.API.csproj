@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
 	<PropertyGroup>
 		<TargetFramework>net6.0</TargetFramework>
@@ -23,8 +23,9 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\..\..\Gateways\ServiceDiscovery\ServiceDiscovery.csproj" />
 		<ProjectReference Include="..\Order.Infrastructure\Order.Infrastructure.csproj" />
+		<ProjectReference Include="..\..\..\BuildingBlocks\Common.ServiceDiscovery\Common.ServiceDiscovery.csproj" />
+		<ProjectReference Include="..\..\..\BuildingBlocks\Common.Logging\Common.Logging.csproj" />
 	</ItemGroup>
 
 </Project>

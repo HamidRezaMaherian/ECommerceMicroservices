@@ -15,8 +15,8 @@
 		<PackageReference Include="fluentvalidation.AspNetCore" Version="10.3.6" />
 		<PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.14.0" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="6.0.5">
-		  <PrivateAssets>all</PrivateAssets>
-		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
 		<PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
 		<PackageReference Include="Grpc.AspNetCore" Version="2.40.0" />
@@ -25,8 +25,9 @@
 		<Protobuf Include="Protos\*.proto" GrpcServices="Server" />
 	</ItemGroup>
 	<ItemGroup>
-		<ProjectReference Include="..\..\..\Gateways\ServiceDiscovery\ServiceDiscovery.csproj" />
 		<ProjectReference Include="..\Discount.Infrastructure\Discount.Infrastructure.csproj" />
+		<ProjectReference Include="..\..\..\BuildingBlocks\Common.ServiceDiscovery\Common.ServiceDiscovery.csproj" />
+		<ProjectReference Include="..\..\..\BuildingBlocks\Common.Logging\Common.Logging.csproj" />
 	</ItemGroup>
 
 </Project>

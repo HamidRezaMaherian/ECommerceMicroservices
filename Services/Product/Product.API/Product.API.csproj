@@ -22,11 +22,9 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\..\..\Utilities\FileActor\FileActor.AspNetCore\FileActor.AspNetCore.csproj" />
+		<ProjectReference Include="..\..\..\BuildingBlocks\Common.ServiceDiscovery\Common.ServiceDiscovery.csproj" />
+		<ProjectReference Include="..\..\..\BuildingBlocks\Common.Logging\Common.Logging.csproj" />
 		<ProjectReference Include="..\Product.Infrastructure\Product.Infrastructure.csproj" />
-		<ProjectReference Include="..\..\..\Gateways\ServiceDiscovery\ServiceDiscovery.csproj" />
-	</ItemGroup>
-	<ItemGroup>
-		<ProjectReference Include="..\..\..\Gateways\ServiceDiscovery\ServiceDiscovery.csproj" />
 	</ItemGroup>
 	<ItemGroup>
 		<Folder Include="wwwroot\" />

@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using FileActor.Abstract;
+﻿using FileActor.Abstract;
 using NUnit.Framework;
 using Product.Application.Configurations;
 using Product.Application.Exceptions;
@@ -10,6 +9,7 @@ using Product.Domain.ValueObjects;
 using Product.Infrastructure.Persist;
 using Product.Infrastructure.Persist.Mappings;
 using Product.Infrastructure.Services;
+using Product.Infrastructure.Tests.Utils;
 using Product.Infrastructure.Tests.Utils.HelperTypes;
 using Services.Shared.AppUtils;
 using System;
@@ -508,14 +508,5 @@ namespace Product.Infrastructure.Tests.Unit.Repositories
 			return category;
 		}
 		#endregion
-	}
-
-	public class TestMapperProfile : Profile
-	{
-		public TestMapperProfile()
-		{
-			CreateMap<HelperProductDTO, Domain.Entities.Product>().ForMember(d => d.MainImage, opt => opt.MapFrom(s => new Blob("", s.MainImagePath, "")))
-				.ReverseMap();
-		}
 	}
 }

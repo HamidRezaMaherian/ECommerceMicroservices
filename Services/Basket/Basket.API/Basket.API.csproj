@@ -17,8 +17,9 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="..\..\..\Gateways\ServiceDiscovery\ServiceDiscovery.csproj" />
-	  <ProjectReference Include="..\Basket.Infrastructure\Basket.Infrastructure.csproj" />
+		<ProjectReference Include="..\..\..\BuildingBlocks\Common.ServiceDiscovery\Common.ServiceDiscovery.csproj" />
+		<ProjectReference Include="..\..\..\BuildingBlocks\Common.Logging\Common.Logging.csproj" />
+		<ProjectReference Include="..\Basket.Infrastructure\Basket.Infrastructure.csproj" />
 	</ItemGroup>
 
 </Project>

@@ -29,6 +29,8 @@ namespace UI.Infrastructure.IOC
 			services.AddSingleton<ICdnResolver,T>();
 		}
 
+		#region Private
+
 		private static void RegisterConfigurations(this IServiceCollection services)
 		{
 			services.AddSingleton<ServiceMapper>();
@@ -43,8 +45,6 @@ namespace UI.Infrastructure.IOC
 			});
 			services.AddSingleton<ICustomMapper, CustomMapper>();
 		}
-
-
 		private static void RegisterServices(this IServiceCollection services)
 		{
 			services.AddScoped<IFaqService, FaqService>();
@@ -68,5 +68,7 @@ namespace UI.Infrastructure.IOC
 			});
 			services.AddScoped<IUnitOfWork, UnitOfWork>();
 		}
+
+		#endregion
 	}
 }

@@ -8,6 +8,7 @@ public class Program
 	public static void Main(string[] args)
 	{
 		var builder = WebApplication.CreateBuilder(args);
+		builder.Logging.RegisterLoggingProvider(builder.Configuration);
 		builder.Services.AddHealthChecks();
 		builder.Services.AddServiceDiscoveryRegistration();
 		builder.Configuration.AddJsonFile($"ocelot.json");
